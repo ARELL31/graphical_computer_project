@@ -1,5 +1,5 @@
 /*---------------------------------------------------------*/
-/* ----------------   Pr·ctica  --------------------------*/
+/* ----------------   Pr√°ctica  --------------------------*/
 /*-----------------    2026-1   ---------------------------*/
 /*------------- Alumno:                     ---------------*/
 /*------------- No. Cuenta                  ---------------*/
@@ -58,8 +58,8 @@ lastFrame = 0.0f;
 
 void getResolution(void);
 void myData(void);							// De la practica 4
-void LoadTextures(void);					// De la pr·ctica 6
-unsigned int generateTextures(char*, bool, bool);	// De la pr·ctica 6
+void LoadTextures(void);					// De la pr√°ctica 6
+unsigned int generateTextures(char*, bool, bool);	// De la pr√°ctica 6
 
 //For Keyboard
 float	movX = 0.0f,
@@ -94,7 +94,7 @@ recorrido3 = false,
 recorrido4 = false;
 
 
-//Keyframes (ManipulaciÛn y dibujo)
+//Keyframes (Manipulaci√≥n y dibujo)
 float	posX = 0.0f,
 		posY = 0.0f,
 		posZ = 0.0f,
@@ -121,7 +121,7 @@ typedef struct _frame
 }FRAME;
 
 FRAME KeyFrame[MAX_FRAMES];
-int FrameIndex = 0;			//introducir n˙mero en caso de tener Key guardados
+int FrameIndex = 0;			//introducir n√∫mero en caso de tener Key guardados
 bool play = false;
 int playIndex = 0;
 
@@ -248,7 +248,7 @@ void animate(void)
 		}
 	}
 
-	//VehÌculo
+	//Veh√≠culo
 	if (animacion)
 	{
 		movAuto_x += 3.0f;
@@ -465,7 +465,17 @@ int main() {
 	Model primerPiso("resources/General_Models/MuseoJumexTercerPiso.obj");
 	Model vestibulo("resources/General_Models/vestibulo.obj");
 
-	//InicializaciÛn de KeyFrames
+	Model pintura("resources/f1/frame1.obj");
+	Model pintura1("resources/f2/frame02.obj");
+	Model pintura2("resources/f3/frame03.obj");
+	Model pintura3("resources/f4/frame04.obj");
+	Model pintura4("resources/f5/frame05.obj");
+
+	Model sillon("resources/objects/sillon/sillon.obj");
+	Model extintor("resources/objects/extintor/extintor.obj");
+
+	
+	//Inicializaci√≥n de KeyFrames
 	for (int i = 0; i < MAX_FRAMES; i++)
 	{
 		KeyFrame[i].posX = 0;
@@ -600,7 +610,7 @@ int main() {
 
 		//Tener Piso como referencia
 		glBindVertexArray(VAO[2]);
-		//Colocar cÛdigo aquÌ
+		//Colocar c√≥digo aqu√≠
 		modelOp = glm::scale(glm::mat4(1.0f), glm::vec3(40.0f, 2.0f, 40.0f));
 		modelOp = glm::translate(modelOp, glm::vec3(0.0f, -1.0f, 0.0f));
 		modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -610,7 +620,7 @@ int main() {
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glBindVertexArray(VAO[0]);
-		//Colocar cÛdigo aquÌ
+		//Colocar c√≥digo aqu√≠
 		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 10.0f, 0.0f));
 		modelOp = glm::scale(modelOp, glm::vec3(5.0f, 5.0f, 1.0f));
 		myShader.setMat4("model", modelOp);
@@ -660,7 +670,57 @@ int main() {
 		
 
 
+		// -------------------------------------------------------------------------------------------------------------------------
+		// Modelos 1er piso
+		// -------------------------------------------------------------------------------------------------------------------------
+				modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-19.7f, 15.5f, 9.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.15f));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		pintura.Draw(staticShader);
 
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-19.7f, 15.5f, 21.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.17f));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		pintura1.Draw(staticShader);
+		
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-19.7f, 15.5f, 32.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.17f));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		pintura2.Draw(staticShader);
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(19.7f, 15.5f, 9.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.17f));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		pintura3.Draw(staticShader);
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(19.7f, 15.5f, 21.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.169f));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		pintura4.Draw(staticShader);
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 12.8f, -8.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.009f));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		sillon.Draw(staticShader);
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(19.7f, 11.8f, 40.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.3f));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		extintor.Draw(staticShader);
 		
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Just in case
