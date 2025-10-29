@@ -44,7 +44,7 @@ GLFWmonitor* monitors;
 GLuint VBO[3], VAO[3], EBO[3];
 
 //Camera
-Camera camera(glm::vec3(0.0f, 10.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 5.0f, 3.0f));
 float MovementSpeed = 5.0f;
 GLfloat lastX = SCR_WIDTH / 2.0f,
 		lastY = SCR_HEIGHT / 2.0f;
@@ -465,6 +465,10 @@ int main() {
 	Model primerPiso("resources/General_Models/MuseoJumexTercerPiso.obj");
 	Model vestibulo("resources/General_Models/vestibulo.obj");
 
+	Model carro1("resources/objects/Carro1/Carro1.obj");
+	Model carro2("resources/objects/Carro2/Carro2.obj");
+	Model carro3("resources/objects/Carro3/Carro3.obj");
+
 	//Inicialización de KeyFrames
 	for (int i = 0; i < MAX_FRAMES; i++)
 	{
@@ -617,7 +621,7 @@ int main() {
 		myShader.setVec3("aColor", 1.0f, 1.0f, 1.0f);
 		glBindTexture(GL_TEXTURE_2D, t_unam);
 		//glDrawArrays(GL_TRIANGLES, 0, 36); //A lonely cube :(
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);d
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 		// ------------------------------------------------------------------------------------------------------------------------
 		// Termina Escenario Primitivas
@@ -638,7 +642,7 @@ int main() {
 		tmp = modelOp = rotate(modelOp, radians(giroMonito), vec3(0.0f, 1.0f, 0.0));
 		staticShader.setMat4("model", modelOp);
 		vestibulo.Draw(staticShader);
-
+		
 		tempPrimero = modelOp = translate(tempJumex, vec3(0.0f, 9.50f, 0.0f));
 		tmp = modelOp = rotate(modelOp, radians(giroMonito), vec3(0.0f, 1.0f, 0.0));
 		staticShader.setMat4("model", modelOp);
@@ -653,14 +657,28 @@ int main() {
 		tmp = modelOp = rotate(modelOp, radians(giroMonito), vec3(0.0f, 1.0f, 0.0));
 		staticShader.setMat4("model", modelOp);
 		tercerPiso.Draw(staticShader);
-
+		
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Personajes de la planta baja
 		// -------------------------------------------------------------------------------------------------------------------------
 		
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-19.0f, 42.0f, 30.0f));	//2.15
+		modelOp = glm::scale(modelOp, glm::vec3(0.012f));
+		modelOp = glm::rotate(modelOp, glm::radians(205.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro1.Draw(staticShader);
 
-
-
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 39.51f, 20.0f));	//0.91
+		modelOp = glm::scale(modelOp, glm::vec3(0.03f));
+		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro2.Draw(staticShader);
+		
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-18.0f, 39.62f, 15.0f));	//0.96
+		modelOp = glm::scale(modelOp, glm::vec3(0.03f));
+		modelOp = glm::rotate(modelOp, glm::radians(25.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro3.Draw(staticShader);
 		
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Just in case
