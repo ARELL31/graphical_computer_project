@@ -556,6 +556,66 @@ int main() {
 		staticShader.setFloat("spotLight[0].linear", 0.0009f);
 		staticShader.setFloat("spotLight[0].quadratic", 0.0005f);
 
+		// ===================================================================
+		// LUCES DE FOCO ANARANJADAS DE ALTA INTENSIDAD PARA CADA CUADRO
+		// ===================================================================
+
+		staticShader.setVec3("spotLight[1].position", glm::vec3(-19.7f, 18.0f, 9.0f));   
+		staticShader.setVec3("spotLight[1].direction", glm::vec3(0.0f, -1.0f, 0.0f));   
+		staticShader.setVec3("spotLight[1].ambient", glm::vec3(0.8f, 0.4f, 0.1f));      
+		staticShader.setVec3("spotLight[1].diffuse", glm::vec3(1.0f, 0.5f, 0.1f));      
+		staticShader.setVec3("spotLight[1].specular", glm::vec3(1.0f, 0.7f, 0.3f));      
+		staticShader.setFloat("spotLight[1].cutOff", glm::cos(glm::radians(20.0f)));    
+		staticShader.setFloat("spotLight[1].outerCutOff", glm::cos(glm::radians(35.0f))); 
+		staticShader.setFloat("spotLight[1].constant", 1.0f);
+		staticShader.setFloat("spotLight[1].linear", 0.005f);   
+		staticShader.setFloat("spotLight[1].quadratic", 0.0001f);
+
+		staticShader.setVec3("spotLight[2].position", glm::vec3(-19.7f, 18.0f, 21.0f));
+		staticShader.setVec3("spotLight[2].direction", glm::vec3(0.0f, -1.0f, 0.0f));
+		staticShader.setVec3("spotLight[2].ambient", glm::vec3(0.8f, 0.4f, 0.1f));
+		staticShader.setVec3("spotLight[2].diffuse", glm::vec3(1.0f, 0.5f, 0.1f));
+		staticShader.setVec3("spotLight[2].specular", glm::vec3(1.0f, 0.7f, 0.3f));
+		staticShader.setFloat("spotLight[2].cutOff", glm::cos(glm::radians(20.0f)));
+		staticShader.setFloat("spotLight[2].outerCutOff", glm::cos(glm::radians(35.0f)));
+		staticShader.setFloat("spotLight[2].constant", 1.0f);
+		staticShader.setFloat("spotLight[2].linear", 0.005f);
+		staticShader.setFloat("spotLight[2].quadratic", 0.0001f);
+
+		staticShader.setVec3("spotLight[3].position", glm::vec3(-19.7f, 18.0f, 32.0f));
+		staticShader.setVec3("spotLight[3].direction", glm::vec3(0.0f, -1.0f, 0.0f));
+		staticShader.setVec3("spotLight[3].ambient", glm::vec3(0.8f, 0.4f, 0.1f));
+		staticShader.setVec3("spotLight[3].diffuse", glm::vec3(1.0f, 0.5f, 0.1f));
+		staticShader.setVec3("spotLight[3].specular", glm::vec3(1.0f, 0.7f, 0.3f));
+		staticShader.setFloat("spotLight[3].cutOff", glm::cos(glm::radians(20.0f)));
+		staticShader.setFloat("spotLight[3].outerCutOff", glm::cos(glm::radians(35.0f)));
+		staticShader.setFloat("spotLight[3].constant", 1.0f);
+		staticShader.setFloat("spotLight[3].linear", 0.005f);
+		staticShader.setFloat("spotLight[3].quadratic", 0.0001f);
+
+		staticShader.setVec3("spotLight[4].position", glm::vec3(19.7f, 18.0f, 9.0f));
+		staticShader.setVec3("spotLight[4].direction", glm::vec3(0.0f, -1.0f, 0.0f));
+		staticShader.setVec3("spotLight[4].ambient", glm::vec3(0.8f, 0.4f, 0.1f));
+		staticShader.setVec3("spotLight[4].diffuse", glm::vec3(1.0f, 0.5f, 0.1f));
+		staticShader.setVec3("spotLight[4].specular", glm::vec3(1.0f, 0.7f, 0.3f));
+		staticShader.setFloat("spotLight[4].cutOff", glm::cos(glm::radians(20.0f)));
+		staticShader.setFloat("spotLight[4].outerCutOff", glm::cos(glm::radians(35.0f)));
+		staticShader.setFloat("spotLight[4].constant", 1.0f);
+		staticShader.setFloat("spotLight[4].linear", 0.005f);
+		staticShader.setFloat("spotLight[4].quadratic", 0.0001f);
+
+		staticShader.setVec3("spotLight[5].position", glm::vec3(19.7f, 18.0f, 21.0f));
+		staticShader.setVec3("spotLight[5].direction", glm::vec3(0.0f, -1.0f, 0.0f));
+		staticShader.setVec3("spotLight[5].ambient", glm::vec3(0.8f, 0.4f, 0.1f));
+		staticShader.setVec3("spotLight[5].diffuse", glm::vec3(1.0f, 0.5f, 0.1f));
+		staticShader.setVec3("spotLight[5].specular", glm::vec3(1.0f, 0.7f, 0.3f));
+		staticShader.setFloat("spotLight[5].cutOff", glm::cos(glm::radians(20.0f)));
+		staticShader.setFloat("spotLight[5].outerCutOff", glm::cos(glm::radians(35.0f)));
+		staticShader.setFloat("spotLight[5].constant", 1.0f);
+		staticShader.setFloat("spotLight[5].linear", 0.005f);
+		staticShader.setFloat("spotLight[5].quadratic", 0.0001f);
+
+
 		staticShader.setFloat("material_shininess", 32.0f);
 
 		//glm::mat4 model = glm::mat4(1.0f);
@@ -627,7 +687,7 @@ int main() {
 		myShader.setVec3("aColor", 1.0f, 1.0f, 1.0f);
 		glBindTexture(GL_TEXTURE_2D, t_unam);
 		//glDrawArrays(GL_TRIANGLES, 0, 36); //A lonely cube :(
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);d
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 		// ------------------------------------------------------------------------------------------------------------------------
 		// Termina Escenario Primitivas
