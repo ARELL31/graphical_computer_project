@@ -27,6 +27,8 @@
 #include <iostream>
 #include <mmsystem.h>
 
+
+
 using namespace std;
 using namespace glm;
 
@@ -474,6 +476,34 @@ int main() {
 	Model sillon("resources/objects/sillon/sillon.obj");
 	Model extintor("resources/objects/extintor/extintor.obj");
 
+	//Modelos de planta baja
+
+	Model easels("resources/General_Models/easels.obj");
+	Model anunciacion("resources/planta_baja/anunciacion.obj");
+	Model armino("resources/planta_baja/armino.obj");
+	Model bautista("resources/planta_baja/bautista.obj");
+	Model benci("resources/planta_baja/benci.obj");
+	Model cristo("resources/planta_baja/cristo.obj");
+	Model magos("resources/planta_baja/magos.obj");
+	Model monalisa("resources/planta_baja/monalisa.obj");
+	Model mundi("resources/planta_baja/mundi.obj");
+	Model ultimacena("resources/planta_baja/ultimacena.obj");
+	Model vitruvio("resources/planta_baja/vitruvio.obj");
+			
+			// Caballero de la planta baja
+
+	Model CaballeroCuerpo("resources/caballero/cuerpo.obj");
+	Model CaballeroBrazoIzquierdo("resources/caballero/brazoIzquierdo.obj");
+	Model CaballeroBrazoDerecho("resources/caballero/brazoDerecho.obj");
+	Model CaballeroPiernaIzquierda("resources/caballero/perinaIzquierda.obj");
+	Model CaballeroPiernaDerecha("resources/caballero/perinaDerecha.obj");
+
+
+	Model Colorful_Plant("resources/plants/Colorful_Plant/karafuruueki.obj");
+
+	Model Candle("resources/Candle/Model.obj");
+
+
 	
 	//Inicialización de KeyFrames
 	for (int i = 0; i < MAX_FRAMES; i++)
@@ -497,6 +527,8 @@ int main() {
 	mat4 tempPrimero = mat4(1.0f);
 	mat4 tempSegundo = mat4(1.0f);
 	mat4 tempTercero = mat4(1.0f);
+	mat4 tempEasels = mat4(1.0f);
+	mat4 tempCaballero = mat4(1.0f);
 
 
 	// render loop
@@ -555,6 +587,118 @@ int main() {
 		staticShader.setFloat("spotLight[0].constant", 1.0f);
 		staticShader.setFloat("spotLight[0].linear", 0.0009f);
 		staticShader.setFloat("spotLight[0].quadratic", 0.0005f);
+
+		// ===================================================================
+		// LUCES DE FOCO PARA LOS CANDLE'S
+		// ===================================================================
+
+		glm::vec3 purpleDiffuse = glm::vec3(0.6f, 0.1f, 0.8f); 
+		glm::vec3 purpleAmbient = purpleDiffuse * glm::vec3(0.1f); 
+		glm::vec3 purpleSpecular = glm::vec3(1.0f); 
+
+		float lightHeight = 8.0f;
+		glm::mat4 candleModelMatrix; 
+		glm::vec3 candleWorldPos;  
+
+		candleModelMatrix = translate(tempJumex, vec3(12.0f, lightHeight, -24.5f));
+		candleWorldPos = glm::vec3(candleModelMatrix[3]);
+		staticShader.setVec3("pointLight[2].position", candleWorldPos);
+		staticShader.setVec3("pointLight[2].ambient", purpleAmbient);
+		staticShader.setVec3("pointLight[2].diffuse", purpleDiffuse);
+		staticShader.setVec3("pointLight[2].specular", purpleSpecular);
+		staticShader.setFloat("pointLight[2].constant", 1.0f);
+		staticShader.setFloat("pointLight[2].linear", 0.14f);  
+		staticShader.setFloat("pointLight[2].quadratic", 0.07f);
+
+		candleModelMatrix = translate(tempJumex, vec3(12.0f, lightHeight, -14.5f));
+		candleWorldPos = glm::vec3(candleModelMatrix[3]);
+		staticShader.setVec3("pointLight[3].position", candleWorldPos);
+		staticShader.setVec3("pointLight[3].ambient", purpleAmbient);
+		staticShader.setVec3("pointLight[3].diffuse", purpleDiffuse);
+		staticShader.setVec3("pointLight[3].specular", purpleSpecular);
+		staticShader.setFloat("pointLight[3].constant", 1.0f);
+		staticShader.setFloat("pointLight[3].linear", 0.14f);
+		staticShader.setFloat("pointLight[3].quadratic", 0.07f);
+
+		candleModelMatrix = translate(tempJumex, vec3(12.0f, lightHeight, -4.5f));
+		candleWorldPos = glm::vec3(candleModelMatrix[3]);
+		staticShader.setVec3("pointLight[4].position", candleWorldPos);
+		staticShader.setVec3("pointLight[4].ambient", purpleAmbient);
+		staticShader.setVec3("pointLight[4].diffuse", purpleDiffuse);
+		staticShader.setVec3("pointLight[4].specular", purpleSpecular);
+		staticShader.setFloat("pointLight[4].constant", 1.0f);
+		staticShader.setFloat("pointLight[4].linear", 0.14f);
+		staticShader.setFloat("pointLight[4].quadratic", 0.07f);
+
+		candleModelMatrix = translate(tempJumex, vec3(12.0f, lightHeight, 5.5f));
+		candleWorldPos = glm::vec3(candleModelMatrix[3]);
+		staticShader.setVec3("pointLight[5].position", candleWorldPos);
+		staticShader.setVec3("pointLight[5].ambient", purpleAmbient);
+		staticShader.setVec3("pointLight[5].diffuse", purpleDiffuse);
+		staticShader.setVec3("pointLight[5].specular", purpleSpecular);
+		staticShader.setFloat("pointLight[5].constant", 1.0f);
+		staticShader.setFloat("pointLight[5].linear", 0.14f);
+		staticShader.setFloat("pointLight[5].quadratic", 0.07f);
+
+		candleModelMatrix = translate(tempJumex, vec3(12.0f, lightHeight, 15.5f));
+		candleWorldPos = glm::vec3(candleModelMatrix[3]);
+		staticShader.setVec3("pointLight[6].position", candleWorldPos);
+		staticShader.setVec3("pointLight[6].ambient", purpleAmbient);
+		staticShader.setVec3("pointLight[6].diffuse", purpleDiffuse);
+		staticShader.setVec3("pointLight[6].specular", purpleSpecular);
+		staticShader.setFloat("pointLight[6].constant", 1.0f);
+		staticShader.setFloat("pointLight[6].linear", 0.14f);
+		staticShader.setFloat("pointLight[6].quadratic", 0.07f);
+
+		candleModelMatrix = translate(tempJumex, vec3(-12.0f, lightHeight, -24.5f));
+		candleWorldPos = glm::vec3(candleModelMatrix[3]);
+		staticShader.setVec3("pointLight[7].position", candleWorldPos);
+		staticShader.setVec3("pointLight[7].ambient", purpleAmbient);
+		staticShader.setVec3("pointLight[7].diffuse", purpleDiffuse);
+		staticShader.setVec3("pointLight[7].specular", purpleSpecular);
+		staticShader.setFloat("pointLight[7].constant", 1.0f);
+		staticShader.setFloat("pointLight[7].linear", 0.14f);
+		staticShader.setFloat("pointLight[7].quadratic", 0.07f);
+
+		candleModelMatrix = translate(tempJumex, vec3(-12.0f, lightHeight, -14.5f));
+		candleWorldPos = glm::vec3(candleModelMatrix[3]);
+		staticShader.setVec3("pointLight[8].position", candleWorldPos);
+		staticShader.setVec3("pointLight[8].ambient", purpleAmbient);
+		staticShader.setVec3("pointLight[8].diffuse", purpleDiffuse);
+		staticShader.setVec3("pointLight[8].specular", purpleSpecular);
+		staticShader.setFloat("pointLight[8].constant", 1.0f);
+		staticShader.setFloat("pointLight[8].linear", 0.14f);
+		staticShader.setFloat("pointLight[8].quadratic", 0.07f);
+
+		candleModelMatrix = translate(tempJumex, vec3(-12.0f, lightHeight, -4.5f));
+		candleWorldPos = glm::vec3(candleModelMatrix[3]);
+		staticShader.setVec3("pointLight[9].position", candleWorldPos);
+		staticShader.setVec3("pointLight[9].ambient", purpleAmbient);
+		staticShader.setVec3("pointLight[9].diffuse", purpleDiffuse);
+		staticShader.setVec3("pointLight[9].specular", purpleSpecular);
+		staticShader.setFloat("pointLight[9].constant", 1.0f);
+		staticShader.setFloat("pointLight[9].linear", 0.14f);
+		staticShader.setFloat("pointLight[9].quadratic", 0.07f);
+
+		candleModelMatrix = translate(tempJumex, vec3(-12.0f, lightHeight, 5.5f));
+		candleWorldPos = glm::vec3(candleModelMatrix[3]);
+		staticShader.setVec3("pointLight[10].position", candleWorldPos);
+		staticShader.setVec3("pointLight[10].ambient", purpleAmbient);
+		staticShader.setVec3("pointLight[10].diffuse", purpleDiffuse);
+		staticShader.setVec3("pointLight[10].specular", purpleSpecular);
+		staticShader.setFloat("pointLight[10].constant", 1.0f);
+		staticShader.setFloat("pointLight[10].linear", 0.14f);
+		staticShader.setFloat("pointLight[10].quadratic", 0.07f);
+
+		candleModelMatrix = translate(tempJumex, vec3(-12.0f, lightHeight, 15.5f));
+		candleWorldPos = glm::vec3(candleModelMatrix[3]);
+		staticShader.setVec3("pointLight[11].position", candleWorldPos);
+		staticShader.setVec3("pointLight[11].ambient", purpleAmbient);
+		staticShader.setVec3("pointLight[11].diffuse", purpleDiffuse);
+		staticShader.setVec3("pointLight[11].specular", purpleSpecular);
+		staticShader.setFloat("pointLight[11].constant", 1.0f);
+		staticShader.setFloat("pointLight[11].linear", 0.14f);
+		staticShader.setFloat("pointLight[11].quadratic", 0.07f);
 
 		// ===================================================================
 		// LUCES DE FOCO ANARANJADAS DE ALTA INTENSIDAD PARA CADA CUADRO
@@ -725,15 +869,201 @@ int main() {
 		tercerPiso.Draw(staticShader);
 
 		// -------------------------------------------------------------------------------------------------------------------------
-		// Personajes de la planta baja
+		// Modelos de la planta baja
 		// -------------------------------------------------------------------------------------------------------------------------
 		
+		for (int i = 0; i < 50; i = i + 10) {
+			tempEasels = modelOp = translate(tempJumex, vec3(12.0f, 1.0f, -25.0f + i));
+			modelOp = scale(modelOp, vec3(1.0f));
+			modelOp = rotate(modelOp, radians(45.0f), vec3(0.0f, 1.0f, 0.0f));
+			staticShader.setMat4("model", modelOp);
+			easels.Draw(staticShader);
+
+			tempEasels = modelOp = translate(tempJumex, vec3(-12.0f, 1.0f, -25.0f + i));
+			modelOp = scale(modelOp, vec3(1.0f));
+			modelOp = rotate(modelOp, radians(135.0f), vec3(0.0f, 1.0f, 0.0f));
+			staticShader.setMat4("model", modelOp);
+			easels.Draw(staticShader);
+		}
+
+		// Cuadros de planta baja
+
+		mat4 cuadroOp = translate(tempJumex, vec3(12.0f, 5.3f, -24.5f));
+		cuadroOp = rotate(cuadroOp, radians(45.0f), vec3(0.0f, 1.0f, 0.0f));
+		cuadroOp = scale(cuadroOp, vec3(0.8f * 0.17f * 0.67f));
+		staticShader.setMat4("model", cuadroOp);
+		anunciacion.Draw(staticShader);
+
+		cuadroOp = translate(tempJumex, vec3(12.0f, 5.3f, -14.5f));
+		cuadroOp = rotate(cuadroOp, radians(45.0f), vec3(0.0f, 1.0f, 0.0f));
+		cuadroOp = scale(cuadroOp, vec3(0.8f * 0.17f * 0.67f));
+		staticShader.setMat4("model", cuadroOp);
+		armino.Draw(staticShader);
+
+		cuadroOp = translate(tempJumex, vec3(12.0f, 5.3f, -4.5f));
+		cuadroOp = rotate(cuadroOp, radians(45.0f), vec3(0.0f, 1.0f, 0.0f));
+		cuadroOp = scale(cuadroOp, vec3(0.8f * 0.17f * 0.67f));
+		staticShader.setMat4("model", cuadroOp);
+		bautista.Draw(staticShader);
+
+		cuadroOp = translate(tempJumex, vec3(12.0f, 5.3f, 5.5f));
+		cuadroOp = rotate(cuadroOp, radians(45.0f), vec3(0.0f, 1.0f, 0.0f));
+		cuadroOp = scale(cuadroOp, vec3(0.8f * 0.17f * 0.67f));
+		staticShader.setMat4("model", cuadroOp);
+		benci.Draw(staticShader);
+
+		cuadroOp = translate(tempJumex, vec3(12.0f, 5.3f, 15.5f));
+		cuadroOp = rotate(cuadroOp, radians(45.0f), vec3(0.0f, 1.0f, 0.0f));
+		cuadroOp = scale(cuadroOp, vec3(0.8f * 0.17f * 0.67f));
+		staticShader.setMat4("model", cuadroOp);
+		cristo.Draw(staticShader);
+
+		cuadroOp = translate(tempJumex, vec3(-12.0f, 5.3f, -24.5f));
+		cuadroOp = rotate(cuadroOp, radians(135.0f), vec3(0.0f, 1.0f, 0.0f));
+		cuadroOp = scale(cuadroOp, vec3(0.8f * 0.17f * 0.67f));
+		staticShader.setMat4("model", cuadroOp);
+		magos.Draw(staticShader);
+
+		cuadroOp = translate(tempJumex, vec3(-12.0f, 5.3f, -14.5f));
+		cuadroOp = rotate(cuadroOp, radians(135.0f), vec3(0.0f, 1.0f, 0.0f));
+		cuadroOp = scale(cuadroOp, vec3(0.8f * 0.17f * 0.67f));
+		staticShader.setMat4("model", cuadroOp);
+		monalisa.Draw(staticShader);
+
+		cuadroOp = translate(tempJumex, vec3(-12.0f, 5.3f, -4.5f));
+		cuadroOp = rotate(cuadroOp, radians(135.0f), vec3(0.0f, 1.0f, 0.0f));
+		cuadroOp = scale(cuadroOp, vec3(0.8f * 0.17f * 0.67f));
+		staticShader.setMat4("model", cuadroOp);
+		mundi.Draw(staticShader);
+
+		cuadroOp = translate(tempJumex, vec3(-12.0f, 5.3f, 5.5f));
+		cuadroOp = rotate(cuadroOp, radians(135.0f), vec3(0.0f, 1.0f, 0.0f));
+		cuadroOp = scale(cuadroOp, vec3(0.8f * 0.17f * 0.67f));
+		staticShader.setMat4("model", cuadroOp);
+		ultimacena.Draw(staticShader);
+
+		cuadroOp = translate(tempJumex, vec3(-12.0f, 5.3f, 15.5f));
+		cuadroOp = rotate(cuadroOp, radians(135.0f), vec3(0.0f, 1.0f, 0.0f));
+		cuadroOp = scale(cuadroOp, vec3(0.8f * 0.17f * 0.67f));
+		staticShader.setMat4("model", cuadroOp);
+		vitruvio.Draw(staticShader);
+
+
+			// Caballero de recepcion
+
+		float tiempo = glfwGetTime();
+		float angulo = sin(tiempo * 2.0f) * 10.0f;
+
+		tempCaballero = cuadroOp = translate(tempJumex, vec3(-2.0f, 1.0f, -24.5f));
+		cuadroOp = rotate(cuadroOp, radians(135.0f), vec3(0.0f, 1.0f, 0.0f));
+		cuadroOp = scale(cuadroOp, vec3( 10 * 0.17f));
+		staticShader.setMat4("model", cuadroOp);
+		CaballeroPiernaIzquierda.Draw(staticShader);
+
+		cuadroOp = translate(tempCaballero, vec3(0.0f, 0.0f, 0.0f));
+		cuadroOp = rotate(cuadroOp, radians(135.0f), vec3(0.0f, 1.0f, 0.0f));
+		cuadroOp = scale(cuadroOp, vec3(10 * 0.17f));
+		staticShader.setMat4("model", cuadroOp);
+		CaballeroPiernaDerecha.Draw(staticShader);
+
+		cuadroOp = translate(tempCaballero, vec3(0.0f, 0.0f, 0.0f));
+		cuadroOp = rotate(cuadroOp, radians(135.0f), vec3(0.0f, 1.0f, 0.0f));
+		cuadroOp = scale(cuadroOp, vec3(10 * 0.17f));
+		staticShader.setMat4("model", cuadroOp);
+		CaballeroCuerpo.Draw(staticShader);
+
+		cuadroOp = translate(tempCaballero, vec3(-0.40f, 3.3f, -0.2f));
+		cuadroOp = rotate(cuadroOp, radians(135.0f), vec3(0.0f, 1.0f, 0.0f));
+		cuadroOp = rotate(cuadroOp, radians(-45.0f + angulo), vec3(1.0f, 0.0f, 0.0f));
+		cuadroOp = scale(cuadroOp, vec3(10 * 0.17f));
+		staticShader.setMat4("model", cuadroOp);
+		CaballeroBrazoDerecho.Draw(staticShader);
+
+		cuadroOp = translate(tempCaballero, vec3(0.40f, 3.3f, 0.2f));
+		cuadroOp = rotate(cuadroOp, radians(135.0f), vec3(0.0f, 1.0f, 0.0f));
+		cuadroOp = rotate(cuadroOp, radians(-45.0f + angulo), vec3(1.0f, 0.0f, 0.0f));
+		cuadroOp = scale(cuadroOp, vec3(10 * 0.17f));
+		staticShader.setMat4("model", cuadroOp);
+		CaballeroBrazoIzquierdo.Draw(staticShader);
+
+			// Plantas de recepcion 
+
+		float radio = 6.0f;
+		int numPlantas = 5;
+
+		for (int i = 0; i < numPlantas; i++) {
+			float angulo = radians(360.0f / numPlantas * i);
+			float x = sin(angulo) * radio;
+			float z = cos(angulo) * radio;
+
+			cuadroOp = translate(tempCaballero, vec3(x, 2.2f, z));
+			cuadroOp = scale(cuadroOp, vec3(0.3f));
+			staticShader.setMat4("model", cuadroOp);
+			Colorful_Plant.Draw(staticShader);
+		}
+
+			// Candle's de la planta baja
+		float PI = 3.141591;
+		float radio2 = 4.0f;
+		float freqX = 3.0f;   
+		float freqZ = 4.0f;  
+		float phase = PI / 2;  
+
+		float t = (sin(tiempo) * 0.5f) + 0.5f;
+		float xDer = mix(0.0f, 12.0f, t);
+		float xIzq = mix(0.0f, -12.0f, t);
+
+		float lissajousX = sin(tiempo * freqX) * radio2;
+		float lissajousZ = sin(tiempo * freqZ + phase) * radio2;
+		float factorCentro = (1.0f - abs(sin(tiempo))) * 1.0f;
+
+		cuadroOp = translate(tempJumex, vec3(xDer + lissajousX, 6.3f * 1.25f, -24.5f + lissajousZ * factorCentro));
+		staticShader.setMat4("model", cuadroOp);
+		Candle.Draw(staticShader);
+
+		cuadroOp = translate(tempJumex, vec3(xDer + lissajousX, 6.3f * 1.25f, -14.5f + lissajousZ * factorCentro));
+		staticShader.setMat4("model", cuadroOp);
+		Candle.Draw(staticShader);
+
+		cuadroOp = translate(tempJumex, vec3(xDer + lissajousX, 6.3f * 1.25f, -4.5f + lissajousZ * factorCentro));
+		staticShader.setMat4("model", cuadroOp);
+		Candle.Draw(staticShader);
+
+		cuadroOp = translate(tempJumex, vec3(xDer + lissajousX, 6.3f * 1.25f, 5.5f + lissajousZ * factorCentro));
+		staticShader.setMat4("model", cuadroOp);
+		Candle.Draw(staticShader);
+
+		cuadroOp = translate(tempJumex, vec3(xDer + lissajousX, 6.3f * 1.25f, 15.5f + lissajousZ * factorCentro));
+		staticShader.setMat4("model", cuadroOp);
+		Candle.Draw(staticShader);
+
+		cuadroOp = translate(tempJumex, vec3(xIzq - lissajousX, 6.3f * 1.25f, -24.5f - lissajousZ * factorCentro));
+		staticShader.setMat4("model", cuadroOp);
+		Candle.Draw(staticShader);
+
+		cuadroOp = translate(tempJumex, vec3(xIzq - lissajousX, 6.3f * 1.25f, -14.5f - lissajousZ * factorCentro));
+		staticShader.setMat4("model", cuadroOp);
+		Candle.Draw(staticShader);
+
+		cuadroOp = translate(tempJumex, vec3(xIzq - lissajousX, 6.3f * 1.25f, -4.5f - lissajousZ * factorCentro));
+		staticShader.setMat4("model", cuadroOp);
+		Candle.Draw(staticShader);
+
+		cuadroOp = translate(tempJumex, vec3(xIzq - lissajousX, 6.3f * 1.25f, 5.5f - lissajousZ * factorCentro));
+		staticShader.setMat4("model", cuadroOp);
+		Candle.Draw(staticShader);
+
+		cuadroOp = translate(tempJumex, vec3(xIzq - lissajousX, 6.3f * 1.25f, 15.5f - lissajousZ * factorCentro));
+		staticShader.setMat4("model", cuadroOp);
+		Candle.Draw(staticShader);
+
+
 
 
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Modelos 1er piso
 		// -------------------------------------------------------------------------------------------------------------------------
-				modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-19.7f, 15.5f, 9.0f));
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-19.7f, 15.5f, 9.0f));
 		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		modelOp = glm::scale(modelOp, glm::vec3(0.15f));
 		staticShader.setMat4("model", modelOp);
