@@ -206,7 +206,7 @@ void LoadTextures()
 	t_smile = generateTextures("Texturas/awesomeface.png", 1, true);
 	t_toalla = generateTextures("Texturas/toalla.tga", 0, true);
 	t_unam = generateTextures("Texturas/escudo_unam.jpg", 0, true);
-	t_ladrillos = generateTextures("Texturas/bricks.jpg", 0, true);
+	t_ladrillos = generateTextures("Texturas/sand.jpg", 0, true);
 	//This must be the last
 	t_white = generateTextures("Texturas/white.jpg", 0, false);
 }
