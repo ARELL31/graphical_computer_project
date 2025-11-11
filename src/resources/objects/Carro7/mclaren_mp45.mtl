@@ -1,0 +1,78 @@
+# Blender 4.3.2 MTL File: 'mclaren mp4.5 complete.blend'
+# www.blender.org
+
+newmtl body_mat
+	Ns 250.000000
+	Ka 1.000000 1.000000 1.000000
+	Kd 0.800000 0.800000 0.800000
+	Ks 0.500000 0.500000 0.500000
+	Ke 0.000000 0.000000 0.000000
+	Ni 1.450000
+	d 1.000000
+	illum 2
+	map_Ka body_mat_BaseColor.jpg
+	map_Kd body_mat_BaseColor.jpg
+	map_Ks body_mat_Metallic.jpg
+	map_bump body_mat_Normal.jpg
+	bump body_mat_Roughness.jpg
+
+newmtl bottom_details_mat
+	Ns 250.000000
+	Ka 1.000000 1.000000 1.000000
+	Kd 0.800000 0.800000 0.800000
+	Ks 0.500000 0.500000 0.500000
+	Ke 0.000000 0.000000 0.000000
+	Ni 1.450000
+	d 1.000000
+	illum 2
+	map_Ka bottom_details_mat_BaseColor.jpg
+	map_Kd bottom_details_mat_BaseColor.jpg
+	map_Ks bottom_details_mat_Metallic.jpg
+	map_bump bottom_details_mat_Normal.jpg
+	bump bottom_details_mat_Roughness.jpg
+
+newmtl glass_details_mat
+	Ns 250.000000
+	Ka 1.000000 1.000000 1.000000
+	Kd 0.800000 0.800000 0.800000
+	Ks 0.500000 0.500000 0.500000
+	Ke 2.000000 2.000000 2.000000
+	Ni 1.450000
+	d 0.488189
+	illum 9
+	map_Ka glass_details_mat_BaseColor.jpg
+	map_Kd glass_details_mat_BaseColor.jpg
+	map_Ks glass_details_mat_Metallic.jpg
+	map_Ke glass_details_mat_Emissive.jpg
+	map_bump glass_details_mat_Normal.jpg
+	bump glass_details_mat_Roughness.jpg
+
+newmtl interior_mat
+	Ns 250.000000
+	Ka 1.000000 1.000000 1.000000
+	Kd 0.800000 0.800000 0.800000
+	Ks 0.500000 0.500000 0.500000
+	Ke 0.000000 0.000000 0.000000
+	Ni 1.450000
+	d 1.000000
+	illum 2
+	map_Ka interior_mat_BaseColor.jpg
+	map_Kd interior_mat_BaseColor.jpg
+	map_Ks interior_mat_Metallic.jpg
+	map_bump interior_mat_Normal.jpg
+	bump interior_mat_Roughness.jpg
+
+newmtl wheels_mat
+	Ns 250.000000
+	Ka 1.000000 1.000000 1.000000
+	Kd 0.800000 0.800000 0.800000
+	Ks 0.500000 0.500000 0.500000
+	Ke 0.000000 0.000000 0.000000
+	Ni 1.450000
+	d 1.000000
+	illum 2
+	map_Ka wheels_mat_BaseColor.jpg
+	map_Kd wheels_mat_BaseColor.jpg
+	map_Ks wheels_mat_Metallic.jpg
+	map_bump wheels_mat_Normal.jpg
+	bump wheels_mat_Roughness.jpg
