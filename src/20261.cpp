@@ -85,14 +85,17 @@ glm::vec3 ambientColor = diffuseColor * glm::vec3(0.75f);
 
 // posiciones
 float	movAuto_x = 0.0f,
-movAuto_z = 0.0f,
-orienta = 90.0f;
+		movAuto_y = 0.0f,
+		movAuto_z = 0.0f,
+		orienta_x = 0.0f,
+		orienta_y = 0.0f,
+		orienta_z = 0.0f;
+int		etapa = 0;
 bool	animacion = false,
-recorrido1 = true,
-recorrido2 = false,
-recorrido3 = false,
-recorrido4 = false;
-
+		recorrido1 = true,
+		recorrido2 = false,
+		recorrido3 = false,
+		recorrido4 = false;
 
 //Keyframes (Manipulación y dibujo)
 float	posX = 0.0f,
@@ -249,9 +252,45 @@ void animate(void)
 	}
 
 	//Vehículo
-	if (animacion)
-	{
-		movAuto_x += 3.0f;
+	if (animacion){
+		orienta_y += 0.5f;
+		switch (etapa) {
+		case 0:
+			if (orienta_y >= 360.0f) {
+				orienta_x += 0.3f;
+				movAuto_y = (orienta_x / 45.0f) * 8.0f;
+				if (orienta_x >= 45.0f || movAuto_y >= 8.0f) {
+					etapa = 1;
+				}
+			}
+			break;
+		case 1:
+			if (orienta_y >= 720.0f) {
+				etapa = 2;
+			}
+			break;
+		case 2:
+			orienta_x -= 0.3f;
+			if (orienta_x <= -45.0f) {
+				etapa = 3;
+			}
+			break;
+		case 3:
+			if (orienta_y >= 1080.0f) {
+				orienta_x += 0.3f;
+				movAuto_y = (orienta_x / -45.0f) * 8.0f;
+				if (orienta_x >= 0.0f || movAuto_y <= 0.0f) {
+					etapa = 4;
+				}
+			}
+			break;
+		case 4:
+			if (orienta_y >= 1440.0f) {
+				orienta_y = 0.0f;
+				etapa = 0;
+			}
+			break;
+		}
 	}
 }
 
@@ -451,23 +490,24 @@ int main() {
 
 	// load models
 	// -----------
-	//Model piso("resources/objects/piso/piso.obj");
-	//Model carro("resources/objects/lambo/carroceria.obj");
-	//Model llanta("resources/objects/lambo/Wheel.obj");
-	//Model casaVieja("resources/objects/casa/OldHouse.obj");
-	//Model cubo("resources/objects/cubo/cube02.obj");
-	//Model casaDoll("resources/objects/casa/DollHouse.obj");
 
-	//ModelAnim animacionPersonaje("resources/objects/Personaje1/Arm.dae");
-	//animacionPersonaje.initShaders(animShader.ID);
 	Model tercerPiso("resources/General_Models/MuseoJumex.obj");
 	Model segundoPiso("resources/General_Models/MuseoJumexSegundoPiso.obj");
 	Model primerPiso("resources/General_Models/MuseoJumexTercerPiso.obj");
 	Model vestibulo("resources/General_Models/vestibulo.obj");
-
+	/*
 	Model carro1("resources/objects/Carro1/Carro1.obj");
 	Model carro2("resources/objects/Carro2/Carro2.obj");
 	Model carro3("resources/objects/Carro3/Carro3.obj");
+	Model carro4("resources/objects/Carro4/Cybertruck.obj");
+	Model carro5("resources/objects/Carro5/Suv_4x4.obj");
+	Model carro6("resources/objects/Carro6/Carro6.obj");
+	Model carro7("resources/objects/Carro7/mclaren_mp45.obj");
+	Model carro8("resources/objects/Carro8/Carro8.obj");
+	Model carro9("resources/objects/Carro9/Carro9.obj");
+	Model carro10("resources/objects/Carro10/Gta-spano-2010 obj.obj");*/
+	Model carro11("resources/objects/Carro11/Carro11.obj");
+	Model llanta("resources/objects/Carro11/llanta2.obj");
 
 	//Inicialización de KeyFrames
 	for (int i = 0; i < MAX_FRAMES; i++)
@@ -491,7 +531,7 @@ int main() {
 	mat4 tempPrimero = mat4(1.0f);
 	mat4 tempSegundo = mat4(1.0f);
 	mat4 tempTercero = mat4(1.0f);
-
+	mat4 tmp11 = mat4(1.0f);
 
 	// render loop
 	// -----------
@@ -594,9 +634,6 @@ int main() {
 		// Segundo Personaje Animacion
 		// -------------------------------------------------------------------------------------------------------------------------
 
-
-
-
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Escenario Primitivas
 		// -------------------------------------------------------------------------------------------------------------------------
@@ -661,77 +698,99 @@ int main() {
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Personajes de la planta baja
 		// -------------------------------------------------------------------------------------------------------------------------
-		
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-19.0f, 42.0f, 30.0f));	//2.15
+		/*
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f, 42.0f, 33.0f));	//2.15
 		modelOp = glm::scale(modelOp, glm::vec3(0.012f));
-		modelOp = glm::rotate(modelOp, glm::radians(205.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(140.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
 		carro1.Draw(staticShader);
 
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 39.51f, 20.0f));	//0.91
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-21.0f, 39.51f, 26.0f));	//0.91	//-21.0f, 39.51f, 23.0f
 		modelOp = glm::scale(modelOp, glm::vec3(0.03f));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
 		carro2.Draw(staticShader);
 		
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-18.0f, 39.62f, 15.0f));	//0.96
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f, 39.62f, 19.0f));	//0.96
 		modelOp = glm::scale(modelOp, glm::vec3(0.03f));
-		modelOp = glm::rotate(modelOp, glm::radians(25.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(-40.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
 		carro3.Draw(staticShader);
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f, 39.7f, 3.0f));	//-2.0f, 39.62f, 6.0f
+		modelOp = glm::scale(modelOp, glm::vec3(0.14f));
+		modelOp = glm::rotate(modelOp, glm::radians(-40.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro8.Draw(staticShader);
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-21.0f, 39.65f, 7.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.12f));
+		staticShader.setMat4("model", modelOp);
+		carro9.Draw(staticShader);
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-21.0f, 39.65f, -17.0f));//-21.0f, 39.65f, -17.0f
+		modelOp = glm::scale(modelOp, glm::vec3(0.07f));
+		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro10.Draw(staticShader);
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-18.0f, 39.62f, -40.0f));	//0.96
+		modelOp = glm::scale(modelOp, glm::vec3(2.4f));
+		modelOp = glm::rotate(modelOp, glm::radians(200.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro6.Draw(staticShader);
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(13.0f, 39.1f, -39.0f));	//0.96
+		modelOp = glm::scale(modelOp, glm::vec3(0.008f));
+		modelOp = glm::rotate(modelOp, glm::radians(-20.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro5.Draw(staticShader);
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 39.65f, -45.0f));	//0.0f, 39.0f, -45.0f
+		modelOp = glm::scale(modelOp, glm::vec3(0.08f));
+		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro4.Draw(staticShader);
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f + movAuto_x, 39.7f + movAuto_y, -18.0f + movAuto_z));	//0.0f, 39.7f, -45.0f
+		modelOp = glm::rotate(modelOp, glm::radians(orienta_y), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(orienta_z), glm::vec3(0.0f, 0.0f, 1.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(orienta_x), glm::vec3(1.0f, 0.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(4.5f));
+		staticShader.setMat4("model", modelOp);
+		carro7.Draw(staticShader);
+		*/
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(20.0f, 49.7f, 0.0f));//-21.0f, 39.65f, -17.0f
+		tmp11 = modelOp = glm::rotate(modelOp, glm::radians(orienta_y), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(8.0f));
+		staticShader.setMat4("model", modelOp);
+		carro11.Draw(staticShader);
+
+		modelOp = glm::translate(tmp11, glm::vec3(0.272f * 8, 0.015f * 8, -0.159f * 8));//-21.0f, 39.65f, -17.0f
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(orienta_y*3), glm::vec3(0.0f, 0.0f, 1.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(8.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta.Draw(staticShader);
+
+		modelOp = glm::translate(tmp11, glm::vec3(-0.236f * 8, 0.015f * 8, -0.159f * 8));//-21.0f, 39.65f, -17.0f
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(orienta_y*3), glm::vec3(0.0f, 0.0f, 1.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(8.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta.Draw(staticShader);
+
+		modelOp = glm::translate(tmp11, glm::vec3(0.272f * 8, 0.015f * 8, 0.159f * 8));//-21.0f, 39.65f, -17.0f
+		modelOp = glm::rotate(modelOp, glm::radians(orienta_y*3), glm::vec3(0.0f, 0.0f, -1.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(8.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta.Draw(staticShader);
+
+		modelOp = glm::translate(tmp11, glm::vec3(-0.236f * 8, 0.015f * 8, 0.159f * 8));//-21.0f, 39.65f, -17.0f
+		modelOp = glm::rotate(modelOp, glm::radians(orienta_y*3), glm::vec3(0.0f, 0.0f, -1.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(8.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta.Draw(staticShader);
 		
-		// -------------------------------------------------------------------------------------------------------------------------
-		// Just in case
-		// -------------------------------------------------------------------------------------------------------------------------
-		/*modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posX, posY, posZ));
-		tmp = modelOp = glm::rotate(modelOp, glm::radians(giroMonito), glm::vec3(0.0f, 1.0f, 0.0));
-		staticShader.setMat4("model", modelOp);
-		torso.Draw(staticShader);
-
-		//Pierna Der
-		modelOp = glm::translate(tmp, glm::vec3(-0.5f, 0.0f, -0.1f));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0));
-		modelOp = glm::rotate(modelOp, glm::radians(-rotRodIzq), glm::vec3(1.0f, 0.0f, 0.0f));
-		staticShader.setMat4("model", modelOp);
-		piernaDer.Draw(staticShader);
-
-		//Pie Der
-		modelOp = glm::translate(modelOp, glm::vec3(0, -0.9f, -0.2f));
-		staticShader.setMat4("model", modelOp);
-		botaDer.Draw(staticShader);
-
-		//Pierna Izq
-		modelOp = glm::translate(tmp, glm::vec3(0.5f, 0.0f, -0.1f));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		staticShader.setMat4("model", modelOp);
-		piernaIzq.Draw(staticShader);
-
-		//Pie Iz
-		modelOp = glm::translate(modelOp, glm::vec3(0, -0.9f, -0.2f));
-		staticShader.setMat4("model", modelOp);
-		botaDer.Draw(staticShader);	//Izq trase
-
-		//Brazo derecho
-		modelOp = glm::translate(tmp, glm::vec3(0.0f, -1.0f, 0.0f));
-		modelOp = glm::translate(modelOp, glm::vec3(-0.75f, 2.5f, 0));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		staticShader.setMat4("model", modelOp);
-		brazoDer.Draw(staticShader);
-
-		//Brazo izquierdo
-		modelOp = glm::translate(tmp, glm::vec3(0.0f, -1.0f, 0.0f));
-		modelOp = glm::translate(modelOp, glm::vec3(0.75f, 2.5f, 0));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		staticShader.setMat4("model", modelOp);
-		brazoIzq.Draw(staticShader);
-
-		//Cabeza
-		modelOp = glm::translate(tmp, glm::vec3(0.0f, -1.0f, 0.0f));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0));
-		modelOp = glm::translate(modelOp, glm::vec3(0.0f, 2.5f, 0));
-		staticShader.setMat4("model", modelOp);
-		cabeza.Draw(staticShader);*/
-
 		//-------------------------------------------------------------------------------------
 		// draw skybox as last
 		// -------------------
@@ -801,6 +860,16 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode)
 	//Car animation
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
 		animacion ^= true;
+	if (key == GLFW_KEY_R && action == GLFW_PRESS) {
+		orienta_x = 0.0f;
+		orienta_y = 0.0f;
+		orienta_z = 0.0f;
+		movAuto_x = 0.0f;
+		movAuto_y = 0.0f;
+		movAuto_z = 0.0f;
+		animacion = false;
+		etapa = 0;
+	}
 
 	//To play KeyFrame animation 
 	if (key == GLFW_KEY_P && action == GLFW_PRESS)
