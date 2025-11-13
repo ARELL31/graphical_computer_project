@@ -232,6 +232,26 @@ float	posX = 0.0f,
 		rotp12 = -90.0f,
 		scalep12 = 0.169f;
 
+// Variables para el atractor de Lorenz
+		float lorenz_x = 0.0f, lorenz_y = 9.8f, lorenz_z = 0.0f; // Posición inicial 
+		float lorenz_vx = 0.0f, lorenz_vy = 0.0f, lorenz_vz = 0.0f; // Velocidades
+		float dt = 0.01f;
+		const float sigma = 10.0f;
+		const float rho = 28.0f;
+		const float beta = 8.0f / 3.0f;
+		bool lorenz_active = false;
+		bool lorenz_was_active = false;
+
+// Límites del primer piso 
+		const float PISO1_MIN_X = -18.0f;
+		const float PISO1_MAX_X = 18.0f;
+		const float PISO1_MIN_Z = -18.0f;
+		const float PISO1_MAX_Z = 18.0f;
+		const float PISO1_Y = 9.8f;
+// Parámetros de rebote
+		const float COEFICIENTE_REBOTE = 0.7f; // 0.0 = sin rebote, 1.0 = rebote perfecto
+		const float FRENADO_PARED = 0.8f;
+
 float	incX = 0.0f,
 		incY = 0.0f,
 		incZ = 0.0f,
@@ -972,6 +992,67 @@ void animate(void)
 		ornWingAngle -= wingSpeed;
 		if (ornWingAngle <= -wingMaxAngle)
 			ornWingUp = true;
+	}
+
+	
+		if (lorenz_active) {
+		// Ecuaciones de Lorenz
+		float dx = sigma * (lorenz_y - lorenz_x);
+		float dy = lorenz_x * (rho - lorenz_z) - lorenz_y;
+		float dz = lorenz_x * lorenz_y - beta * lorenz_z;
+
+		lorenz_vx += dx * dt;
+		lorenz_vy += dy * dt;
+		lorenz_vz += dz * dt;
+
+		float new_x = lorenz_x + lorenz_vx * dt;
+		float new_z = lorenz_z + lorenz_vz * dt;
+
+		// Detección de colisión y rebote en eje X
+		bool rebote_x = false;
+		if (new_x <= PISO1_MIN_X) {
+			new_x = PISO1_MIN_X;
+			lorenz_vx = -lorenz_vx * COEFICIENTE_REBOTE;
+			lorenz_vz *= FRENADO_PARED; // Reducir velocidad lateral
+			rebote_x = true;
+		}
+		else if (new_x >= PISO1_MAX_X) {
+			new_x = PISO1_MAX_X;
+			lorenz_vx = -lorenz_vx * COEFICIENTE_REBOTE;
+			lorenz_vz *= FRENADO_PARED;
+			rebote_x = true;
+		}
+
+		// Detección de colisión y rebote en eje Z
+		bool rebote_z = false;
+		if (new_z <= PISO1_MIN_Z) {
+			new_z = PISO1_MIN_Z;
+			lorenz_vz = -lorenz_vz * COEFICIENTE_REBOTE;
+			lorenz_vx *= FRENADO_PARED;
+			rebote_z = true;
+		}
+		else if (new_z >= PISO1_MAX_Z) {
+			new_z = PISO1_MAX_Z;
+			lorenz_vz = -lorenz_vz * COEFICIENTE_REBOTE;
+			lorenz_vx *= FRENADO_PARED;
+			rebote_z = true;
+		}
+
+		// Aplicar nuevas posiciones
+		lorenz_x = new_x;
+		lorenz_z = new_z;
+
+		// Mantener altura fija y velocidad vertical mínima
+		lorenz_y = PISO1_Y;
+		lorenz_vy *= 0.5f; // Amortiguar movimiento vertical
+
+		// Limitar velocidades máximas
+		float velocidad_max = 15.0f;
+		float speed = sqrt(lorenz_vx * lorenz_vx + lorenz_vz * lorenz_vz);
+		if (speed > velocidad_max) {
+			lorenz_vx = (lorenz_vx / speed) * velocidad_max;
+			lorenz_vz = (lorenz_vz / speed) * velocidad_max;
+		}
 	}
 }
 
@@ -2137,9 +2218,17 @@ int main() {
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Personaje Animado 1er Piso
 		// -------------------------------------------------------------------------------------------------------------------------
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 9.8f, 15.0f));
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(lorenz_x, lorenz_y, lorenz_z + 15.0f));
 		modelOp = glm::scale(modelOp, glm::vec3(0.04f));
-		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		//modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		if (lorenz_active && (abs(lorenz_vx) > 0.1f || abs(lorenz_vz) > 0.1f)) {
+			float move_angle = atan2(lorenz_vx, lorenz_vz);
+			modelOp = glm::rotate(modelOp, move_angle, glm::vec3(0.0f, 1.0f, 0.0f));
+		}
+		else {
+			// Rotación por defecto si no hay movimiento significativo
+			modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		}
 		animShader.setMat4("model", modelOp);
 		personajeGal.Draw(animShader);
 
@@ -2937,6 +3026,20 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode)
 			saveFrame();
 		}
 	}
+
+		if (key == GLFW_KEY_O && action == GLFW_PRESS) {
+			if (!lorenz_active && !lorenz_was_active) {  // Solo activar si nunca se ha activado
+				lorenz_active = true;
+				lorenz_was_active = true;  // Marcar como que ya se activó
+				std::cout << "Atractor de Lorenz " << std::endl;
+				// Iniciar con pequeña velocidad
+				lorenz_x = 0.1f;
+				lorenz_z = 0.1f;
+			}
+			else if (lorenz_was_active) {
+				std::cout << "La animación ya fue iniciada. " << std::endl;
+			}
+		}
 
 }
 
