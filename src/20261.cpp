@@ -130,6 +130,14 @@ int		etapa_giro = 0,
 bool	animacion1 = false,
 		animacion2 = false;
 
+float paraBaseX = 10.0f;
+float paraBaseY = 25.0f;  // inicia arriba del segundo piso
+float paraBaseZ = -20.0f;
+
+float paraOffsetY = 0.0f;
+float paraSpeed = 0.05f;   // velocidad mayor para ciclo visible
+bool paraGoingDown = true;
+
 //Keyframes (Manipulación y dibujo)
 float	posX = 0.0f,
 		posY = 0.0f,
@@ -910,6 +918,19 @@ void animate(void)
 			break;
 		}
 	}
+
+	// Movimiento del paracaídas
+	if (paraGoingDown) {
+		paraOffsetY -= paraSpeed;
+		if (paraBaseY + paraOffsetY <= 0.0f)  // llegó al piso
+			paraGoingDown = false;
+	}
+	else {
+		paraOffsetY += paraSpeed;
+		if (paraOffsetY >= 0.0f)  // llegó a la altura inicial
+			paraGoingDown = true;
+	}
+
 }
 
 void getResolution() {
@@ -1167,6 +1188,12 @@ int main() {
 	Model Colorful_Plant("resources/plants/Colorful_Plant/karafuruueki.obj");
 	Model Tree("resources/plants/Tree/Basic_Tree_1.obj");
 	Model Candle("resources/Candle/Model.obj");
+	
+	//Segundo piso
+	Model paracaidas("resources/Paracaidas/paracaidas.obj");
+
+	
+	
 	//Tercer piso
 	Model carro1("resources/objects/Carro1/Carro1.obj");
 	Model carro2("resources/objects/Carro2/Carro2.obj");
@@ -2455,7 +2482,21 @@ int main() {
 			staticShader.setMat4("model", modelOp);
 			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
 			pintura11.Draw(staticShader); //15.7, 15.5, 42.2, r=-90
+
+		// -------------------------------------------------------------------------------------------------------------------------
+		// Modelos 2do piso
+		// -------------------------------------------------------------------------------------------------------------------------
 		
+			glm::mat4 modelPara = glm::mat4(1.0f);
+			modelPara = glm::translate(modelPara, glm::vec3(paraBaseX, paraBaseY + paraOffsetY, paraBaseZ));
+
+			modelPara = glm::scale(modelPara, glm::vec3(0.02f)); // tamaño pequeño visible
+			staticShader.setMat4("model", modelPara);
+
+			paracaidas.Draw(staticShader);
+
+
+
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Modelos 3er piso
 		// -------------------------------------------------------------------------------------------------------------------------
