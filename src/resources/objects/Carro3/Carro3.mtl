@@ -12,12 +12,9 @@ newmtl Body
 	Kd 0.5000 0.5000 0.5000
 	Ks 1.0000 1.0000 1.0000
 	Ke 0.0000 0.0000 0.0000
-	
 	map_Ka Body_Base_Color.png
 	map_Kd Body_Base_Color.png
-	map_Ks Body_Metallic.png
-	map_bump Body_Normal_OpenGL.png
-	bump Body_Roughness.png
+	
 
 newmtl Tire
 	Ns 100.0000
@@ -30,12 +27,9 @@ newmtl Tire
 	Kd 0.5000 0.5000 0.5000
 	Ks 1.0000 1.0000 1.0000
 	Ke 0.0000 0.0000 0.0000
-	
 	map_Ka Tire_Base_Color.png
 	map_Kd Tire_Base_Color.png
-	map_Ks Tire_Metallic.png
-	map_bump Tire_Normal_OpenGL.png
-	bump Tire_Roughness.png
+	
 
 newmtl Glass
 	Ns 200.0000
@@ -48,6 +42,4 @@ newmtl Glass
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Glass_Base_Color.png
 	map_Kd Glass_Base_Color.png
-	map_Ks Glass_Metallic.png
-	map_bump Glass_Opacity.png
-	bump Glass_Roughness.png
+	

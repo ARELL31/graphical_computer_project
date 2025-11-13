@@ -14,11 +14,7 @@ newmtl body
 	Ke 0.0000 0.0000 0.0000
 	map_Ka car2_02_BaseColor.png
 	map_Kd car2_02_BaseColor.png
-	map_Ks car2_02_Metallic.png
-	map_Ke car2_02_Emissive.png
-	map_d car2_02_Transmissive.png
-	map_bump car2_02_Height.png
-	bump car2_02_Height.png
+	
 
 newmtl chrom
 	Ns 10.0000
@@ -33,11 +29,7 @@ newmtl chrom
 	Ke 0.0000 0.0000 0.0000
 	map_Ka car2_04_BaseColor.png
 	map_Kd car2_04_BaseColor.png
-	map_Ks car2_04_Metallic.png
-	map_Ke car2_04_Emissive.png
-	map_d car2_04_Transmissive.png
-	map_bump car2_04_Height.png
-	bump car2_04_Height.png
+	
 
 newmtl glass
 	Ns 10.0000
@@ -50,11 +42,7 @@ newmtl glass
 	Ke 0.0000 0.0000 0.0000
 	map_Ka car2_05_BaseColor.png
 	map_Kd car2_05_BaseColor.png
-	map_Ks car2_05_Metallic.png
-	map_Ke car2_05_Emissive.png
-	map_d car2_05_Transmissive.png
-	map_bump car2_05_Height.png
-	bump car2_05_Height.png
+	
 
 newmtl others
 	Ns 1.0000
@@ -69,11 +57,7 @@ newmtl others
 	Ke 0.0000 0.0000 0.0000
 	map_Ka car2_03_BaseColor.png
 	map_Kd car2_03_BaseColor.png
-	map_Ks car2_03_Metallic.png
-	map_Ke car2_03_Emissive.png
-	map_d car2_03_Transmissive.png
-	map_bump car2_03_Height.png
-	bump car2_03_Height.png
+	
 
 newmtl Object013
 	Ns 1.0000
@@ -88,8 +72,4 @@ newmtl Object013
 	Ke 0.0000 0.0000 0.0000
 	map_Ka car2_01_BaseColor.png
 	map_Kd car2_01_BaseColor.png
-	map_Ks car2_01_Metallic.png
-	map_Ke car2_01_Emissive.png
-	map_d car2_01_Transmissive.png
-	map_bump car2_01_Height.png
-	bump car2_01_Height.png
+	

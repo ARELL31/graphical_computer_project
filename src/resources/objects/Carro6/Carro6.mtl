@@ -14,9 +14,7 @@ newmtl Car_Paint_009
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Car Paint.001_BaseColor.png
 	map_Kd Car Paint.001_BaseColor.png
-	map_bump Car Paint.001_Normal.png
-	bump Car Paint.001_Normal.png
-	map_refl Car Paint.001_Metallic.png
+	
 
 newmtl Car_plastic_dark_001
 	Ns 30.0000
@@ -31,9 +29,7 @@ newmtl Car_plastic_dark_001
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Car Paint.003_BaseColor.png
 	map_Kd Car Paint.003_BaseColor.png
-	map_bump Car plastic dark_Normal.png
-	bump Car plastic dark_Normal.png
-	map_refl Car plastic dark_Metallic.png
+	
 
 newmtl Material_009
 	Ns 490.0000
@@ -60,9 +56,7 @@ newmtl Car_Paint_010
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Car Paint.002_BaseColor.png
 	map_Kd Car Paint.002_BaseColor.png
-	map_bump Car Paint.002_Normal.png
-	bump Car Paint.002_Normal.png
-	map_refl Car Paint.002_Metallic.png
+	
 
 newmtl Carlight_shingle_chrome_white
 	Ns 30.0000
@@ -89,9 +83,7 @@ newmtl Car_Paint_011
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Car Paint.003_BaseColor.png
 	map_Kd Car Paint.003_BaseColor.png
-	map_bump Car Paint.003_Normal.png
-	bump Car Paint.003_Normal.png
-	map_refl Car Paint.003_Metallic.png
+	
 
 newmtl Material_036
 	Ns 360.0000
@@ -116,9 +108,7 @@ newmtl Glass_Simple_001
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Glass Simple_BaseColor.png
 	map_Kd Glass Simple_BaseColor.png
-	map_bump Glass Simple_Normal.png
-	bump Glass Simple_Normal.png
-	map_refl Glass Simple_Metallic.png
+	
 
 newmtl Material_032
 	Ns 1000.0000
@@ -145,9 +135,7 @@ newmtl Car_chrome_001
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Car chrome_BaseColor.png
 	map_Kd Car chrome_BaseColor.png
-	map_bump Car chrome_Normal.png
-	bump Car chrome_Normal.png
-	map_refl Car chrome_Metallic.png
+	
 
 newmtl Metal_Black_Dixon_002
 	Ns 548.9463
@@ -162,8 +150,7 @@ newmtl Metal_Black_Dixon_002
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Metal Black Dixon_BaseColor.png
 	map_Kd Metal Black Dixon_BaseColor.png
-	map_bump Metal Black Dixon_Normal.png
-	bump Metal Black Dixon_Normal.png
+	
 
 newmtl Gold_Leaf_001
 	Ns 370.9918
@@ -178,9 +165,7 @@ newmtl Gold_Leaf_001
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Gold Leaf_BaseColor.png
 	map_Kd Gold Leaf_BaseColor.png
-	map_bump Gold Leaf_Normal.png
-	bump Gold Leaf_Normal.png
-	map_refl Gold Leaf_Metallic.png
+	
 
 newmtl Steel_grinded_001
 	Ns 30.0000
@@ -195,9 +180,7 @@ newmtl Steel_grinded_001
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Steel grinded_BaseColor.png
 	map_Kd Steel grinded_BaseColor.png
-	map_bump Steel grinded_Normal.png
-	bump Steel grinded_Normal.png
-	map_refl Steel grinded_Metallic.png
+	
 
 newmtl Red_car_lights_glass_001
 	Ns 30.0000
@@ -212,9 +195,7 @@ newmtl Red_car_lights_glass_001
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Red car lights glass_BaseColor.png
 	map_Kd Red car lights glass_BaseColor.png
-	map_bump Red car lights glass_Normal.png
-	bump Red car lights glass_Normal.png
-	map_refl Red car lights glass_Metallic.png
+	
 
 newmtl Material_033
 	Ns 30.0000
@@ -229,9 +210,7 @@ newmtl Material_033
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Carlight line chrome orange_BaseColor.png
 	map_Kd Carlight line chrome orange_BaseColor.png
-	map_bump Car windshield glass_Normal.png
-	bump Car windshield glass_Normal.png
-	map_refl Car windshield glass_Metallic.png
+	
 
 newmtl Air_Duct_Rubber_002
 	Ns 30.0000
@@ -246,8 +225,7 @@ newmtl Air_Duct_Rubber_002
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Air Duct Rubber.001_BaseColor.png
 	map_Kd Air Duct Rubber.001_BaseColor.png
-	map_bump Air Duct Rubber.001_Normal.png
-	bump Air Duct Rubber.001_Normal.png
+	
 
 newmtl Carlight_line_chrome_orange_001
 	Ns 30.0000
@@ -262,9 +240,7 @@ newmtl Carlight_line_chrome_orange_001
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Carlight line chrome orange_BaseColor.png
 	map_Kd Carlight line chrome orange_BaseColor.png
-	map_bump Carlight line chrome orange_Normal.png
-	bump Carlight line chrome orange_Normal.png
-	map_refl Carlight line chrome orange_Metallic.png
+	
 
 newmtl Procedural_Metal_001
 	Ns 30.0000
@@ -279,9 +255,7 @@ newmtl Procedural_Metal_001
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Procedural Metal_BaseColor.png
 	map_Kd Procedural Metal_BaseColor.png
-	map_bump Procedural Metal_Normal.png
-	bump Procedural Metal_Normal.png
-	map_refl Procedural Metal_Metallic.png
+	
 
 newmtl Material_035
 	Ns 893.8843
@@ -296,8 +270,7 @@ newmtl Material_035
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Air Duct Rubber.001_BaseColor.png
 	map_Kd Air Duct Rubber.001_BaseColor.png
-	map_bump rust_coarse_01_nor_gl_1k.png
-	bump rust_coarse_01_nor_gl_1k.png
+	
 
 newmtl Car_Paint_012
 	Ns 30.0000
@@ -312,9 +285,7 @@ newmtl Car_Paint_012
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Car Paint.003_BaseColor.png
 	map_Kd Car Paint.003_BaseColor.png
-	map_bump Car Paint.002_Normal.png
-	bump Car Paint.002_Normal.png
-	map_refl Car Paint.002_Metallic.png
+	
 
 newmtl Transparent_Glass
 	Ns 250.0000
@@ -341,6 +312,4 @@ newmtl Material_037
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Carlight line chrome orange_BaseColor.png
 	map_Kd Carlight line chrome orange_BaseColor.png
-	map_bump Car windshield glass_Normal.png
-	bump Car windshield glass_Normal.png
-	map_refl Car windshield glass_Metallic.png
+	

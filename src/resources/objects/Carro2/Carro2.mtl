@@ -14,9 +14,7 @@ newmtl Body
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Body_Base_Color.png
 	map_Kd Body_Base_Color.png
-	map_Ks Body_Metallic.png
-	map_bump Body_Normal_OpenGL.png
-	bump Body_Normal_OpenGL.png
+	
 
 newmtl Interior
 	Ns 100.0000
@@ -31,9 +29,7 @@ newmtl Interior
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Interior_Base_Color.png
 	map_Kd Interior_Base_Color.png
-	map_Ks Interior_Metallic.png
-	map_bump Interior_Normal_OpenGL.png
-	bump Interior_Normal_OpenGL.png
+	
 
 newmtl Glass
 	Ns 200.0000
@@ -46,6 +42,4 @@ newmtl Glass
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Glass_Base_Color.png
 	map_Kd Glass_Base_Color.png
-	map_Ks Glass_Metallic.png
-	map_bump Glass_Roughness.png
-	bump Glass_Roughness.png
+	

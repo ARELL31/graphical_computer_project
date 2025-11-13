@@ -14,8 +14,7 @@ newmtl trunk_mat
 	Ke 0.0000 0.0000 0.0000
 	map_Ka tesla_cybertruck_trunk_mat_BaseColor.png
 	map_Kd tesla_cybertruck_trunk_mat_BaseColor.png
-	map_bump tesla_cybertruck_trunk_mat_Normal.png
-	bump tesla_cybertruck_trunk_mat_OcclusionRoughnessMetallic.png
+	
 
 newmtl body_mat
 	Ns 26.5805
@@ -30,8 +29,7 @@ newmtl body_mat
 	Ke 0.0000 0.0000 0.0000
 	map_Ka tesla_cybertruck_body_mat_BaseColor.png
 	map_Kd tesla_cybertruck_body_mat_BaseColor.png
-	map_bump tesla_cybertruck_body_mat_Normal.png
-	bump tesla_cybertruck_body_mat_OcclusionRoughnessMetallic.png
+	
 
 newmtl interior_mat
 	Ns 26.5805
@@ -46,8 +44,7 @@ newmtl interior_mat
 	Ke 0.0000 0.0000 0.0000
 	map_Ka tesla_cybertruck_interior_mat_BaseColor.png
 	map_Kd tesla_cybertruck_interior_mat_BaseColor.png
-	map_bump tesla_cybertruck_interior_mat_Normal.png
-	bump tesla_cybertruck_interior_mat_OcclusionRoughnessMetallic.png
+	
 
 newmtl car_paint_mat
 	Ns 26.5805
@@ -62,8 +59,7 @@ newmtl car_paint_mat
 	Ke 0.0000 0.0000 0.0000
 	map_Ka tesla_cybertruck_car_paint_mat_BaseColor.png
 	map_Kd tesla_cybertruck_car_paint_mat_BaseColor.png
-	map_bump tesla_cybertruck_car_paint_mat_Normal.png
-	bump tesla_cybertruck_car_paint_mat_OcclusionRoughnessMetallic.png
+	
 
 newmtl light_mat
 	Ns 26.5805
@@ -76,10 +72,7 @@ newmtl light_mat
 	Ke 0.0000 0.0000 0.0000
 	map_Ka tesla_cybertruck_light_mat_BaseColor.png
 	map_Kd tesla_cybertruck_light_mat_BaseColor.png
-	map_Ks tesla_cybertruck_light_mat_OcclusionRoughnessMetallic.png
-	map_Ke tesla_cybertruck_light_mat_Emissive.png
-	map_bump tesla_cybertruck_light_mat_Normal.png
-	bump tesla_cybertruck_light_mat_OcclusionRoughnessMetallic.png
+	
 
 newmtl glass_windows_mat
 	Ns 43.2193
@@ -94,8 +87,7 @@ newmtl glass_windows_mat
 	Ke 0.0000 0.0000 0.0000
 	map_Ka tesla_cybertruck_glass_windows_mat_BaseColor.png
 	map_Kd tesla_cybertruck_glass_windows_mat_BaseColor.png
-	map_bump tesla_cybertruck_glass_windows_mat_Normal.png
-	bump tesla_cybertruck_glass_windows_mat_OcclusionRoughnessMetallic.png
+	
 
 newmtl glass_light_mat
 	Ns 43.2193
@@ -110,8 +102,7 @@ newmtl glass_light_mat
 	Ke 0.0000 0.0000 0.0000
 	map_Ka tesla_cybertruck_glass_light_mat_BaseColor.png
 	map_Kd tesla_cybertruck_glass_light_mat_BaseColor.png
-	map_bump tesla_cybertruck_glass_light_mat_Normal.png
-	bump tesla_cybertruck_glass_light_mat_OcclusionRoughnessMetallic.png
+	
 
 newmtl wheel_mat
 	Ns 26.5805
@@ -126,5 +117,4 @@ newmtl wheel_mat
 	Ke 0.0000 0.0000 0.0000
 	map_Ka tesla_cybertruck_wheel_mat_BaseColor.png
 	map_Kd tesla_cybertruck_wheel_mat_BaseColor.png
-	map_bump tesla_cybertruck_wheel_mat_Normal.png
-	bump tesla_cybertruck_wheel_mat_OcclusionRoughnessMetallic.png
+	

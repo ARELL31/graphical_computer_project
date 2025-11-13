@@ -14,7 +14,4 @@ newmtl blinn1SG
 	Ke 0.0000 0.0000 0.0000
 	map_Ka Cadillac CT4 V 2022_lambert6_BaseColor-4.png
 	map_Kd Cadillac CT4 V 2022_lambert6_BaseColor-4.png
-	map_Ks Cadillac CT4 V 2022_lambert6_Metalness.png
-	map_Ke Cadillac CT4 V 2022_lambert6_Specular.png
-	map_bump Cadillac CT4 V 2022_lambert6_Roughness.png
-	bump Cadillac CT4 V 2022_lambert6_Roughness.png
+	
