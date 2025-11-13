@@ -1,8 +1,12 @@
 /*---------------------------------------------------------*/
-/* ----------------   Práctica  --------------------------*/
+/* ----------------   Proyecto  --------------------------*/
 /*-----------------    2026-1   ---------------------------*/
-/*------------- Alumno:                     ---------------*/
-/*------------- No. Cuenta                  ---------------*/
+/* Alumnos:
+Campos Camargo Rafael
+Cuevas González Dalia
+Franco Arellano Luis Fernando
+Valencia Mancera Erick Samuel */
+
 
 #include <Windows.h>
 
