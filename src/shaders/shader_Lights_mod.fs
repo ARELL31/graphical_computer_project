@@ -1,8 +1,8 @@
 #version 330 core
 out vec4 FragColor;
 
-#define NUMBER 2
-#define NUMBER_SPOT 1
+#define NUMBER 12
+#define NUMBER_SPOT 6
 
 in vec3 FragPos;
 in vec3 Normal;
