@@ -101,12 +101,158 @@ float	posX = 0.0f,
 		posY = 0.0f,
 		posZ = 0.0f,
 		rotRodIzq = 0.0f,
-		giroMonito = 0.0f;
+		giroMonito = 0.0f,
+//pinturas key frame
+//pinturas key frame - POSICIONES EN PAREDES
+		posXp1 = -19.7f,
+		posYp1 = 15.5f,
+		posZp1 = 7.0f,
+		rotp1 = 180.0f,
+		scalep1 = 0.15f,
+
+		posXp2 = -19.7f,
+		posYp2 = 15.5f,
+		posZp2 = 17.0f,
+		rotp2 = 180.0f,
+		scalep2 = 0.17f,
+
+		posXp3 = -19.7f,
+		posYp3 = 15.5f,
+		posZp3 = 27.0f,
+		rotp3 = 180.0f,
+		scalep3 = 0.17f,
+
+		posXp4 = -19.7f,
+		posYp4 = 15.5f,
+		posZp4 = 37.0f,
+		rotp4 = 180.0f,
+		scalep4 = 0.169f,
+
+		posXp5 = 19.7f,
+		posYp5 = 15.5f,
+		posZp5 = 7.0f,
+		rotp5 = 0.0f,
+		scalep5 = 0.17f,
+
+		posXp6 = 19.7f,
+		posYp6 = 15.5f,
+		posZp6 = 17.0f,
+		rotp6 = 0.0f,
+		scalep6 = 0.169f,
+
+		posXp7 = 19.7f,
+		posYp7 = 15.5f,
+		posZp7 = 27.0f,
+		rotp7 = 0.0f,
+		scalep7 = 0.169f,
+
+		posXp8 = 19.7f,
+		posYp8 = 15.5f,
+		posZp8 = 37.0f,
+		rotp8 = 0.0f,
+		scalep8 = 0.169f,
+
+		posXp9 = 15.7f,
+		posYp9 = 15.5f,
+		posZp9 = -42.2f,
+		rotp9 = 90.0f,
+		scalep9 = 0.169f,
+
+		posXp10 = -15.7f,
+		posYp10 = 15.5f,
+		posZp10 = -42.2f,
+		rotp10 = 90.0f,
+		scalep10 = 0.169f,
+
+		posXp11 = -15.7f,
+		posYp11 = 15.5f,
+		posZp11 = 42.2f,
+		rotp11 = -90.0f,
+		scalep11 = 0.169f,
+
+		posXp12 = 15.7f,
+		posYp12 = 15.5f,
+		posZp12 = 42.2f,
+		rotp12 = -90.0f,
+		scalep12 = 0.169f;
+
 float	incX = 0.0f,
 		incY = 0.0f,
 		incZ = 0.0f,
 		rotRodIzqInc = 0.0f,
-		giroMonitoInc = 0.0f;
+		giroMonitoInc = 0.0f,
+		//pinturas
+		incposXp1 = 0.0f,
+		incposYp1 = 0.0f,
+		incposZp1 = 0.0f,
+		incrotp1 = 0.0f,
+		incscalep1 = 0.0f,
+
+		incposXp2 = 0.0f,
+		incposYp2 = 0.0f,
+		incposZp2 = 0.0f,
+		incrotp2 = 0.0f,
+		incscalep2 = 0.0f,
+
+		incposXp3 = 0.0f,
+		incposYp3 = 0.0f,
+		incposZp3 = 0.0f,
+		incrotp3 = 0.0f,
+		incscalep3 = 0.0f,
+
+		incposXp4 = 0.0f,
+		incposYp4 = 0.0f,
+		incposZp4 = 0.0f,
+		incrotp4 = 0.0f,
+		incscalep4 = 0.0f,
+
+		incposXp5 = 0.0f,
+		incposYp5 = 0.0f,
+		incposZp5 = 0.0f,
+		incrotp5 = 0.0f,
+		incscalep5 = 0.0f,
+
+		incposXp6 = 0.0f,
+		incposYp6 = 0.0f,
+		incposZp6 = 0.0f,
+		incrotp6 = 0.0f,
+		incscalep6 = 0.0f,
+
+		incposXp7 = 0.0f,
+		incposYp7 = 0.0f,
+		incposZp7 = 0.0f,
+		incrotp7 = 0.0f,
+		incscalep7 = 0.0f,
+
+		incposXp8 = 0.0f,
+		incposYp8 = 0.0f,
+		incposZp8 = 0.0f,
+		incrotp8 = 0.0f,
+		incscalep8 = 0.0f,
+
+		incposXp9 = 0.0f,
+		incposYp9 = 0.0f,
+		incposZp9 = 0.0f,
+		incrotp9 = 0.0f,
+		incscalep9 = 0.0f,
+
+		incposXp10 = 0.0f,
+		incposYp10 = 0.0f,
+		incposZp10 = 0.0f,
+		incrotp10 = 0.0f,
+		incscalep10 = 0.0f,
+
+		incposXp11 = 0.0f,
+		incposYp11 = 0.0f,
+		incposZp11 = 0.0f,
+		incrotp11 = 0.0f,
+		incscalep11 = 0.0f,
+
+		incposXp12 = 0.0f,
+		incposYp12 = 0.0f,
+		incposZp12 = 0.0f,
+		incrotp12 = 0.0f,
+		incscalep12 = 0.0f;
 
 #define MAX_FRAMES 9
 int i_max_steps = 60;
@@ -119,11 +265,72 @@ typedef struct _frame
 	float posZ;		//Variable para PosicionZ
 	float rotRodIzq;
 	float giroMonito;
+	//Variables para pinturas KeyFrames
+	float posXp1 = 0.0f;
+	float posYp1 = 0.0f;
+	float posZp1 = 0.0f;
+	float rotp1 = 0.0f;
+	float scalep1 = 0.0f;
+	float posXp2 = 0.0f;
+	float posYp2 = 0.0f;
+	float scalep2 = 0.0f;
+	float posZp2 = 0.0f;
+	float rotp2 = 0.0f;
+	float posXp3 = 0.0f;
+	float posYp3 = 0.0f;
+	float posZp3 = 0.0f;
+	float rotp3 = 0.0f;
+	float scalep3 = 0.0f;
+	float posXp4 = 0.0f;
+	float posYp4 = 0.0f;
+	float posZp4 = 0.0f;
+	float rotp4 = 0.0f;
+	float scalep4 = 0.0f;
+	float posXp5 = 0.0f;
+	float posYp5 = 0.0f;
+	float posZp5 = 0.0f;
+	float rotp5 = 0.0f;
+	float scalep5 = 0.0f;
+	float posXp6 = 0.0f;
+	float posYp6 = 0.0f;
+	float posZp6 = 0.0f;
+	float rotp6 = 0.0f;
+	float scalep6 = 0.0f;
+	float posXp7 = 0.0f;
+	float posYp7 = 0.0f;
+	float posZp7 = 0.0f;
+	float rotp7 = 0.0f;
+	float scalep7 = 0.0f;
+	float posXp8 = 0.0f;
+	float posYp8 = 0.0f;
+	float posZp8 = 0.0f;
+	float rotp8 = 0.0f;
+	float scalep8 = 0.0f;
+	float posXp9 = 0.0f;
+	float posYp9 = 0.0f;
+	float posZp9 = 0.0f;
+	float rotp9 = 0.0f;
+	float scalep9 = 0.0f;
+	float posXp10 = 0.0f;
+	float posYp10 = 0.0f;
+	float posZp10 = 0.0f;
+	float rotp10 = 0.0f;
+	float scalep10 = 0.0f;
+	float posXp11 = 0.0f;
+	float posYp11 = 0.0f;
+	float posZp11 = 0.0f;
+	float rotp11 = 0.0f;
+	float scalep11 = 0.0f;
+	float posXp12 = 0.0f;
+	float posYp12 = 0.0f;
+	float posZp12 = 0.0f;
+	float rotp12 = 0.0f;
+	float scalep12 = 0.0f;
 
 }FRAME;
 
 FRAME KeyFrame[MAX_FRAMES];
-int FrameIndex = 0;			//introducir número en caso de tener Key guardados
+int FrameIndex = 7;			//introducir número en caso de tener Key guardados
 bool play = false;
 int playIndex = 0;
 
@@ -139,6 +346,78 @@ void saveFrame(void)
 	KeyFrame[FrameIndex].rotRodIzq = rotRodIzq;
 	KeyFrame[FrameIndex].giroMonito = giroMonito;
 
+	KeyFrame[FrameIndex].posXp1 = posXp1;
+	KeyFrame[FrameIndex].posYp1 = posYp1;
+	KeyFrame[FrameIndex].posZp1 = posZp1;
+	KeyFrame[FrameIndex].rotp1 = rotp1;
+	KeyFrame[FrameIndex].scalep1 = scalep1;
+
+	KeyFrame[FrameIndex].posXp2 = posXp2;
+	KeyFrame[FrameIndex].posYp2 = posYp2;
+	KeyFrame[FrameIndex].posZp2 = posZp2;
+	KeyFrame[FrameIndex].rotp2 = rotp2;
+	KeyFrame[FrameIndex].scalep2 = scalep2;
+
+	KeyFrame[FrameIndex].posXp3 = posXp3;
+	KeyFrame[FrameIndex].posYp3 = posYp3;
+	KeyFrame[FrameIndex].posZp3 = posZp3;
+	KeyFrame[FrameIndex].rotp3 = rotp3;
+	KeyFrame[FrameIndex].scalep3 = scalep3;
+
+	KeyFrame[FrameIndex].posXp4 = posXp4;
+	KeyFrame[FrameIndex].posYp4 = posYp4;
+	KeyFrame[FrameIndex].posZp4 = posZp4;
+	KeyFrame[FrameIndex].rotp4 = rotp4;
+	KeyFrame[FrameIndex].scalep4 = scalep4;
+
+	KeyFrame[FrameIndex].posXp5 = posXp5;
+	KeyFrame[FrameIndex].posYp5 = posYp5;
+	KeyFrame[FrameIndex].posZp5 = posZp5;
+	KeyFrame[FrameIndex].rotp5 = rotp5;
+	KeyFrame[FrameIndex].scalep5 = scalep5;
+
+	KeyFrame[FrameIndex].posXp6 = posXp6;
+	KeyFrame[FrameIndex].posYp6 = posYp6;
+	KeyFrame[FrameIndex].posZp6 = posZp6;
+	KeyFrame[FrameIndex].rotp6 = rotp6;
+	KeyFrame[FrameIndex].scalep6 = scalep6;
+
+	KeyFrame[FrameIndex].posXp7 = posXp7;
+	KeyFrame[FrameIndex].posYp7 = posYp7;
+	KeyFrame[FrameIndex].posZp7 = posZp7;
+	KeyFrame[FrameIndex].rotp7 = rotp7;
+	KeyFrame[FrameIndex].scalep7 = scalep7;
+
+	KeyFrame[FrameIndex].posXp8 = posXp8;
+	KeyFrame[FrameIndex].posYp8 = posYp8;
+	KeyFrame[FrameIndex].posZp8 = posZp8;
+	KeyFrame[FrameIndex].rotp8 = rotp8;
+	KeyFrame[FrameIndex].scalep8 = scalep8;
+
+	KeyFrame[FrameIndex].posXp9 = posXp9;
+	KeyFrame[FrameIndex].posYp9 = posYp9;
+	KeyFrame[FrameIndex].posZp9 = posZp9;
+	KeyFrame[FrameIndex].rotp9 = rotp9;
+	KeyFrame[FrameIndex].scalep9 = scalep9;
+
+	KeyFrame[FrameIndex].posXp10 = posXp10;
+	KeyFrame[FrameIndex].posYp10 = posYp10;
+	KeyFrame[FrameIndex].posZp10 = posZp10;
+	KeyFrame[FrameIndex].rotp10 = rotp10;
+	KeyFrame[FrameIndex].scalep10 = scalep10;
+
+	KeyFrame[FrameIndex].posXp11 = posXp11;
+	KeyFrame[FrameIndex].posYp11 = posYp11;
+	KeyFrame[FrameIndex].posZp11 = posZp11;
+	KeyFrame[FrameIndex].rotp11 = rotp11;
+	KeyFrame[FrameIndex].scalep11 = scalep11;
+
+	KeyFrame[FrameIndex].posXp12 = posXp12;
+	KeyFrame[FrameIndex].posYp12 = posYp12;
+	KeyFrame[FrameIndex].posZp12 = posZp12;
+	KeyFrame[FrameIndex].rotp12 = rotp12;
+	KeyFrame[FrameIndex].scalep12 = scalep12;
+
 	FrameIndex++;
 }
 
@@ -150,6 +429,78 @@ void resetElements(void)
 
 	rotRodIzq = KeyFrame[0].rotRodIzq;
 	giroMonito = KeyFrame[0].giroMonito;
+
+	posXp1 = KeyFrame[0].posXp1;
+	posYp1 = KeyFrame[0].posYp1;
+	posZp1 = KeyFrame[0].posZp1;
+	rotp1 = KeyFrame[0].rotp1;
+	scalep1 = KeyFrame[0].scalep1;
+
+	posXp2 = KeyFrame[0].posXp2;
+	posYp2 = KeyFrame[0].posYp2;
+	posZp2 = KeyFrame[0].posZp2;
+	rotp2 = KeyFrame[0].rotp2;
+	scalep2 = KeyFrame[0].scalep2;
+
+	posXp3 = KeyFrame[0].posXp3;
+	posYp3 = KeyFrame[0].posYp3;
+	posZp3 = KeyFrame[0].posZp3;
+	rotp3 = KeyFrame[0].rotp3;
+	scalep3 = KeyFrame[0].scalep3;
+
+	posXp4 = KeyFrame[0].posXp4;
+	posYp4 = KeyFrame[0].posYp4;
+	posZp4 = KeyFrame[0].posZp4;
+	rotp4 = KeyFrame[0].rotp4;
+	scalep4 = KeyFrame[0].scalep4;
+
+	posXp5 = KeyFrame[0].posXp5;
+	posYp5 = KeyFrame[0].posYp5;
+	posZp5 = KeyFrame[0].posZp5;
+	rotp5 = KeyFrame[0].rotp5;
+	scalep5 = KeyFrame[0].scalep5;
+	
+	posXp6 = KeyFrame[0].posXp6;
+	posYp6 = KeyFrame[0].posYp6;
+	posZp6 = KeyFrame[0].posZp6;
+	rotp6 = KeyFrame[0].rotp6;
+	scalep6 = KeyFrame[0].scalep6;
+	
+	posXp7 = KeyFrame[0].posXp7;
+	posYp7 = KeyFrame[0].posYp7;
+	posZp7 = KeyFrame[0].posZp7;
+	rotp7 = KeyFrame[0].rotp7;
+	scalep7 = KeyFrame[0].scalep7;
+	
+	posXp8 = KeyFrame[0].posXp8;
+	posYp8 = KeyFrame[0].posYp8;
+	posZp8 = KeyFrame[0].posZp8;
+	rotp8 = KeyFrame[0].rotp8;
+	scalep8 = KeyFrame[0].scalep8;
+	
+	posXp9 = KeyFrame[0].posXp9;
+	posYp9 = KeyFrame[0].posYp9;
+	posZp9 = KeyFrame[0].posZp9;
+	rotp9 = KeyFrame[0].rotp9;
+	scalep9 = KeyFrame[0].scalep9;
+	
+	posXp10 = KeyFrame[0].posXp10;
+	posYp10 = KeyFrame[0].posYp10;
+	posZp10 = KeyFrame[0].posZp10;
+	rotp10 = KeyFrame[0].rotp10;
+	scalep10 = KeyFrame[0].scalep10;
+	
+	posXp11 = KeyFrame[0].posXp11;
+	posYp11 = KeyFrame[0].posYp11;
+	posZp11 = KeyFrame[0].posZp11;
+	rotp11 = KeyFrame[0].rotp11;
+	scalep11 = KeyFrame[0].scalep11;
+	
+	posXp12 = KeyFrame[0].posXp12;
+	posYp12 = KeyFrame[0].posYp12;
+	posZp12 = KeyFrame[0].posZp12;
+	rotp12 = KeyFrame[0].rotp12;
+	scalep12 = KeyFrame[0].scalep12;
 }
 
 void interpolation(void)
@@ -161,6 +512,77 @@ void interpolation(void)
 	rotRodIzqInc = (KeyFrame[playIndex + 1].rotRodIzq - KeyFrame[playIndex].rotRodIzq) / i_max_steps;
 	giroMonitoInc = (KeyFrame[playIndex + 1].giroMonito - KeyFrame[playIndex].giroMonito) / i_max_steps;
 
+	incposXp1 = (KeyFrame[playIndex + 1].posXp1 - KeyFrame[playIndex].posXp1) / i_max_steps;
+	incposYp1 = (KeyFrame[playIndex + 1].posYp1 - KeyFrame[playIndex].posYp1) / i_max_steps;
+	incposZp1 = (KeyFrame[playIndex + 1].posZp1 - KeyFrame[playIndex].posZp1) / i_max_steps;
+	incrotp1 = (KeyFrame[playIndex + 1].rotp1 - KeyFrame[playIndex].rotp1) / i_max_steps;
+	incscalep1 = (KeyFrame[playIndex + 1].scalep1 - KeyFrame[playIndex].scalep1) / i_max_steps;
+	
+	incposXp2 = (KeyFrame[playIndex + 1].posXp2 - KeyFrame[playIndex].posXp2) / i_max_steps;
+	incposYp2 = (KeyFrame[playIndex + 1].posYp2 - KeyFrame[playIndex].posYp2) / i_max_steps;
+	incposZp2 = (KeyFrame[playIndex + 1].posZp2 - KeyFrame[playIndex].posZp2) / i_max_steps;
+	incrotp2 = (KeyFrame[playIndex + 1].rotp2 - KeyFrame[playIndex].rotp2) / i_max_steps;
+	incscalep2 = (KeyFrame[playIndex + 1].scalep2 - KeyFrame[playIndex].scalep2) / i_max_steps;
+	
+	incposXp3 = (KeyFrame[playIndex + 1].posXp3 - KeyFrame[playIndex].posXp3) / i_max_steps;
+	incposYp3 = (KeyFrame[playIndex + 1].posYp3 - KeyFrame[playIndex].posYp3) / i_max_steps;
+	incposZp3 = (KeyFrame[playIndex + 1].posZp3 - KeyFrame[playIndex].posZp3) / i_max_steps;
+	incrotp3 = (KeyFrame[playIndex + 1].rotp3 - KeyFrame[playIndex].rotp3) / i_max_steps;
+	incscalep3 = (KeyFrame[playIndex + 1].scalep3 - KeyFrame[playIndex].scalep3) / i_max_steps;
+	
+	incposXp4 = (KeyFrame[playIndex + 1].posXp4 - KeyFrame[playIndex].posXp4) / i_max_steps;
+	incposYp4 = (KeyFrame[playIndex + 1].posYp4 - KeyFrame[playIndex].posYp4) / i_max_steps;
+	incposZp4 = (KeyFrame[playIndex + 1].posZp4 - KeyFrame[playIndex].posZp4) / i_max_steps;
+	incrotp4 = (KeyFrame[playIndex + 1].rotp4 - KeyFrame[playIndex].rotp4) / i_max_steps;
+	incscalep4 = (KeyFrame[playIndex + 1].scalep4 - KeyFrame[playIndex].scalep4) / i_max_steps;
+	
+	incposXp5 = (KeyFrame[playIndex + 1].posXp5 - KeyFrame[playIndex].posXp5) / i_max_steps;
+	incposYp5 = (KeyFrame[playIndex + 1].posYp5 - KeyFrame[playIndex].posYp5) / i_max_steps;
+	incposZp5 = (KeyFrame[playIndex + 1].posZp5 - KeyFrame[playIndex].posZp5) / i_max_steps;
+	incrotp5 = (KeyFrame[playIndex + 1].rotp5 - KeyFrame[playIndex].rotp5) / i_max_steps;
+	incscalep5 = (KeyFrame[playIndex + 1].scalep5 - KeyFrame[playIndex].scalep5) / i_max_steps;
+	
+	incposXp6 = (KeyFrame[playIndex + 1].posXp6 - KeyFrame[playIndex].posXp6) / i_max_steps;
+	incposYp6 = (KeyFrame[playIndex + 1].posYp6 - KeyFrame[playIndex].posYp6) / i_max_steps;
+	incposZp6 = (KeyFrame[playIndex + 1].posZp6 - KeyFrame[playIndex].posZp6) / i_max_steps;
+	incrotp6 = (KeyFrame[playIndex + 1].rotp6 - KeyFrame[playIndex].rotp6) / i_max_steps;
+	incscalep6 = (KeyFrame[playIndex + 1].scalep6 - KeyFrame[playIndex].scalep6) / i_max_steps;
+	
+	incposXp7 = (KeyFrame[playIndex + 1].posXp7 - KeyFrame[playIndex].posXp7) / i_max_steps;
+	incposYp7 = (KeyFrame[playIndex + 1].posYp7 - KeyFrame[playIndex].posYp7) / i_max_steps;
+	incposZp7 = (KeyFrame[playIndex + 1].posZp7 - KeyFrame[playIndex].posZp7) / i_max_steps;
+	incrotp7 = (KeyFrame[playIndex + 1].rotp7 - KeyFrame[playIndex].rotp7) / i_max_steps;
+	incscalep7 = (KeyFrame[playIndex + 1].scalep7 - KeyFrame[playIndex].scalep7) / i_max_steps;
+	
+	incposXp8 = (KeyFrame[playIndex + 1].posXp8 - KeyFrame[playIndex].posXp8) / i_max_steps;
+	incposYp8 = (KeyFrame[playIndex + 1].posYp8 - KeyFrame[playIndex].posYp8) / i_max_steps;
+	incposZp8 = (KeyFrame[playIndex + 1].posZp8 - KeyFrame[playIndex].posZp8) / i_max_steps;
+	incrotp8 = (KeyFrame[playIndex + 1].rotp8 - KeyFrame[playIndex].rotp8) / i_max_steps;
+	incscalep8 = (KeyFrame[playIndex + 1].scalep8 - KeyFrame[playIndex].scalep8) / i_max_steps;
+	
+	incposXp9 = (KeyFrame[playIndex + 1].posXp9 - KeyFrame[playIndex].posXp9) / i_max_steps;
+	incposYp9 = (KeyFrame[playIndex + 1].posYp9 - KeyFrame[playIndex].posYp9) / i_max_steps;
+	incposZp9 = (KeyFrame[playIndex + 1].posZp9 - KeyFrame[playIndex].posZp9) / i_max_steps;
+	incrotp9 = (KeyFrame[playIndex + 1].rotp9 - KeyFrame[playIndex].rotp9) / i_max_steps;
+	incscalep9 = (KeyFrame[playIndex + 1].scalep9 - KeyFrame[playIndex].scalep9) / i_max_steps;
+	
+	incposXp10 = (KeyFrame[playIndex + 1].posXp10 - KeyFrame[playIndex].posXp10) / i_max_steps;
+	incposYp10 = (KeyFrame[playIndex + 1].posYp10 - KeyFrame[playIndex].posYp10) / i_max_steps;
+	incposZp10 = (KeyFrame[playIndex + 1].posZp10 - KeyFrame[playIndex].posZp10) / i_max_steps;
+	incrotp10 = (KeyFrame[playIndex + 1].rotp10 - KeyFrame[playIndex].rotp10) / i_max_steps;
+	incscalep10 = (KeyFrame[playIndex + 1].scalep10 - KeyFrame[playIndex].scalep10) / i_max_steps;
+	
+	incposXp11 = (KeyFrame[playIndex + 1].posXp11 - KeyFrame[playIndex].posXp11) / i_max_steps;
+	incposYp11 = (KeyFrame[playIndex + 1].posYp11 - KeyFrame[playIndex].posYp11) / i_max_steps;
+	incposZp11 = (KeyFrame[playIndex + 1].posZp11 - KeyFrame[playIndex].posZp11) / i_max_steps;
+	incrotp11 = (KeyFrame[playIndex + 1].rotp11 - KeyFrame[playIndex].rotp11) / i_max_steps;
+	incscalep11 = (KeyFrame[playIndex + 1].scalep11 - KeyFrame[playIndex].scalep11) / i_max_steps;
+	
+	incposXp12 = (KeyFrame[playIndex + 1].posXp12 - KeyFrame[playIndex].posXp12) / i_max_steps;
+	incposYp12 = (KeyFrame[playIndex + 1].posYp12 - KeyFrame[playIndex].posYp12) / i_max_steps;
+	incposZp12 = (KeyFrame[playIndex + 1].posZp12 - KeyFrame[playIndex].posZp12) / i_max_steps;
+	incrotp12 = (KeyFrame[playIndex + 1].rotp12 - KeyFrame[playIndex].rotp12) / i_max_steps;
+	incscalep12 = (KeyFrame[playIndex + 1].scalep12 - KeyFrame[playIndex].scalep12) / i_max_steps;
 }
 
 unsigned int generateTextures(const char* filename, bool alfa, bool isPrimitive)
@@ -245,6 +667,78 @@ void animate(void)
 
 			rotRodIzq += rotRodIzqInc;
 			giroMonito += giroMonitoInc;
+
+			posXp1 += incposXp1;
+			posYp1 += incposYp1;
+			posZp1 += incposZp1;
+			rotp1 += incrotp1;
+			scalep1 += incscalep1;
+
+			posXp2 += incposXp2;
+			posYp2 += incposYp2;
+			posZp2 += incposZp2;
+			rotp2 += incrotp2;
+			scalep2 += incscalep2;
+
+			posXp3 += incposXp3;
+			posYp3 += incposYp3;
+			posZp3 += incposZp3;
+			rotp3 += incrotp3;
+			scalep3 += incscalep3;
+
+			posXp4 += incposXp4;
+			posYp4 += incposYp4;
+			posZp4 += incposZp4;
+			rotp4 += incrotp4;
+			scalep4 += incscalep4;
+
+			posXp5 += incposXp5;
+			posYp5 += incposYp5;
+			posZp5 += incposZp5;
+			rotp5 += incrotp5;
+			scalep5 += incscalep5;
+
+			posXp6 += incposXp6;
+			posYp6 += incposYp6;
+			posZp6 += incposZp6;
+			rotp6 += incrotp6;
+			scalep6 += incscalep6;
+
+			posXp7 += incposXp7;
+			posYp7 += incposYp7;
+			posZp7 += incposZp7;
+			rotp7 += incrotp7;
+			scalep7 += incscalep7;
+
+			posXp8 += incposXp8;
+			posYp8 += incposYp8;
+			posZp8 += incposZp8;
+			rotp8 += incrotp8;
+			scalep8 += incscalep8;
+
+			posXp9 += incposXp9;
+			posYp9 += incposYp9;
+			posZp9 += incposZp9;
+			rotp9 += incrotp9;
+			scalep9 += incscalep9;
+
+			posXp10 += incposXp10;
+			posYp10 += incposYp10;
+			posZp10 += incposZp10;
+			rotp10 += incrotp10;
+			scalep10 += incscalep10;
+
+			posXp11 += incposXp11;
+			posYp11 += incposYp11;
+			posZp11 += incposZp11;
+			rotp11 += incrotp11;
+			scalep11 += incscalep11;
+
+			posXp12 += incposXp12;
+			posYp12 += incposYp12;
+			posZp12 += incposZp12;
+			rotp12 += incrotp12;
+			scalep12 += incscalep12;
 
 			i_curr_steps++;
 		}
@@ -472,9 +966,17 @@ int main() {
 	Model pintura2("resources/f3/frame03.obj");
 	Model pintura3("resources/f4/frame04.obj");
 	Model pintura4("resources/f5/frame05.obj");
+	Model pintura5("resources/f6/frame06.obj");
+	Model pintura6("resources/f7/frame07.obj");
+	Model pintura7("resources/f8/frame08.obj");
+	Model pintura8("resources/f9/frame09.obj");
+	Model pintura9("resources/f10/frame10.obj");
+	Model pintura10("resources/f11/frame11.obj");
+	Model pintura11("resources/f12/frame12.obj");
 
-	Model sillon("resources/objects/sillon/sillon.obj");
-	Model extintor("resources/objects/extintor/extintor.obj");
+	ModelAnim personajeGal("resources/modelo/modelo.dae");
+	personajeGal.initShaders(animShader.ID);
+
 
 	//Modelos de planta baja
 
@@ -513,8 +1015,584 @@ int main() {
 		KeyFrame[i].posZ = 0;
 		KeyFrame[i].rotRodIzq = 0;
 		KeyFrame[i].giroMonito = 0;
+
+		KeyFrame[i].posXp1 = 0.0f;
+		KeyFrame[i].posYp1 = 0.0f;
+		KeyFrame[i].posZp1 = 0.0f;
+		KeyFrame[i].rotp1 = 0.0f;
+		KeyFrame[i].scalep1 = 0.0f;
+
+		KeyFrame[i].posXp2 = 0.0f;
+		KeyFrame[i].posYp2 = 0.0f;
+		KeyFrame[i].posZp2 = 0.0f;
+		KeyFrame[i].rotp2 = 0.0f;
+		KeyFrame[i].scalep2 = 0.0f;
+		
+		KeyFrame[i].posXp3 = 0.0f;
+		KeyFrame[i].posYp3 = 0.0f;
+		KeyFrame[i].posZp3 = 0.0f;
+		KeyFrame[i].rotp3 = 0.0f;
+		KeyFrame[i].scalep3 = 0.0f;
+
+		KeyFrame[i].posXp4 = 0.0f;
+		KeyFrame[i].posYp4 = 0.0f;
+		KeyFrame[i].posZp4 = 0.0f;
+		KeyFrame[i].rotp4 = 0.0f;
+		KeyFrame[i].scalep4 = 0.0f;
+
+		KeyFrame[i].posXp5 = 0.0f;
+		KeyFrame[i].posYp5 = 0.0f;
+		KeyFrame[i].posZp5 = 0.0f;
+		KeyFrame[i].rotp5 = 0.0f;
+		KeyFrame[i].scalep5 = 0.0f;
+
+		KeyFrame[i].posXp6 = 0.0f;
+		KeyFrame[i].posYp6 = 0.0f;
+		KeyFrame[i].posZp6 = 0.0f;
+		KeyFrame[i].rotp6 = 0.0f;
+		KeyFrame[i].scalep6 = 0.0f;
+
+
+		KeyFrame[i].posXp7 = 0.0f;
+		KeyFrame[i].posYp7 = 0.0f;
+		KeyFrame[i].posZp7 = 0.0f;
+		KeyFrame[i].rotp7 = 0.0f;
+		KeyFrame[i].scalep7 = 0.0f;
+
+		KeyFrame[i].posXp8 = 0.0f;
+		KeyFrame[i].posYp8 = 0.0f;
+		KeyFrame[i].posZp8 = 0.0f;
+		KeyFrame[i].rotp8 = 0.0f;
+		KeyFrame[i].scalep8 = 0.0f;
+		
+		KeyFrame[i].posXp9 = 0.0f;
+		KeyFrame[i].posYp9 = 0.0f;
+		KeyFrame[i].posZp9 = 0.0f;
+		KeyFrame[i].rotp9 = 0.0f;
+		KeyFrame[i].scalep9 = 0.0f;
+		
+		KeyFrame[i].posXp10 = 0.0f;
+		KeyFrame[i].posYp10 = 0.0f;
+		KeyFrame[i].posZp10 = 0.0f;
+		KeyFrame[i].rotp10 = 0.0f;
+		KeyFrame[i].scalep10 = 0.0f;
+		
+		KeyFrame[i].posXp11 = 0.0f;
+		KeyFrame[i].posYp11 = 0.0f;
+		KeyFrame[i].posZp11 = 0.0f;
+		KeyFrame[i].rotp11 = 0.0f;
+		KeyFrame[i].scalep11 = 0.0f;
+		
+		KeyFrame[i].posXp12 = 0.0f;
+		KeyFrame[i].posYp12 = 0.0f;
+		KeyFrame[i].posZp12 = 0.0f;
+		KeyFrame[i].rotp12 = 0.0f;
+		KeyFrame[i].scalep12 = 0.0f;
 	}
 
+	KeyFrame[0].posXp1 = -19.7f; //-19.7
+	KeyFrame[0].posYp1 = 15.5f; 
+	KeyFrame[0].posZp1 = 7.0f; 
+	KeyFrame[0].rotp1 = 180.0f;
+	KeyFrame[0].scalep1 = 0.15f,
+
+	KeyFrame[0].posXp2 = -19.7f; 
+	KeyFrame[0].posYp2 = 15.5f; 
+	KeyFrame[0].posZp2 = 17.0f; 
+	KeyFrame[0].rotp2 = 180.0f;
+	KeyFrame[0].scalep2 = 0.17f,
+
+	KeyFrame[0].posXp3 = -19.7f; 
+	KeyFrame[0].posYp3 = 15.5f; 
+	KeyFrame[0].posZp3 = 27.0f; 
+	KeyFrame[0].rotp3 = 180.0f;
+	KeyFrame[0].scalep3 = 0.17f,
+
+	KeyFrame[0].posXp4 = -19.7f; 
+	KeyFrame[0].posYp4 = 15.5f; 
+	KeyFrame[0].posZp4 = 37.0f; 
+	KeyFrame[0].rotp4 = 180.0f;
+	KeyFrame[0].scalep4 = 0.169f,
+
+	KeyFrame[0].posXp5 = 19.7f; 
+	KeyFrame[0].posYp5 = 15.5f; 
+	KeyFrame[0].posZp5 = 7.0f; 
+	KeyFrame[0].rotp5 = 0.0f;
+	KeyFrame[0].scalep5 = 0.17f,
+	
+	KeyFrame[0].posXp6 = 19.7f; 
+	KeyFrame[0].posYp6 = 15.5f; 
+	KeyFrame[0].posZp6 = 17.0f; 
+	KeyFrame[0].rotp6 = 0.0f;
+	KeyFrame[0].scalep6 = 0.169f,
+	
+	KeyFrame[0].posXp7 = 19.7f; 
+	KeyFrame[0].posYp7 = 15.5f; 
+	KeyFrame[0].posZp7 = 27.0f; 
+	KeyFrame[0].rotp7 = 0.0f;
+	KeyFrame[0].scalep7 = 0.169f,
+	
+	KeyFrame[0].posXp8 = 19.7f; 
+	KeyFrame[0].posYp8 = 15.5f; 
+	KeyFrame[0].posZp8 = 37.0f; 
+	KeyFrame[0].rotp8 = 0.0f;
+	KeyFrame[0].scalep8 = 0.169f,
+	
+	KeyFrame[0].posXp9 = 15.7f; 
+	KeyFrame[0].posYp9 = 15.5f; 
+	KeyFrame[0].posZp9 = -42.2f; 
+	KeyFrame[0].rotp9 = 90.0f;
+	KeyFrame[0].scalep9 = 0.169f,
+
+	KeyFrame[0].posXp10 = -15.7f; 
+	KeyFrame[0].posYp10 = 15.5f; 
+	KeyFrame[0].posZp10 = -42.2f; 
+	KeyFrame[0].rotp10 = 90.0f;
+	KeyFrame[0].scalep10 = 0.169f,
+	
+	KeyFrame[0].posXp11 = -15.7f; 
+	KeyFrame[0].posYp11 = 15.5f; 
+	KeyFrame[0].posZp11 = 42.2f; 
+	KeyFrame[0].rotp11 = -90.0f;
+	KeyFrame[0].scalep11 = 0.169f,
+	
+	KeyFrame[0].posXp12 = 15.7f; 
+	KeyFrame[0].posYp12 = 15.5f; 
+	KeyFrame[0].posZp12 = 42.2f; 
+	KeyFrame[0].rotp12 = -90.0f;
+	KeyFrame[0].scalep12 = 0.169f;
+
+
+	KeyFrame[1].posXp1 = -10.0f; 
+	KeyFrame[1].posYp1 = 16.7f; 
+	KeyFrame[1].posZp1 = 8.0f; 
+	KeyFrame[1].rotp1 = 270.0f;
+	KeyFrame[1].scalep1 = 0.18f;
+
+	KeyFrame[1].posXp2 = -10.0f; 
+	KeyFrame[1].posYp2 = 16.7f; 
+	KeyFrame[1].posZp2 = 18.0f; 
+	KeyFrame[1].rotp2 = 270.0f;
+	KeyFrame[1].scalep2 = 0.2f;
+
+	KeyFrame[1].posXp3 = -10.0f; 
+	KeyFrame[1].posYp3 = 16.7f; 
+	KeyFrame[1].posZp3 = 28.0f; 
+	KeyFrame[1].rotp3 = 270.0f;
+	KeyFrame[1].scalep3 = 0.2f;
+
+	KeyFrame[1].posXp4 = -10.0f; 
+	KeyFrame[1].posYp4 = 16.7f; 
+	KeyFrame[1].posZp4 = 38.0f; 
+	KeyFrame[1].rotp4 = 270.0f;
+	KeyFrame[1].scalep4 = 0.2f;
+
+	KeyFrame[1].posXp5 = 10.0f; 
+	KeyFrame[1].posYp5 = 16.7f; 
+	KeyFrame[1].posZp5 = 8.0f; 
+	KeyFrame[1].rotp5 = 270.0f;
+	KeyFrame[1].scalep5 = 0.2f;
+
+	KeyFrame[1].posXp6 = 10.0f; 
+	KeyFrame[1].posYp6 = 16.7f; 
+	KeyFrame[1].posZp6 = 18.0f; 
+	KeyFrame[1].rotp6 = 270.0f;
+	KeyFrame[1].scalep6 = 0.2f;
+
+	KeyFrame[1].posXp7 = 10.0f; 
+	KeyFrame[1].posYp7 = 16.7f; 
+	KeyFrame[1].posZp7 = 28.0f; 
+	KeyFrame[1].rotp7 = 270.0f;
+	KeyFrame[1].scalep7 = 0.2f;
+
+	KeyFrame[1].posXp8 = 10.0f; 
+	KeyFrame[1].posYp8 = 16.7f; 
+	KeyFrame[1].posZp8 = 38.0f; 
+	KeyFrame[1].rotp8 = 270.0f;
+	KeyFrame[1].scalep8 = 0.2f;
+
+	KeyFrame[1].posXp9 = 15.7f; 
+	KeyFrame[1].posYp9 = 14.0f; 
+	KeyFrame[1].posZp9 = -42.2f; 
+	KeyFrame[1].rotp9 = 45.0f;
+	KeyFrame[1].scalep9 = 0.8f;
+	KeyFrame[1].scalep9 = 0.12f;
+
+	KeyFrame[1].posXp10 = -20.0f; 
+	KeyFrame[1].posYp10 = 16.7f; 
+	KeyFrame[1].posZp10 = -47.0f; 
+	KeyFrame[1].rotp10 = 90.0f;
+	KeyFrame[1].scalep10 = 0.8f;
+
+	KeyFrame[1].posXp11 = -20.0f; 
+	KeyFrame[1].posYp11 = 16.7f; 
+	KeyFrame[1].posZp11 = 47.0f; 
+	KeyFrame[1].rotp11 = -90.0f;
+	KeyFrame[1].scalep11 = 0.8f;
+
+	KeyFrame[1].posXp12 = 20.0f; 
+	KeyFrame[1].posYp12 = 16.7f; 
+	KeyFrame[1].posZp12 = 47.0f; 
+	KeyFrame[1].rotp12 = -90.0f;
+	KeyFrame[1].scalep12 = 0.8f;
+
+
+	KeyFrame[2].posXp1 = -12.0f; 
+	KeyFrame[2].posYp1 = 14.9f; 
+	KeyFrame[2].posZp1 = 7.0f; 
+	KeyFrame[2].rotp1 = 360.0f;
+	KeyFrame[2].scalep1 = 0.11f;
+
+	KeyFrame[2].posXp2 = -12.0f; 
+	KeyFrame[2].posYp2 = 13.7f; 
+	KeyFrame[2].posZp2 = 17.0f; 
+	KeyFrame[2].rotp2 = 360.0f;
+	KeyFrame[2].scalep2 = 0.13f;
+
+	KeyFrame[2].posXp3 = -12.0f; 
+	KeyFrame[2].posYp3 = 13.7f; 
+	KeyFrame[2].posZp3 = 27.0f; 
+	KeyFrame[2].rotp3 = 360.0f;
+	KeyFrame[2].scalep3 = 0.13f;
+
+
+	KeyFrame[2].posXp4 = -12.0f; 
+	KeyFrame[2].posYp4 = 13.7f; 
+	KeyFrame[2].posZp4 = 37.0f; 
+	KeyFrame[2].rotp4 = 360.0f;
+	KeyFrame[2].scalep4 = 0.13f;
+
+
+	KeyFrame[2].posXp5 = 12.0f; 
+	KeyFrame[2].posYp5 = 13.7f; 
+	KeyFrame[2].posZp5 = 7.0f; 
+	KeyFrame[2].rotp5 = 360.0f;
+	KeyFrame[2].scalep5 = 0.13f;
+
+	KeyFrame[2].posXp6 = 12.0f; 
+	KeyFrame[2].posYp6 = 13.7f; 
+	KeyFrame[2].posZp6 = 17.0f; 
+	KeyFrame[2].rotp6 = 360.0f;
+	KeyFrame[2].scalep6 = 0.13f;
+
+
+	KeyFrame[2].posXp7 = 12.0f; 
+	KeyFrame[2].posYp7 = 13.7f; 
+	KeyFrame[2].posZp7 = 27.0f; 
+	KeyFrame[2].rotp7 = 360.0f;
+	KeyFrame[2].scalep7 = 0.13f;
+
+
+	KeyFrame[2].posXp8 = 12.0f; 
+	KeyFrame[2].posYp8 = 13.7f; 
+	KeyFrame[2].posZp8 = 37.0f; 
+	KeyFrame[2].rotp8 = 360.0f;
+	KeyFrame[2].scalep8 = 0.13f;
+
+
+	KeyFrame[2].posXp9 = 8.0f; 
+	KeyFrame[2].posYp9 = 13.5f; 
+	KeyFrame[2].posZp9 = -35.0f; 
+	KeyFrame[2].rotp9 = 270.0f;
+	KeyFrame[2].scalep9 = 0.15f;
+
+
+	KeyFrame[2].posXp10 = -20.0f; 
+	KeyFrame[2].posYp10 = 13.7f; 
+	KeyFrame[2].posZp10 = -47.0f; 
+	KeyFrame[2].rotp10 = 45.0f;
+
+
+	KeyFrame[2].posXp11 = -20.0f; 
+	KeyFrame[2].posYp11 = 13.7f; 
+	KeyFrame[2].posZp11 = 47.0f; 
+	KeyFrame[2].rotp11 = -135.0f;
+
+
+	KeyFrame[2].posXp12 = 20.0f; 
+	KeyFrame[2].posYp12 = 13.7f; 
+	KeyFrame[2].posZp12 = 47.0f; 
+	KeyFrame[2].rotp12 = -135.0f;
+
+	//KeyFrame[3]
+	KeyFrame[3].posXp1 = -13.5f;
+	KeyFrame[3].posYp1 = 14.4f;
+	KeyFrame[3].posZp1 = 7.0f;
+	KeyFrame[3].rotp1 = 450.0f;
+	KeyFrame[3].scalep1 = 0.13f;
+
+	KeyFrame[3].posXp2 = -13.5f;
+	KeyFrame[3].posYp2 = 14.0f;
+	KeyFrame[3].posZp2 = 17.0f;
+	KeyFrame[3].rotp2 = 450.0f;
+	KeyFrame[3].scalep2 = 0.14f;
+
+	KeyFrame[3].posXp3 = -13.5f;
+	KeyFrame[3].posYp3 = 13.7f;
+	KeyFrame[3].posZp3 = 27.0f;
+	KeyFrame[3].rotp3 = 450.0f;
+	KeyFrame[3].scalep3 = 0.14f;
+
+	KeyFrame[3].posXp4 = -13.5f;
+	KeyFrame[3].posYp4 = 13.7f;
+	KeyFrame[3].posZp4 = 37.0f;
+	KeyFrame[3].rotp4 = 450.0f;
+	KeyFrame[3].scalep4 = 0.14f;
+
+	KeyFrame[3].posXp5 = 13.5f;
+	KeyFrame[3].posYp5 = 13.7f;
+	KeyFrame[3].posZp5 = 7.0f;
+	KeyFrame[3].rotp5 = 450.0f;
+	KeyFrame[3].scalep5 = 0.14f;
+
+	KeyFrame[3].posXp6 = 13.5f;
+	KeyFrame[3].posYp6 = 13.7f;
+	KeyFrame[3].posZp6 = 17.0f;
+	KeyFrame[3].rotp6 = 450.0f;
+	KeyFrame[3].scalep6 = 0.14f;
+
+	KeyFrame[3].posXp7 = 13.5f;
+	KeyFrame[3].posYp7 = 13.7f;
+	KeyFrame[3].posZp7 = 27.0f;
+	KeyFrame[3].rotp7 = 450.0f;
+	KeyFrame[3].scalep7 = 0.14f;
+
+	KeyFrame[3].posXp8 = 13.5f;
+	KeyFrame[3].posYp8 = 13.7f;
+	KeyFrame[3].posZp8 = 37.0f;
+	KeyFrame[3].rotp8 = 450.0f;
+	KeyFrame[3].scalep8 = 0.14f;
+
+	KeyFrame[3].posXp9 = 5.0f;
+	KeyFrame[3].posYp9 = 13.0f;
+	KeyFrame[3].posZp9 = -20.0f;
+	KeyFrame[3].rotp9 = 45.0f;
+	KeyFrame[3].scalep9 = 0.17f;
+
+	KeyFrame[3].posXp10 = -20.0f;
+	KeyFrame[3].posYp10 = 13.7f;
+	KeyFrame[3].posZp10 = -47.0f;
+	KeyFrame[3].rotp10 = 45.0f;
+
+	KeyFrame[3].posXp11 = -20.0f;
+	KeyFrame[3].posYp11 = 13.7f;
+	KeyFrame[3].posZp11 = 47.0f;
+	KeyFrame[3].rotp11 = -135.0f;
+
+	KeyFrame[3].posXp12 = 20.0f;
+	KeyFrame[3].posYp12 = 13.7f;
+	KeyFrame[3].posZp12 = 47.0f;
+	KeyFrame[3].rotp12 = -135.0f;
+
+	//keyframe 4
+	KeyFrame[4].posXp1 = -15.5f;
+	KeyFrame[4].posYp1 = 14.7f;
+	KeyFrame[4].posZp1 = 7.0f;
+	KeyFrame[4].rotp1 = 540.0f;
+	KeyFrame[4].scalep1 = 0.09f;
+
+	KeyFrame[4].posXp2 = -15.5f;
+	KeyFrame[4].posYp2 = 13.7f;
+	KeyFrame[4].posZp2 = 17.0f;
+	KeyFrame[4].rotp2 = 540.0f;
+	KeyFrame[4].scalep2 = 0.11f;
+
+	KeyFrame[4].posXp3 = -15.5f;
+	KeyFrame[4].posYp3 = 13.7f;
+	KeyFrame[4].posZp3 = 27.0f;
+	KeyFrame[4].rotp3 = 540.0f;
+	KeyFrame[4].scalep3 = 0.11f;
+
+	KeyFrame[4].posXp4 = -15.5f;
+	KeyFrame[4].posYp4 = 13.7f;
+	KeyFrame[4].posZp4 = 37.0f;
+	KeyFrame[4].rotp4 = 540.0f;
+	KeyFrame[4].scalep4 = 0.11f;
+
+	KeyFrame[4].posXp5 = 15.5f;
+	KeyFrame[4].posYp5 = 13.7f;
+	KeyFrame[4].posZp5 = 7.0f;
+	KeyFrame[4].rotp5 = 540.0f;
+	KeyFrame[4].scalep5 = 0.11f;
+
+	KeyFrame[4].posXp6 = 15.5f;
+	KeyFrame[4].posYp6 = 13.7f;
+	KeyFrame[4].posZp6 = 17.0f;
+	KeyFrame[4].rotp6 = 540.0f;
+	KeyFrame[4].scalep6 = 0.11f;
+
+	KeyFrame[4].posXp7 = 15.5f;
+	KeyFrame[4].posYp7 = 13.7f;
+	KeyFrame[4].posZp7 = 27.0f;
+	KeyFrame[4].rotp7 = 540.0f;
+	KeyFrame[4].scalep7 = 0.11f;
+
+	KeyFrame[4].posXp8 = 15.5f;
+	KeyFrame[4].posYp8 = 13.7f;
+	KeyFrame[4].posZp8 = 37.0f;
+	KeyFrame[4].rotp8 = 540.0f;
+	KeyFrame[4].scalep8 = 0.11f;
+
+	KeyFrame[4].posXp9 = -5.0f;
+	KeyFrame[4].posYp9 = 14.0f;
+	KeyFrame[4].posZp9 = -15.0f;
+	KeyFrame[4].rotp9 = 135.0f;
+	KeyFrame[4].scalep9 = 0.13f;
+
+	KeyFrame[4].posXp10 = -20.0f;
+	KeyFrame[4].posYp10 = 13.7f;
+	KeyFrame[4].posZp10 = -47.0f;
+	KeyFrame[4].rotp10 = 45.0f;
+
+	KeyFrame[4].posXp11 = -20.0f;
+	KeyFrame[4].posYp11 = 13.7f;
+	KeyFrame[4].posZp11 = 47.0f;
+	KeyFrame[4].rotp11 = -135.0f;
+
+	KeyFrame[4].posXp12 = 20.0f;
+	KeyFrame[4].posYp12 = 13.7f;
+	KeyFrame[4].posZp12 = 47.0f;
+	KeyFrame[4].rotp12 = -135.0f;
+
+	//keyframe 5
+	KeyFrame[5].posXp1 = -16.0f;
+	KeyFrame[5].posYp1 = 15.2f;
+	KeyFrame[5].posZp1 = 7.0f;
+	KeyFrame[5].rotp1 = 630.0f;
+	KeyFrame[5].scalep1 = 0.12f;
+
+	KeyFrame[5].posXp2 = -16.0f;
+	KeyFrame[5].posYp2 = 14.7f;
+	KeyFrame[5].posZp2 = 17.0f;
+	KeyFrame[5].rotp2 = 630.0f;
+	KeyFrame[5].scalep2 = 0.14f;
+
+	KeyFrame[5].posXp3 = -16.0f;
+	KeyFrame[5].posYp3 = 13.7f;
+	KeyFrame[5].posZp3 = 27.0f;
+	KeyFrame[5].rotp3 = 630.0f;
+	KeyFrame[5].scalep3 = 0.14f;
+
+	KeyFrame[5].posXp4 = -16.0f;
+	KeyFrame[5].posYp4 = 13.7f;
+	KeyFrame[5].posZp4 = 37.0f;
+	KeyFrame[5].rotp4 = 630.0f;
+	KeyFrame[5].scalep4 = 0.14f;
+
+	KeyFrame[5].posXp5 = 16.0f;
+	KeyFrame[5].posYp5 = 13.7f;
+	KeyFrame[5].posZp5 = 7.0f;
+	KeyFrame[5].rotp5 = 630.0f;
+	KeyFrame[5].scalep5 = 0.14f;
+
+	KeyFrame[5].posXp6 = 16.0f;
+	KeyFrame[5].posYp6 = 13.7f;
+	KeyFrame[5].posZp6 = 17.0f;
+	KeyFrame[5].rotp6 = 630.0f;
+	KeyFrame[5].scalep6 = 0.14f;
+
+	KeyFrame[5].posXp7 = 16.0f;
+	KeyFrame[5].posYp7 = 13.7f;
+	KeyFrame[5].posZp7 = 27.0f;
+	KeyFrame[5].rotp7 = 630.0f;
+	KeyFrame[5].scalep7 = 0.14f;
+
+	KeyFrame[5].posXp8 = 16.0f;
+	KeyFrame[5].posYp8 = 13.7f;
+	KeyFrame[5].posZp8 = 37.0f;
+	KeyFrame[5].rotp8 = 630.0f;
+	KeyFrame[5].scalep8 = 0.14f;
+
+	KeyFrame[5].posXp9 = 12.0f;
+	KeyFrame[5].posYp9 = 14.9f;
+	KeyFrame[5].posZp9 = -30.0f;
+	KeyFrame[5].rotp9 = 225.0f;
+	KeyFrame[5].scalep9 = 0.16f;
+
+	KeyFrame[5].posXp10 = -20.0f;
+	KeyFrame[5].posYp10 = 13.7f;
+	KeyFrame[5].posZp10 = -47.0f;
+	KeyFrame[5].rotp10 = 45.0f;
+
+	KeyFrame[5].posXp11 = -20.0f;
+	KeyFrame[5].posYp11 = 13.7f;
+	KeyFrame[5].posZp11 = 47.0f;
+	KeyFrame[5].rotp11 = -135.0f;
+
+	KeyFrame[5].posXp12 = 20.0f;
+	KeyFrame[5].posYp12 = 13.7f;
+	KeyFrame[5].posZp12 = 47.0f;
+	KeyFrame[5].rotp12 = -135.0f;
+
+	//keyframe 6
+	KeyFrame[6].posXp1 = -19.7f; //-19.7
+	KeyFrame[6].posYp1 = 15.5f;
+	KeyFrame[6].posZp1 = 7.0f;
+	KeyFrame[6].rotp1 = 180.0f;
+	KeyFrame[6].scalep1 = 0.15f;
+
+	KeyFrame[6].posXp2 = -19.7f;
+	KeyFrame[6].posYp2 = 15.5f;
+	KeyFrame[6].posZp2 = 17.0f;
+	KeyFrame[6].rotp2 = 180.0f;
+	KeyFrame[6].scalep2 = 0.17f;
+
+	KeyFrame[6].posXp3 = -19.7f;
+	KeyFrame[6].posYp3 = 15.5f;
+	KeyFrame[6].posZp3 = 27.0f;
+	KeyFrame[6].rotp3 = 180.0f;
+	KeyFrame[6].scalep3 = 0.17f;
+
+	KeyFrame[6].posXp4 = -19.7f;
+	KeyFrame[6].posYp4 = 15.5f;
+	KeyFrame[6].posZp4 = 37.0f;
+	KeyFrame[6].rotp4 = 180.0f;
+	KeyFrame[6].scalep4 = 0.169f;
+
+	KeyFrame[6].posXp5 = 19.7f;
+	KeyFrame[6].posYp5 = 15.5f;
+	KeyFrame[6].posZp5 = 7.0f;
+	KeyFrame[6].rotp5 = 0.0f;
+	KeyFrame[6].scalep5 = 0.17f;
+
+	KeyFrame[6].posXp6 = 19.7f;
+	KeyFrame[6].posYp6 = 15.5f;
+	KeyFrame[6].posZp6 = 17.0f;
+	KeyFrame[6].rotp6 = 0.0f;
+	KeyFrame[6].scalep6 = 0.169f;
+
+	KeyFrame[6].posXp7 = 19.7f;
+	KeyFrame[6].posYp7 = 15.5f;
+	KeyFrame[6].posZp7 = 27.0f;
+	KeyFrame[6].rotp7 = 0.0f;
+	KeyFrame[6].scalep7 = 0.169f;
+
+	KeyFrame[6].posXp8 = 19.7f;
+	KeyFrame[6].posYp8 = 15.5f;
+	KeyFrame[6].posZp8 = 37.0f;
+	KeyFrame[6].rotp8 = 0.0f;
+	KeyFrame[6].scalep8 = 0.169f;
+
+	KeyFrame[6].posXp9 = 15.7f;
+	KeyFrame[6].posYp9 = 15.5f;
+	KeyFrame[6].posZp9 = -42.2f;
+	KeyFrame[6].rotp9 = 315.0f;
+	KeyFrame[6].scalep9 = 0.169f;
+
+	KeyFrame[6].posXp10 = -15.7f;
+	KeyFrame[6].posYp10 = 15.5f;
+	KeyFrame[6].posZp10 = -42.2f;
+	KeyFrame[6].rotp10 = 90.0f;
+
+	KeyFrame[6].posXp11 = -15.7f;
+	KeyFrame[6].posYp11 = 15.5f;
+	KeyFrame[6].posZp11 = 42.2f;
+	KeyFrame[6].rotp11 = -90.0f;
+
+	KeyFrame[6].posXp12 = 15.7f;
+	KeyFrame[6].posYp12 = 15.5f;
+	KeyFrame[6].posZp12 = 42.2f;
+	KeyFrame[6].rotp12 = -90.0f;
 
 	// create transformations and Projection
 	glm::mat4 modelOp = glm::mat4(1.0f);		// initialize Matrix, Use this matrix for individual models
@@ -803,7 +1881,11 @@ int main() {
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Segundo Personaje Animacion
 		// -------------------------------------------------------------------------------------------------------------------------
-
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 9.8f, 15.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.04f));
+		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		animShader.setMat4("model", modelOp);
+		personajeGal.Draw(animShader);
 
 
 
@@ -1107,16 +2189,16 @@ int main() {
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Modelos 1er piso
 		// -------------------------------------------------------------------------------------------------------------------------
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-19.7f, 15.5f, 9.0f));
-		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		modelOp = glm::scale(modelOp, glm::vec3(0.15f));
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp1, posYp1, posZp1));
+		modelOp = glm::rotate(modelOp, glm::radians(rotp1), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(scalep1));
 		staticShader.setMat4("model", modelOp);
 		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
 		pintura.Draw(staticShader);
 
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-19.7f, 15.5f, 21.0f));
-		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		modelOp = glm::scale(modelOp, glm::vec3(0.17f));
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp2, posYp2, posZp2));
+		modelOp = glm::rotate(modelOp, glm::radians(rotp2), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(scalep2));
 		staticShader.setMat4("model", modelOp);
 		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
 		pintura1.Draw(staticShader);
