@@ -1230,6 +1230,29 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode)
 	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
 		lightPosition.x--;
 
+	// Camaras fijas
+	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+		camera.Position = glm::vec3(0.0f, 5.0f, -40.0f);
+		camera.Front = glm::normalize(glm::vec3(0.0f, 0.0f, 1.0f));
+	}
+	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+		camera.Position = glm::vec3(0.0f, 15.0f, -40.0f);
+		camera.Front = glm::normalize(glm::vec3(0.0f, 0.0f, 1.0f));
+	}
+	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
+		camera.Position = glm::vec3(0.0f, 25.0f, -40.0f);
+		camera.Front = glm::normalize(glm::vec3(0.0f, 0.0f, 1.0f));
+	}
+	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
+		camera.Position = glm::vec3(0.0f, 45.0f, -40.0f);
+		camera.Front = glm::normalize(glm::vec3(0.0f, 0.0f, 1.0f));
+	}
+	if (key == GLFW_KEY_5 && action == GLFW_PRESS) {
+		camera.Position = glm::vec3(200.0f, 150.0f, -200.0f);
+		camera.Yaw = -125.0f;
+		camera.Pitch = -35.264f;
+		camera.Front = glm::normalize(glm::vec3(-1.0f, -0.4f, 1.0f));
+	}
 	//Car animation
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
 		animacion ^= true;
