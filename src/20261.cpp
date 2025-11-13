@@ -130,6 +130,28 @@ int		etapa_giro = 0,
 bool	animacion1 = false,
 		animacion2 = false;
 
+float paraBaseX = 10.0f;
+float paraBaseY = 25.0f;
+float paraBaseZ = -20.0f;
+
+float paraOffsetY = 0.0f;
+float paraSpeed = 0.05f; 
+bool paraGoingDown = true;
+
+float helicoideX = -10.0f;
+float helicoideY = 22.0f;
+float helicoideZ = -20.0f;
+
+float heliceAngle = 0.0f;
+
+float ornX = 0.0f;   
+float ornY = 22.0f;    
+float ornZ = 20.0f; 
+float ornScale = 0.3f;
+
+float ornWingAngle = 0.0f;
+bool ornWingUp = true;
+
 //Keyframes (Manipulación y dibujo)
 float	posX = 0.0f,
 		posY = 0.0f,
@@ -910,6 +932,47 @@ void animate(void)
 			break;
 		}
 	}
+
+	// Límites del segundo piso
+	const float paraMinY = 22.4f;   
+	const float paraMaxY = 34.4f;  
+
+	if (paraGoingDown)
+	{
+		
+		paraOffsetY -= paraSpeed;
+		if ((paraBaseY + paraOffsetY) <= paraMinY)
+		{
+			paraOffsetY = paraMinY - paraBaseY;
+			paraGoingDown = false;    
+		}
+	}
+	else
+	{
+		paraOffsetY = paraMaxY - paraBaseY;
+		paraGoingDown = true;   
+	}
+
+	//Helice
+	heliceAngle += 1.0f;
+	if (heliceAngle > 360.0f) {
+		heliceAngle -= 360.0f;
+	}
+
+	//Ornitoptero
+	float wingSpeed = 1.0f;    
+	float wingMaxAngle = 30.0f;   
+
+	if (ornWingUp) {
+		ornWingAngle += wingSpeed;
+		if (ornWingAngle >= wingMaxAngle)
+			ornWingUp = false;
+	}
+	else {
+		ornWingAngle -= wingSpeed;
+		if (ornWingAngle <= -wingMaxAngle)
+			ornWingUp = true;
+	}
 }
 
 void getResolution() {
@@ -1167,6 +1230,15 @@ int main() {
 	Model Colorful_Plant("resources/plants/Colorful_Plant/karafuruueki.obj");
 	Model Tree("resources/plants/Tree/Basic_Tree_1.obj");
 	Model Candle("resources/Candle/Model.obj");
+	
+	//Segundo piso
+	Model paracaidas("resources/Paracaidas/paracaidas.obj");
+	Model helicoideBase("resources/Tornillo/Base.obj");
+	Model helicoideHelice("resources/Tornillo/Helice.obj");
+	Model OrnCuer("resources/Ornitoptero/Cuerpo.obj");
+	Model OrnAlDe("resources/Ornitoptero/AlaDer.obj");
+	Model OrnAlIz("resources/Ornitoptero/AlaIzq.obj");
+
 	//Tercer piso
 	Model carro1("resources/objects/Carro1/Carro1.obj");
 	Model carro2("resources/objects/Carro2/Carro2.obj");
@@ -2455,7 +2527,55 @@ int main() {
 			staticShader.setMat4("model", modelOp);
 			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
 			pintura11.Draw(staticShader); //15.7, 15.5, 42.2, r=-90
-		
+
+		// -------------------------------------------------------------------------------------------------------------------------
+		// Modelos 2do piso
+		// -------------------------------------------------------------------------------------------------------------------------
+			
+			//Paracaidas
+			glm::mat4 modelPara = glm::mat4(1.0f);
+			modelPara = glm::translate(modelPara, glm::vec3(paraBaseX, paraBaseY + paraOffsetY, paraBaseZ));
+			modelPara = glm::scale(modelPara, glm::vec3(0.05f));
+			staticShader.setMat4("model", modelPara);
+			paracaidas.Draw(staticShader);
+
+			//Tornillo
+			glm::mat4 modelHelicoide = glm::mat4(1.0f);
+			modelHelicoide = glm::translate(modelHelicoide, glm::vec3(helicoideX, helicoideY, helicoideZ));
+			modelHelicoide = glm::scale(modelHelicoide, glm::vec3(0.4f));
+			staticShader.setMat4("model", modelHelicoide);
+			helicoideBase.Draw(staticShader);
+
+			glm::mat4 modelHelice = modelHelicoide;
+			modelHelice = glm::translate(modelHelice, glm::vec3(0.0f, 1.0f, 0.0f));
+			modelHelice = glm::rotate(modelHelice, glm::radians(heliceAngle), glm::vec3(0, 1, 0));
+			staticShader.setMat4("model", modelHelice);
+			helicoideHelice.Draw(staticShader);
+
+			//Ornitoptero
+			glm::mat4 modelOrn = glm::mat4(1.0f);
+			modelOrn = glm::translate(modelOrn, glm::vec3(ornX, ornY, ornZ));
+			modelOrn = glm::scale(modelOrn, glm::vec3(ornScale));
+			staticShader.setMat4("model", modelOrn);
+			OrnCuer.Draw(staticShader);
+
+			glm::vec3 pivotAlaDerLocal = glm::vec3(1.5f, 0.0f, 0.0f);  
+			glm::vec3 pivotAlaIzqLocal = glm::vec3(-1.5f, 0.0f, 0.0f); 
+
+			glm::mat4 modelAlaDer = modelOrn;
+			modelAlaDer = glm::translate(modelAlaDer, pivotAlaDerLocal);
+			modelAlaDer = glm::rotate(modelAlaDer,glm::radians(ornWingAngle),glm::vec3(1.0f, 0.0f, 0.0f));  // eje del tubo
+			modelAlaDer = glm::translate(modelAlaDer, -pivotAlaDerLocal);
+			staticShader.setMat4("model", modelAlaDer);
+			OrnAlDe.Draw(staticShader);
+
+			glm::mat4 modelAlaIzq = modelOrn;
+			modelAlaIzq = glm::translate(modelAlaIzq, pivotAlaIzqLocal); modelAlaIzq = glm::rotate(modelAlaIzq, glm::radians(-ornWingAngle), glm::vec3(1.0f, 0.0f, 0.0f));
+			modelAlaIzq = glm::translate(modelAlaIzq, -pivotAlaIzqLocal);
+			staticShader.setMat4("model", modelAlaIzq);
+			OrnAlIz.Draw(staticShader);
+
+
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Modelos 3er piso
 		// -------------------------------------------------------------------------------------------------------------------------
