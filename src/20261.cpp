@@ -1916,7 +1916,7 @@ int main() {
 		animShader.setVec3("viewPos", camera.Position);
 
 		// -------------------------------------------------------------------------------------------------------------------------
-		// Segundo Personaje Animacion
+		// Personaje Animado 1er Piso
 		// -------------------------------------------------------------------------------------------------------------------------
 		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 9.8f, 15.0f));
 		modelOp = glm::scale(modelOp, glm::vec3(0.04f));
@@ -2226,54 +2226,89 @@ int main() {
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Modelos 1er piso
 		// -------------------------------------------------------------------------------------------------------------------------
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp1, posYp1, posZp1));
-		modelOp = glm::rotate(modelOp, glm::radians(rotp1), glm::vec3(0.0f, 1.0f, 0.0f));
-		modelOp = glm::scale(modelOp, glm::vec3(scalep1));
-		staticShader.setMat4("model", modelOp);
-		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-		pintura.Draw(staticShader);
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp1, posYp1, posZp1));
+			modelOp = glm::rotate(modelOp, glm::radians(rotp1), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(scalep1));
+			staticShader.setMat4("model", modelOp);
+			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+			pintura.Draw(staticShader); //-19.7, 15.5, 7.0, r=180  scale 0.15
 
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp2, posYp2, posZp2));
-		modelOp = glm::rotate(modelOp, glm::radians(rotp2), glm::vec3(0.0f, 1.0f, 0.0f));
-		modelOp = glm::scale(modelOp, glm::vec3(scalep2));
-		staticShader.setMat4("model", modelOp);
-		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-		pintura1.Draw(staticShader);
-		
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-19.7f, 15.5f, 32.0f));
-		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		modelOp = glm::scale(modelOp, glm::vec3(0.17f));
-		staticShader.setMat4("model", modelOp);
-		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-		pintura2.Draw(staticShader);
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp2, posYp2, posZp2));
+			modelOp = glm::rotate(modelOp, glm::radians(rotp2), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(scalep2));
+			staticShader.setMat4("model", modelOp);
+			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+			pintura1.Draw(staticShader); //-19.7, 15.5, 17.0, r=180 scale 0.17
+	
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp3, posYp3, posZp3));
+			modelOp = glm::rotate(modelOp, glm::radians(rotp3), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(scalep3));
+			staticShader.setMat4("model", modelOp);
+			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+			pintura2.Draw(staticShader); //-19.7, 15.5, 27.0, r=180 scale 0.17
 
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(19.7f, 15.5f, 9.0f));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		modelOp = glm::scale(modelOp, glm::vec3(0.17f));
-		staticShader.setMat4("model", modelOp);
-		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-		pintura3.Draw(staticShader);
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp4, posYp4, posZp4));
+			modelOp = glm::rotate(modelOp, glm::radians(rotp4), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(scalep4));
+			staticShader.setMat4("model", modelOp);
+			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+			pintura7.Draw(staticShader); //-19.7, 15.5, 37.0, r=180 scale 0.169
 
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(19.7f, 15.5f, 21.0f));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		modelOp = glm::scale(modelOp, glm::vec3(0.169f));
-		staticShader.setMat4("model", modelOp);
-		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-		pintura4.Draw(staticShader);
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp5, posYp5, posZp5));
+			modelOp = glm::rotate(modelOp, glm::radians(rotp5), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(scalep5));
+			staticShader.setMat4("model", modelOp);
+			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+			pintura3.Draw(staticShader); //19.7, 15.5, 7.0, r=0 scale 0.17
 
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 12.8f, -8.0f));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		modelOp = glm::scale(modelOp, glm::vec3(0.009f));
-		staticShader.setMat4("model", modelOp);
-		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-		sillon.Draw(staticShader);
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp6, posYp6, posZp6));
+			modelOp = glm::rotate(modelOp, glm::radians(rotp6), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(scalep6));
+			staticShader.setMat4("model", modelOp);
+			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+			pintura4.Draw(staticShader); //19.7, 15.5, 17.0, r=0 s 0.169
 
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(19.7f, 11.8f, 40.0f));
-		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		modelOp = glm::scale(modelOp, glm::vec3(0.3f));
-		staticShader.setMat4("model", modelOp);
-		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-		extintor.Draw(staticShader);
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp7, posYp7, posZp7));
+			modelOp = glm::rotate(modelOp, glm::radians(rotp7), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(scalep7));
+			staticShader.setMat4("model", modelOp);
+			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+			pintura5.Draw(staticShader); //19.7, 15.5, 27.0, r=0 s 0.169
+
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp8, posYp8, posZp8));
+			modelOp = glm::rotate(modelOp, glm::radians(rotp8), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(scalep8));
+			staticShader.setMat4("model", modelOp);
+			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+			pintura6.Draw(staticShader); //19.7, 15.5, 37.0, r=0 s 0.169 s 0.169
+
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(15.7, 15.5, -42.2));
+			modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(0.169));
+			staticShader.setMat4("model", modelOp);
+			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+			pintura8.Draw(staticShader); //15.7, 15.5, -42.2, r=90 s 0.169
+
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-15.7f, 15.5f, -42.2f));
+			modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(0.169f));
+			staticShader.setMat4("model", modelOp);
+			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+			pintura9.Draw(staticShader); //-15.7, 15.5, -42.2, r=90
+
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-15.7f, 15.5f, 42.2f));
+			modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(0.169f));
+			staticShader.setMat4("model", modelOp);
+			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+			pintura10.Draw(staticShader); //-15.7, 15.5, 42.2, r=-90
+
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(15.7f, 15.5f, 42.2f));
+			modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(0.169f));
+			staticShader.setMat4("model", modelOp);
+			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+			pintura11.Draw(staticShader); //15.7, 15.5, 42.2, r=-90
 		
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Just in case
