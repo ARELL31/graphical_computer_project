@@ -26,11 +26,36 @@
 #include <Skybox.h>
 #include <iostream>
 #include <mmsystem.h>
+#include <al.h>
+#include <alc.h>
 
+#ifdef _WIN32
+#pragma comment(lib, "OpenAL32.lib")
+#endif
 
 
 using namespace std;
 using namespace glm;
+
+struct AudioZone {
+	glm::vec3 center;
+	float radius;
+	ALuint source;
+	ALuint buffer;
+	bool isPlaying;
+	string audioFile;
+};
+
+// Variables para gestión de audio por zonas
+std::vector<AudioZone> audioZones;
+ALCdevice* audioDevice = nullptr;
+ALCcontext* audioContext = nullptr;
+
+// Prototipos de funciones de audio
+void initializeAudioSystem();
+void createAudioZone(const glm::vec3& center, float radius, const std::string& audioFile);
+void updateAudioZones();
+void cleanupAudioSystem();
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -387,6 +412,16 @@ void myData() {
 }
 
 int main() {
+
+	initializeAudioSystem();
+
+	createAudioZone(glm::vec3(0.0f, 5.0f, -40.0f), 8.0f, "audio/recepcion.wav");
+	createAudioZone(glm::vec3(0.0f, 15.0f, -40.0f), 10.0f, "audio/primer_piso.wav");
+	createAudioZone(glm::vec3(0.0f, 25.0f, -40.0f), 12.0f, "audio/segundo_piso.wav");
+	createAudioZone(glm::vec3(0.0f, 45.0f, -40.0f), 15.0f, "audio/tercer_piso.wav");
+
+
+
 	// glfw: initialize and configure
 	glfwInit();
 
@@ -545,6 +580,8 @@ int main() {
 		// -----
 		//my_input(window);
 		animate();
+
+		updateAudioZones();
 
 		// render
 		// ------
@@ -1229,6 +1266,7 @@ int main() {
 	}
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	// ------------------------------------------------------------------
+	cleanupAudioSystem();
 	glDeleteVertexArrays(2, VAO);
 	glDeleteBuffers(2, VBO);
 	//skybox.Terminate();
@@ -1362,4 +1400,166 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 	camera.ProcessMouseScroll(yoffset);
+}
+
+
+void initializeAudioSystem() {
+	// Inicializar OpenAL
+	audioDevice = alcOpenDevice(nullptr);
+	if (!audioDevice) {
+		std::cerr << "No se pudo abrir el dispositivo de audio" << std::endl;
+		return;
+	}
+
+	audioContext = alcCreateContext(audioDevice, nullptr);
+	if (!alcMakeContextCurrent(audioContext)) {
+		std::cerr << "No se pudo crear el contexto de audio" << std::endl;
+		return;
+	}
+
+	// Configurar propiedades del listener (oyente)
+	alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
+	alListener3f(AL_VELOCITY, 0.0f, 0.0f, 0.0f);
+
+	// Configurar orientación del listener (forward, up)
+	ALfloat listenerOri[] = { 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f };
+	alListenerfv(AL_ORIENTATION, listenerOri);
+}
+
+bool loadWavFile(const char* filename, ALuint* buffer) {
+	std::ifstream file(filename, std::ios::binary);
+	if (!file) {
+		std::cerr << "No se pudo abrir el archivo WAV: " << filename << std::endl;
+		return false;
+	}
+
+	char riff[4]; file.read(riff, 4);
+	file.ignore(4);
+	char wave[4]; file.read(wave, 4);
+
+	char fmt[4]; file.read(fmt, 4);
+	int subchunk1Size; file.read((char*)&subchunk1Size, 4);
+	short audioFormat; file.read((char*)&audioFormat, 2);
+	short numChannels; file.read((char*)&numChannels, 2);
+	int sampleRate; file.read((char*)&sampleRate, 4);
+	file.ignore(6);
+	short bitsPerSample; file.read((char*)&bitsPerSample, 2);
+
+	char dataHeader[4];
+	int dataSize;
+	while (true) {
+		file.read(dataHeader, 4);
+		file.read((char*)&dataSize, 4);
+		if (std::string(dataHeader, 4) == "data") break;
+		file.ignore(dataSize);
+	}
+
+	std::vector<char> data(dataSize);
+	file.read(data.data(), dataSize);
+
+	ALenum format;
+	if (numChannels == 1 && bitsPerSample == 8) format = AL_FORMAT_MONO8;
+	else if (numChannels == 1 && bitsPerSample == 16) format = AL_FORMAT_MONO16;
+	else if (numChannels == 2 && bitsPerSample == 8) format = AL_FORMAT_STEREO8;
+	else if (numChannels == 2 && bitsPerSample == 16) format = AL_FORMAT_STEREO16;
+	else {
+		std::cerr << "Formato WAV no soportado: " << filename << std::endl;
+		return false;
+	}
+
+	alGenBuffers(1, buffer);
+	alBufferData(*buffer, format, data.data(), dataSize, sampleRate);
+
+	std::cout << "Audio cargado: " << filename << std::endl;
+	return true;
+}
+
+void createAudioZone(const glm::vec3& center, float radius, const std::string& audioFile) {
+	AudioZone zone;
+	zone.center = center;
+	zone.radius = radius;
+	zone.audioFile = audioFile;
+	zone.isPlaying = false;
+
+	// Cargar el buffer de audio
+	if (loadWavFile(audioFile.c_str(), &zone.buffer)) {
+		// Crear la fuente de audio
+		alGenSources(1, &zone.source);
+		alSourcei(zone.source, AL_BUFFER, zone.buffer);
+
+		// Configurar propiedades 3D de la fuente
+		alSourcef(zone.source, AL_PITCH, 1.0f);
+		alSourcef(zone.source, AL_GAIN, 0.0f); // Iniciar en silencio
+		alSource3f(zone.source, AL_POSITION, center.x, center.y, center.z);
+		alSource3f(zone.source, AL_VELOCITY, 0.0f, 0.0f, 0.0f);
+		alSourcei(zone.source, AL_LOOPING, AL_TRUE);
+
+		// Configurar atenuación por distancia
+		alSourcef(zone.source, AL_REFERENCE_DISTANCE, radius * 0.3f);
+		alSourcef(zone.source, AL_MAX_DISTANCE, radius);
+		alSourcef(zone.source, AL_ROLLOFF_FACTOR, 1.0f);
+
+		audioZones.push_back(zone);
+		std::cout << "Zona de audio creada en: (" << center.x << ", " << center.y << ", " << center.z
+			<< ") con radio: " << radius << std::endl;
+	}
+}
+
+void updateAudioZones() {
+	// Actualizar posición del listener con la cámara
+	alListener3f(AL_POSITION, camera.Position.x, camera.Position.y, camera.Position.z);
+
+	// Actualizar orientación del listener
+	glm::vec3 forward = camera.Front;
+	glm::vec3 up = camera.Up;
+	ALfloat listenerOri[] = { forward.x, forward.y, forward.z, up.x, up.y, up.z };
+	alListenerfv(AL_ORIENTATION, listenerOri);
+
+	// Actualizar cada zona de audio
+	for (auto& zone : audioZones) {
+		float distance = glm::distance(camera.Position, zone.center);
+
+		if (distance <= zone.radius) {
+			// Dentro de la zona - calcular volumen basado en distancia
+			float volume = 1.0f - (distance / zone.radius);
+			volume = glm::clamp(volume, 0.0f, 1.0f);
+
+			alSourcef(zone.source, AL_GAIN, volume);
+
+			if (!zone.isPlaying) {
+				alSourcePlay(zone.source);
+				zone.isPlaying = true;
+				std::cout << "Reproduciendo audio: " << zone.audioFile << std::endl;
+			}
+		}
+		else {
+			// Fuera de la zona - silenciar
+			alSourcef(zone.source, AL_GAIN, 0.0f);
+
+			if (zone.isPlaying) {
+				alSourceStop(zone.source);
+				zone.isPlaying = false;
+				std::cout << "Deteniendo audio: " << zone.audioFile << std::endl;
+			}
+		}
+	}
+}
+
+void cleanupAudioSystem() {
+	// Detener y limpiar todas las zonas de audio
+	for (auto& zone : audioZones) {
+		alSourceStop(zone.source);
+		alDeleteSources(1, &zone.source);
+		alDeleteBuffers(1, &zone.buffer);
+	}
+	audioZones.clear();
+
+	// Limpiar contexto y dispositivo
+	alcMakeContextCurrent(nullptr);
+	if (audioContext) {
+		alcDestroyContext(audioContext);
+	}
+	if (audioDevice) {
+		alcCloseDevice(audioDevice);
+	}
 }
