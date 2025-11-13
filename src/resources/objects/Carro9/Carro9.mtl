@@ -1,0 +1,36 @@
+# Blender 4.5.3 LTS MTL File: 'None'
+# www.blender.org
+
+newmtl Body
+Ns 267.288940
+Ka 1.000000 1.000000 1.000000
+Ks 0.800000 0.800000 0.800000
+Ke 0.000000 0.000000 0.000000
+Ni 1.520000
+d 1.000000
+illum 2
+map_Ka Body_BaseColor.png
+map_Kd Body_BaseColor.png
+
+newmtl Light_Covers
+Ns 215.667358
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.800000 0.800000 0.800000
+Ke 0.000000 0.000000 0.000000
+Ni 1.520000
+d 1.000000
+illum 2
+map_Ka Wheels & Accesories_BaseColor.png
+map_Kd Wheels & Accesories_BaseColor.png
+
+newmtl Wheels___Accesories
+Ns 215.667358
+Ka 1.000000 1.000000 1.000000
+Ks 0.184500 0.184500 0.184500
+Ke 0.000000 0.000000 0.000000
+Ni 1.520000
+d 1.000000
+illum 2
+map_Ka Wheels & Accesories_BaseColor.png
+map_Kd Wheels & Accesories_BaseColor.png

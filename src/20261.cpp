@@ -26,11 +26,36 @@
 #include <Skybox.h>
 #include <iostream>
 #include <mmsystem.h>
+#include <al.h>
+#include <alc.h>
 
+#ifdef _WIN32
+#pragma comment(lib, "OpenAL32.lib")
+#endif
 
 
 using namespace std;
 using namespace glm;
+
+struct AudioZone {
+	glm::vec3 center;
+	float radius;
+	ALuint source;
+	ALuint buffer;
+	bool isPlaying;
+	string audioFile;
+};
+
+// Variables para gestión de audio por zonas
+std::vector<AudioZone> audioZones;
+ALCdevice* audioDevice = nullptr;
+ALCcontext* audioContext = nullptr;
+
+// Prototipos de funciones de audio
+void initializeAudioSystem();
+void createAudioZone(const glm::vec3& center, float radius, const std::string& audioFile);
+void updateAudioZones();
+void cleanupAudioSystem();
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -46,7 +71,7 @@ GLFWmonitor* monitors;
 GLuint VBO[3], VAO[3], EBO[3];
 
 //Camera
-Camera camera(glm::vec3(0.0f, 10.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 5.0f, 3.0f));
 float MovementSpeed = 5.0f;
 GLfloat lastX = SCR_WIDTH / 2.0f,
 		lastY = SCR_HEIGHT / 2.0f;
@@ -86,15 +111,46 @@ glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
 glm::vec3 ambientColor = diffuseColor * glm::vec3(0.75f);
 
 // posiciones
-float	movAuto_x = 0.0f,
-movAuto_z = 0.0f,
-orienta = 90.0f;
-bool	animacion = false,
-recorrido1 = true,
-recorrido2 = false,
-recorrido3 = false,
-recorrido4 = false;
+float	movAuto_y1 = 0.0f,
+		movAuto_x2 = 1.5f,
+		movAuto_z2 = 1.5f,
+		movAuto_x3 = 0.0f,
+		movAuto_z3 = 0.0f,
+		orienta_x1 = 0.0f,
+		orienta_y1 = 180.0f,
+		orienta_z1 = 0.0f,
+		giroCarro2 = 0.0f,
+		angleCarro2 = 45.0f,
+		giroCarro3 = 0.0f,
+		angleCarro3 = 45.0f,
+		giroRuedas = 0.0f;
+int		etapa_giro = 0,
+		etapa_track1 = 0,
+		etapa_track2 = 0;
+bool	animacion1 = false,
+		animacion2 = false;
 
+float paraBaseX = 10.0f;
+float paraBaseY = 25.0f;
+float paraBaseZ = -20.0f;
+
+float paraOffsetY = 0.0f;
+float paraSpeed = 0.05f; 
+bool paraGoingDown = true;
+
+float helicoideX = -10.0f;
+float helicoideY = 22.0f;
+float helicoideZ = -20.0f;
+
+float heliceAngle = 0.0f;
+
+float ornX = 0.0f;   
+float ornY = 22.0f;    
+float ornZ = 20.0f; 
+float ornScale = 0.3f;
+
+float ornWingAngle = 0.0f;
+bool ornWingUp = true;
 
 //Keyframes (Manipulación y dibujo)
 float	posX = 0.0f,
@@ -744,10 +800,178 @@ void animate(void)
 		}
 	}
 
-	//Vehículo
-	if (animacion)
+	//Vehículos
+	if (animacion1){
+		orienta_y1 += 0.5f;
+		switch (etapa_giro) {
+		case 0:
+			if (orienta_y1 >= 360.0f) {
+				orienta_x1 += 0.3f;
+				movAuto_y1 = (orienta_x1 / 45.0f) * 7.0f;
+				if (orienta_x1 >= 45.0f || movAuto_y1 >= 7.0f) {
+					etapa_giro = 1;
+				}
+			}
+			break;
+		case 1:
+			if (orienta_y1 >= 720.0f) {
+				etapa_giro = 2;
+			}
+			break;
+		case 2:
+			orienta_x1 -= 0.3f;
+			movAuto_y1 = (abs(orienta_x1) / 45.0f) * 7.0f;
+			if (orienta_x1 <= -45.0f) {
+				etapa_giro = 3;
+			}
+			break;
+		case 3:
+			if (orienta_y1 >= 1080.0f) {
+				orienta_x1 += 0.3f;
+				movAuto_y1 = (orienta_x1 / -45.0f) * 7.0f;
+				if (orienta_x1 >= 0.0f || movAuto_y1 <= 0.0f) {
+					etapa_giro = 4;
+				}
+			}
+			break;
+		case 4:
+			if (orienta_y1 >= 1440.0f) {
+				orienta_y1 = 0.0f;
+				etapa_giro = 0;
+			}
+			break;
+		}
+	}
+	if (animacion2) {
+		giroRuedas += 20.0f;
+		if (giroRuedas >= 360.0f) {
+			giroRuedas = 0.0f;
+		}
+		switch (etapa_track1) {
+		case 0:
+			movAuto_x2 += 0.06f;
+			movAuto_z2 = movAuto_x2;
+			if (movAuto_z2 >= 1.7) {
+				etapa_track1 = 1;
+			}
+			break;
+		case 1:
+			if (giroCarro2 < 135.0f) {
+				giroCarro2 += 3.0f;
+			}
+			else {
+				giroCarro2 += 2.0f;
+			}
+			angleCarro2 += 2.0f;
+			movAuto_x2 = 0.0f + 2.3f * sin(glm::radians(angleCarro2));
+			movAuto_z2 = 3.25f - 2.3f * cos(glm::radians(angleCarro2));
+			if (angleCarro2 >= 315.0f) {
+				etapa_track1 = 2;
+			}
+			break;
+		case 2:
+			if (giroCarro2 > 270.0f) {
+				giroCarro2 -= 1.0f;
+			}
+			movAuto_x2 += 0.04f;
+			movAuto_z2 = movAuto_x2 * -1.0f;
+			if (movAuto_x2 >= 1.7f) {
+				etapa_track1 = 3;
+			}
+			break;
+		case 3:
+			giroCarro2 -= 1.0f;
+			angleCarro2 -= 1.0f;
+			movAuto_x2 = 0.0f - 2.3f * sin(glm::radians(angleCarro2));
+			movAuto_z2 = - 3.25f + 2.3f * cos(glm::radians(angleCarro2));
+			if (angleCarro2 <= 45.0f) {
+				etapa_track1 = 0;
+			}
+			break;
+		}
+		switch (etapa_track2) {
+		case 0:
+			if (giroCarro3 > 0.0f) {
+				giroCarro3 -= 1.0f;
+			}
+			movAuto_x3 += 0.04f;
+			movAuto_z3 = movAuto_x3;
+			if(movAuto_z3 >= 1.7) {
+				etapa_track2 = 1;
+			}
+			break;
+		case 1:
+			giroCarro3 -= 1.0f;
+			angleCarro3 += 1.0f;
+			movAuto_x3 = 0.0f + 2.3f * sin(glm::radians(angleCarro3));
+			movAuto_z3 = 3.25f - 2.3f * cos(glm::radians(angleCarro3));
+			if (angleCarro3 >= 315.0f) {
+				etapa_track2 = 2;
+			}
+			break;
+		case 2:
+			movAuto_x3 += 0.06f;
+			movAuto_z3 = movAuto_x3 * -1.0f;
+			if (movAuto_x3 >= 1.7f) {
+				etapa_track2 = 3;
+			}
+			break;
+		case 3:
+			if (giroCarro3 <= -180.0f) {
+				giroCarro3 += 3.0f;
+			}
+			else {
+				giroCarro3 += 2.0f;
+			}
+			angleCarro3 -= 2.0f;
+			movAuto_x3 = 0.0f - 2.3f * sin(glm::radians(angleCarro3));
+			movAuto_z3 = -3.25f + 2.3f * cos(glm::radians(angleCarro3));
+			if (angleCarro3 <= 45.0f) {
+				etapa_track2 = 0;
+			}
+			break;
+		}
+	}
+
+	// Límites del segundo piso
+	const float paraMinY = 22.4f;   
+	const float paraMaxY = 34.4f;  
+
+	if (paraGoingDown)
 	{
-		movAuto_x += 3.0f;
+		
+		paraOffsetY -= paraSpeed;
+		if ((paraBaseY + paraOffsetY) <= paraMinY)
+		{
+			paraOffsetY = paraMinY - paraBaseY;
+			paraGoingDown = false;    
+		}
+	}
+	else
+	{
+		paraOffsetY = paraMaxY - paraBaseY;
+		paraGoingDown = true;   
+	}
+
+	//Helice
+	heliceAngle += 1.0f;
+	if (heliceAngle > 360.0f) {
+		heliceAngle -= 360.0f;
+	}
+
+	//Ornitoptero
+	float wingSpeed = 1.0f;    
+	float wingMaxAngle = 30.0f;   
+
+	if (ornWingUp) {
+		ornWingAngle += wingSpeed;
+		if (ornWingAngle >= wingMaxAngle)
+			ornWingUp = false;
+	}
+	else {
+		ornWingAngle -= wingSpeed;
+		if (ornWingAngle <= -wingMaxAngle)
+			ornWingUp = true;
 	}
 }
 
@@ -881,6 +1105,16 @@ void myData() {
 }
 
 int main() {
+
+	initializeAudioSystem();
+
+	createAudioZone(glm::vec3(0.0f, 5.0f, -40.0f), 8.0f, "audio/recepcion.wav");
+	createAudioZone(glm::vec3(0.0f, 15.0f, -40.0f), 10.0f, "audio/primer_piso.wav");
+	createAudioZone(glm::vec3(0.0f, 25.0f, -40.0f), 12.0f, "audio/segundo_piso.wav");
+	createAudioZone(glm::vec3(0.0f, 45.0f, -40.0f), 15.0f, "audio/tercer_piso.wav");
+
+
+
 	// glfw: initialize and configure
 	glfwInit();
 
@@ -947,15 +1181,7 @@ int main() {
 
 	// load models
 	// -----------
-	//Model piso("resources/objects/piso/piso.obj");
-	//Model carro("resources/objects/lambo/carroceria.obj");
-	//Model llanta("resources/objects/lambo/Wheel.obj");
-	//Model casaVieja("resources/objects/casa/OldHouse.obj");
-	//Model cubo("resources/objects/cubo/cube02.obj");
-	//Model casaDoll("resources/objects/casa/DollHouse.obj");
 
-	//ModelAnim animacionPersonaje("resources/objects/Personaje1/Arm.dae");
-	//animacionPersonaje.initShaders(animShader.ID);
 	Model tercerPiso("resources/General_Models/MuseoJumex.obj");
 	Model segundoPiso("resources/General_Models/MuseoJumexSegundoPiso.obj");
 	Model primerPiso("resources/General_Models/MuseoJumexTercerPiso.obj");
@@ -1002,10 +1228,35 @@ int main() {
 
 
 	Model Colorful_Plant("resources/plants/Colorful_Plant/karafuruueki.obj");
-
+	Model Tree("resources/plants/Tree/Basic_Tree_1.obj");
 	Model Candle("resources/Candle/Model.obj");
+	
+	//Segundo piso
+	Model paracaidas("resources/Paracaidas/paracaidas.obj");
+	Model helicoideBase("resources/Tornillo/Base.obj");
+	Model helicoideHelice("resources/Tornillo/Helice.obj");
+	Model OrnCuer("resources/Ornitoptero/Cuerpo.obj");
+	Model OrnAlDe("resources/Ornitoptero/AlaDer.obj");
+	Model OrnAlIz("resources/Ornitoptero/AlaIzq.obj");
 
-
+	//Tercer piso
+	Model carro1("resources/objects/Carro1/Carro1.obj");
+	Model carro2("resources/objects/Carro2/Carro2.obj");
+	Model carro3("resources/objects/Carro3/Carro3.obj");
+	Model carro4("resources/objects/Carro4/Cybertruck.obj");
+	Model carro5("resources/objects/Carro5/Suv_4x4.obj");
+	Model carro6("resources/objects/Carro6/Carro6.obj");
+	Model carro7("resources/objects/Carro7/mclaren_mp45.obj");
+	Model carro8("resources/objects/Carro8/Carro8.obj");
+	Model carro9("resources/objects/Carro9/Carro9.obj");
+	Model carro10("resources/objects/Carro10/Gta-spano-2010 obj.obj");
+	Model carro11("resources/objects/Carro11/Carro11.obj");
+	Model llanta11("resources/objects/Carro11/llanta2.obj");
+	Model carro12("resources/objects/Carro12/Carro.obj");
+	Model llanta12("resources/objects/Carro12/llanta.obj");
+	Model cubo("resources/objects/Cubo/Cubo.obj");
+	Model pista("resources/objects/Pista/track.obj");
+	Model base("resources/objects/Base/Base.obj");
 	
 	//Inicialización de KeyFrames
 	for (int i = 0; i < MAX_FRAMES; i++)
@@ -1607,7 +1858,10 @@ int main() {
 	mat4 tempTercero = mat4(1.0f);
 	mat4 tempEasels = mat4(1.0f);
 	mat4 tempCaballero = mat4(1.0f);
-
+	mat4 tmp11 = mat4(1.0f);
+	mat4 tmp12 = mat4(1.0f);
+	mat4 tmpTrack = mat4(1.0f);
+	mat4 tmpMini = mat4(1.0f);
 
 	// render loop
 	// -----------
@@ -1623,6 +1877,8 @@ int main() {
 		// -----
 		//my_input(window);
 		animate();
+
+		updateAudioZones();
 
 		// render
 		// ------
@@ -1887,8 +2143,6 @@ int main() {
 		animShader.setMat4("model", modelOp);
 		personajeGal.Draw(animShader);
 
-
-
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Escenario Primitivas
 		// -------------------------------------------------------------------------------------------------------------------------
@@ -1922,6 +2176,7 @@ int main() {
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Escenario
 		// -------------------------------------------------------------------------------------------------------------------------
+
 		staticShader.use();
 		staticShader.setMat4("projection", projectionOp);
 		staticShader.setMat4("view", viewOp);
@@ -1934,7 +2189,7 @@ int main() {
 		tmp = modelOp = rotate(modelOp, radians(giroMonito), vec3(0.0f, 1.0f, 0.0));
 		staticShader.setMat4("model", modelOp);
 		vestibulo.Draw(staticShader);
-
+		
 		tempPrimero = modelOp = translate(tempJumex, vec3(0.0f, 9.50f, 0.0f));
 		tmp = modelOp = rotate(modelOp, radians(giroMonito), vec3(0.0f, 1.0f, 0.0));
 		staticShader.setMat4("model", modelOp);
@@ -1949,7 +2204,7 @@ int main() {
 		tmp = modelOp = rotate(modelOp, radians(giroMonito), vec3(0.0f, 1.0f, 0.0));
 		staticShader.setMat4("model", modelOp);
 		tercerPiso.Draw(staticShader);
-
+		
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Modelos de la planta baja
 		// -------------------------------------------------------------------------------------------------------------------------
@@ -2068,6 +2323,52 @@ int main() {
 		staticShader.setMat4("model", cuadroOp);
 		CaballeroBrazoIzquierdo.Draw(staticShader);
 
+		// Arboles decoracion 
+
+		for (int i = 0; i < 30; i++) {
+			float ang = radians(137.5f * i);
+			float r = 2.0f * sqrt(i);
+			float x = r * cos(ang) * 10.0f;
+			float z = r * sin(ang) * 10.0f;
+			mat4 arbolOp = translate(mat4(1.0f), vec3(200.0f + x, -3.0f, z));
+			arbolOp = rotate(arbolOp, radians(i * 12.0f), vec3(0.0f, 1.0f, 0.0f));
+			staticShader.setMat4("model", arbolOp);
+			Tree.Draw(staticShader);
+		}
+
+		for (int i = 0; i < 30; i++) {
+			float ang = radians(137.5f * i);
+			float r = 2.0f * sqrt(i);
+			float x = r * cos(ang) * 10.0f;
+			float z = r * sin(ang) * 10.0f;
+			mat4 arbolOp = translate(mat4(1.0f), vec3(-200.0f + x, -3.0f, z));
+			arbolOp = rotate(arbolOp, radians(i * 12.0f), vec3(0.0f, 1.0f, 0.0f));
+			staticShader.setMat4("model", arbolOp);
+			Tree.Draw(staticShader);
+		}
+
+		for (int i = 0; i < 30; i++) {
+			float ang = radians(137.5f * i);
+			float r = 2.0f * sqrt(i);
+			float x = r * cos(ang) * 10.0f;
+			float z = r * sin(ang) * 10.0f;
+			mat4 arbolOp = translate(mat4(1.0f), vec3(x, -3.0f, 200.0f + z));
+			arbolOp = rotate(arbolOp, radians(i * 12.0f), vec3(0.0f, 1.0f, 0.0f));
+			staticShader.setMat4("model", arbolOp);
+			Tree.Draw(staticShader);
+		}
+
+		for (int i = 0; i < 30; i++) {
+			float ang = radians(137.5f * i);
+			float r = 2.0f * sqrt(i);
+			float x = r * cos(ang) * 10.0f;
+			float z = r * sin(ang) * 10.0f;
+			mat4 arbolOp = translate(mat4(1.0f), vec3(x, -3.0f, -200.0f + z));
+			arbolOp = rotate(arbolOp, radians(i * 12.0f), vec3(0.0f, 1.0f, 0.0f));
+			staticShader.setMat4("model", arbolOp);
+			Tree.Draw(staticShader);
+		}
+
 			// Plantas de recepcion 
 
 		float radio = 6.0f;
@@ -2078,7 +2379,7 @@ int main() {
 			float x = sin(angulo) * radio;
 			float z = cos(angulo) * radio;
 
-			cuadroOp = translate(tempCaballero, vec3(x, 2.2f, z));
+			cuadroOp = translate(tempCaballero, vec3(x, -2.2f, z));
 			cuadroOp = scale(cuadroOp, vec3(0.3f));
 			staticShader.setMat4("model", cuadroOp);
 			Colorful_Plant.Draw(staticShader);
@@ -2138,8 +2439,6 @@ int main() {
 		cuadroOp = translate(tempJumex, vec3(xIzq - lissajousX, 6.3f * 1.25f, 15.5f - lissajousZ * factorCentro));
 		staticShader.setMat4("model", cuadroOp);
 		Candle.Draw(staticShader);
-
-
 
 
 		// -------------------------------------------------------------------------------------------------------------------------
@@ -2228,59 +2527,291 @@ int main() {
 			staticShader.setMat4("model", modelOp);
 			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
 			pintura11.Draw(staticShader); //15.7, 15.5, 42.2, r=-90
+
+		// -------------------------------------------------------------------------------------------------------------------------
+		// Modelos 2do piso
+		// -------------------------------------------------------------------------------------------------------------------------
+			
+			//Paracaidas
+			glm::mat4 modelPara = glm::mat4(1.0f);
+			modelPara = glm::translate(modelPara, glm::vec3(paraBaseX, paraBaseY + paraOffsetY, paraBaseZ));
+			modelPara = glm::scale(modelPara, glm::vec3(0.05f));
+			staticShader.setMat4("model", modelPara);
+			paracaidas.Draw(staticShader);
+
+			//Tornillo
+			glm::mat4 modelHelicoide = glm::mat4(1.0f);
+			modelHelicoide = glm::translate(modelHelicoide, glm::vec3(helicoideX, helicoideY, helicoideZ));
+			modelHelicoide = glm::scale(modelHelicoide, glm::vec3(0.4f));
+			staticShader.setMat4("model", modelHelicoide);
+			helicoideBase.Draw(staticShader);
+
+			glm::mat4 modelHelice = modelHelicoide;
+			modelHelice = glm::translate(modelHelice, glm::vec3(0.0f, 1.0f, 0.0f));
+			modelHelice = glm::rotate(modelHelice, glm::radians(heliceAngle), glm::vec3(0, 1, 0));
+			staticShader.setMat4("model", modelHelice);
+			helicoideHelice.Draw(staticShader);
+
+			//Ornitoptero
+			glm::mat4 modelOrn = glm::mat4(1.0f);
+			modelOrn = glm::translate(modelOrn, glm::vec3(ornX, ornY, ornZ));
+			modelOrn = glm::scale(modelOrn, glm::vec3(ornScale));
+			staticShader.setMat4("model", modelOrn);
+			OrnCuer.Draw(staticShader);
+
+			glm::vec3 pivotAlaDerLocal = glm::vec3(1.5f, 0.0f, 0.0f);  
+			glm::vec3 pivotAlaIzqLocal = glm::vec3(-1.5f, 0.0f, 0.0f); 
+
+			glm::mat4 modelAlaDer = modelOrn;
+			modelAlaDer = glm::translate(modelAlaDer, pivotAlaDerLocal);
+			modelAlaDer = glm::rotate(modelAlaDer,glm::radians(ornWingAngle),glm::vec3(1.0f, 0.0f, 0.0f));  // eje del tubo
+			modelAlaDer = glm::translate(modelAlaDer, -pivotAlaDerLocal);
+			staticShader.setMat4("model", modelAlaDer);
+			OrnAlDe.Draw(staticShader);
+
+			glm::mat4 modelAlaIzq = modelOrn;
+			modelAlaIzq = glm::translate(modelAlaIzq, pivotAlaIzqLocal); modelAlaIzq = glm::rotate(modelAlaIzq, glm::radians(-ornWingAngle), glm::vec3(1.0f, 0.0f, 0.0f));
+			modelAlaIzq = glm::translate(modelAlaIzq, -pivotAlaIzqLocal);
+			staticShader.setMat4("model", modelAlaIzq);
+			OrnAlIz.Draw(staticShader);
+
+
+		// -------------------------------------------------------------------------------------------------------------------------
+		// Modelos 3er piso
+		// -------------------------------------------------------------------------------------------------------------------------
 		
-		// -------------------------------------------------------------------------------------------------------------------------
-		// Just in case
-		// -------------------------------------------------------------------------------------------------------------------------
-		/*modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posX, posY, posZ));
-		tmp = modelOp = glm::rotate(modelOp, glm::radians(giroMonito), glm::vec3(0.0f, 1.0f, 0.0));
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(20.0f, 42.0f, -20.0f));	//-2.0f, 42.0f, 33.0f
+		modelOp = glm::scale(modelOp, glm::vec3(0.012f));
+		modelOp = glm::rotate(modelOp, glm::radians(25.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
-		torso.Draw(staticShader);
-
-		//Pierna Der
-		modelOp = glm::translate(tmp, glm::vec3(-0.5f, 0.0f, -0.1f));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0));
-		modelOp = glm::rotate(modelOp, glm::radians(-rotRodIzq), glm::vec3(1.0f, 0.0f, 0.0f));
+		carro1.Draw(staticShader);
+		
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(19.0f, 39.51f, 0.0f));	//-21.0f, 39.51f, 23.0f
+		modelOp = glm::scale(modelOp, glm::vec3(0.03f));
+		modelOp = glm::rotate(modelOp, glm::radians(205.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
-		piernaDer.Draw(staticShader);
-
-		//Pie Der
-		modelOp = glm::translate(modelOp, glm::vec3(0, -0.9f, -0.2f));
+		carro2.Draw(staticShader);
+		
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(21.0f, 39.62f, 20.0f));	//-2.0f, 39.62f, 19.0f
+		modelOp = glm::scale(modelOp, glm::vec3(0.03f));
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
-		botaDer.Draw(staticShader);
-
-		//Pierna Izq
-		modelOp = glm::translate(tmp, glm::vec3(0.5f, 0.0f, -0.1f));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		carro3.Draw(staticShader);
+		
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 39.65f, 45.0f));	//0.0f, 39.65f, -45.0f
+		modelOp = glm::scale(modelOp, glm::vec3(0.08f));
+		modelOp = glm::rotate(modelOp, glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
-		piernaIzq.Draw(staticShader);
-
-		//Pie Iz
-		modelOp = glm::translate(modelOp, glm::vec3(0, -0.9f, -0.2f));
+		carro4.Draw(staticShader);
+		
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(20.0f, 39.1f, 37.0f));	//0.96
+		modelOp = glm::scale(modelOp, glm::vec3(0.008f));
+		modelOp = glm::rotate(modelOp, glm::radians(-160.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
-		botaDer.Draw(staticShader);	//Izq trase
+		carro5.Draw(staticShader);
 
-		//Brazo derecho
-		modelOp = glm::translate(tmp, glm::vec3(0.0f, -1.0f, 0.0f));
-		modelOp = glm::translate(modelOp, glm::vec3(-0.75f, 2.5f, 0));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-17.0f, 39.62f, 40.0f));	//0.96
+		modelOp = glm::scale(modelOp, glm::vec3(2.4f));
+		modelOp = glm::rotate(modelOp, glm::radians(-20.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
-		brazoDer.Draw(staticShader);
-
-		//Brazo izquierdo
-		modelOp = glm::translate(tmp, glm::vec3(0.0f, -1.0f, 0.0f));
-		modelOp = glm::translate(modelOp, glm::vec3(0.75f, 2.5f, 0));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		carro6.Draw(staticShader);
+		
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 40.0f + movAuto_y1, 18.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(orienta_y1), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(orienta_z1), glm::vec3(0.0f, 0.0f, 1.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(orienta_x1), glm::vec3(1.0f, 0.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(4.5f));
 		staticShader.setMat4("model", modelOp);
-		brazoIzq.Draw(staticShader);
+		carro7.Draw(staticShader);
 
-		//Cabeza
-		modelOp = glm::translate(tmp, glm::vec3(0.0f, -1.0f, 0.0f));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0));
-		modelOp = glm::translate(modelOp, glm::vec3(0.0f, 2.5f, 0));
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 39.7f, 18.0f));
+		tmpMini = modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(5.0f, 1.0f, 5.0f));
 		staticShader.setMat4("model", modelOp);
-		cabeza.Draw(staticShader);*/
+		base.Draw(staticShader);
+		
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-21.0f, 39.7f, 20.0f));	//-2.0f, 39.62f, 6.0f
+		modelOp = glm::scale(modelOp, glm::vec3(0.14f));
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro8.Draw(staticShader);
 
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-18.0f, 39.65f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.12f));
+		modelOp = glm::rotate(modelOp, glm::radians(155.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro9.Draw(staticShader);
+		
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-18.0f, 39.65f, -20.0f));//-21.0f, 39.65f, -17.0f
+		modelOp = glm::scale(modelOp, glm::vec3(0.07f));
+		modelOp = glm::rotate(modelOp, glm::radians(155.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro10.Draw(staticShader);
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 39.55f, -25.0f));
+		tmpMini = modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.5f, 0.5f, 2.0f));
+		staticShader.setMat4("model", modelOp);
+		cubo.Draw(staticShader);
+
+		modelOp = glm::translate(tmpMini, glm::vec3(1.0f, 1.88f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.0016f));
+		modelOp = glm::rotate(modelOp, glm::radians(225.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro2.Draw(staticShader);
+
+		modelOp = glm::translate(tmpMini, glm::vec3(-1.0f, 1.88f, -2.0f));	
+		modelOp = glm::scale(modelOp, glm::vec3(0.0016f));
+		modelOp = glm::rotate(modelOp, glm::radians(135.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro3.Draw(staticShader);
+
+		modelOp = glm::translate(tmpMini, glm::vec3(-1.0f, 1.89f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.004f));
+		modelOp = glm::rotate(modelOp, glm::radians(135.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro4.Draw(staticShader);
+
+		modelOp = glm::translate(tmpMini, glm::vec3(1.0f, 1.89f, 2.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.004f));
+		modelOp = glm::rotate(modelOp, glm::radians(225.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro10.Draw(staticShader);
+		
+		modelOp = glm::translate(tmpMini, glm::vec3(-1.0, 1.935f, 2.0));	//0.0f, 1.96f, 0.0f		//-1.7f, 1.96f, 4.8f
+		tmp11 = modelOp = glm::rotate(modelOp, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		carro11.Draw(staticShader);
+
+		modelOp = glm::translate(tmp11, glm::vec3(0.272f, 0.015f, -0.159f));
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta11.Draw(staticShader);
+
+		modelOp = glm::translate(tmp11, glm::vec3(-0.236f, 0.015f, -0.159f));
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta11.Draw(staticShader);
+
+		modelOp = glm::translate(tmp11, glm::vec3(0.272f, 0.015f, 0.159f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta11.Draw(staticShader);
+
+		modelOp = glm::translate(tmp11, glm::vec3(-0.236f, 0.015f, 0.159f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta11.Draw(staticShader);
+
+		modelOp = glm::translate(tmpMini, glm::vec3(1.0f, 1.925f, -2.0f));
+		tmp12 = modelOp = glm::rotate(modelOp, glm::radians(225.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		carro12.Draw(staticShader);
+
+		modelOp = glm::translate(tmp12, glm::vec3(-11.91f, 2.375f, -20.575f) * 0.013f);
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		llanta12.Draw(staticShader);
+
+		modelOp = glm::translate(tmp12, glm::vec3(-11.91f, 2.375f, 19.762f) * 0.013f);
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		llanta12.Draw(staticShader);
+
+		modelOp = glm::translate(tmp12, glm::vec3(11.91f, 2.375f, 19.762f) * 0.013f);
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		llanta12.Draw(staticShader);
+
+		modelOp = glm::translate(tmp12, glm::vec3(11.91f, 2.375f, -20.575f) * 0.013f);
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		llanta12.Draw(staticShader);
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 39.55f, -5.0f));
+		tmpTrack = modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.5f, 0.5f, 3.0f));
+		staticShader.setMat4("model", modelOp);
+		cubo.Draw(staticShader);
+
+		modelOp = glm::translate(tmpTrack, glm::vec3(0.0f, 1.9f, 0.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.07f));
+		staticShader.setMat4("model", modelOp);
+		pista.Draw(staticShader);
+
+		modelOp = glm::translate(tmpTrack, glm::vec3(movAuto_x2, 1.96f, -movAuto_z2));	//0.0f, 1.96f, 0.0f		//-1.7f, 1.96f, 4.8f
+		modelOp = glm::rotate(modelOp, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		tmp11 = modelOp = glm::rotate(modelOp, glm::radians(giroCarro2), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		carro11.Draw(staticShader);
+
+		modelOp = glm::translate(tmp11, glm::vec3(0.272f, 0.015f, -0.159f));
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(giroRuedas), glm::vec3(0.0f, 0.0f, 1.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta11.Draw(staticShader);
+		
+		modelOp = glm::translate(tmp11, glm::vec3(-0.236f, 0.015f, -0.159f));
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(giroRuedas), glm::vec3(0.0f, 0.0f, 1.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta11.Draw(staticShader);
+
+		modelOp = glm::translate(tmp11, glm::vec3(0.272f, 0.015f, 0.159f));
+		modelOp = glm::rotate(modelOp, glm::radians(giroRuedas), glm::vec3(0.0f, 0.0f, -1.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta11.Draw(staticShader);
+
+		modelOp = glm::translate(tmp11, glm::vec3(-0.236f, 0.015f, 0.159f));
+		modelOp = glm::rotate(modelOp, glm::radians(giroRuedas), glm::vec3(0.0f, 0.0f, -1.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta11.Draw(staticShader);
+
+		modelOp = glm::translate(tmpTrack, glm::vec3(movAuto_x3, 1.945f, movAuto_z3));
+		modelOp = glm::rotate(modelOp, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		tmp12 = modelOp = glm::rotate(modelOp, glm::radians(giroCarro3), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		carro12.Draw(staticShader);
+		
+		modelOp = glm::translate(tmp12, glm::vec3(-11.91f, 2.375f, -20.575f) * 0.013f);
+		modelOp = glm::rotate(modelOp, glm::radians(giroRuedas), glm::vec3(1.0f, 0.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		llanta12.Draw(staticShader);
+
+		modelOp = glm::translate(tmp12, glm::vec3(-11.91f, 2.375f, 19.762f) * 0.013f);
+		modelOp = glm::rotate(modelOp, glm::radians(giroRuedas), glm::vec3(1.0f, 0.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		llanta12.Draw(staticShader);
+
+		modelOp = glm::translate(tmp12, glm::vec3(11.91f, 2.375f, 19.762f) * 0.013f);
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(giroRuedas), glm::vec3(-1.0f, 0.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		llanta12.Draw(staticShader);
+
+		modelOp = glm::translate(tmp12, glm::vec3(11.91f, 2.375f, -20.575f) * 0.013f);
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(giroRuedas), glm::vec3(-1.0f, 0.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		llanta12.Draw(staticShader);
+		
 		//-------------------------------------------------------------------------------------
 		// draw skybox as last
 		// -------------------
@@ -2302,6 +2833,7 @@ int main() {
 	}
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	// ------------------------------------------------------------------
+	cleanupAudioSystem();
 	glDeleteVertexArrays(2, VAO);
 	glDeleteBuffers(2, VBO);
 	//skybox.Terminate();
@@ -2325,31 +2857,56 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode)
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, (float)deltaTime);
 
-	//To Configure Model
-	if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS)
-		posZ++;
-	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
-		posZ--;
-	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
-		posX--;
-	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
-		posX++;
-	if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
-		rotRodIzq--;
-	if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
-		rotRodIzq++;
-	if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS)
-		giroMonito--;
-	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
-		giroMonito++;
+
 	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
 		lightPosition.x++;
 	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
 		lightPosition.x--;
 
+	// Camaras fijas
+	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+		camera.Position = glm::vec3(0.0f, 5.0f, -40.0f);
+		camera.Front = glm::normalize(glm::vec3(0.0f, 0.0f, 1.0f));
+	}
+	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+		camera.Position = glm::vec3(0.0f, 15.0f, -40.0f);
+		camera.Front = glm::normalize(glm::vec3(0.0f, 0.0f, 1.0f));
+	}
+	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
+		camera.Position = glm::vec3(0.0f, 25.0f, -40.0f);
+		camera.Front = glm::normalize(glm::vec3(0.0f, 0.0f, 1.0f));
+	}
+	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
+		camera.Position = glm::vec3(0.0f, 45.0f, -40.0f);
+		camera.Front = glm::normalize(glm::vec3(0.0f, 0.0f, 1.0f));
+	}
+	if (key == GLFW_KEY_5 && action == GLFW_PRESS) {
+		camera.Position = glm::vec3(200.0f, 150.0f, -200.0f);
+		camera.Yaw = -125.0f;
+		camera.Pitch = -35.264f;
+		camera.Front = glm::normalize(glm::vec3(-1.0f, -0.4f, 1.0f));
+	}
 	//Car animation
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
-		animacion ^= true;
+		animacion1 ^= true;
+	if (key == GLFW_KEY_C && action == GLFW_PRESS)
+		animacion2 ^= true;
+	if (key == GLFW_KEY_R && action == GLFW_PRESS) {
+		orienta_x1 = 0.0f;
+		orienta_y1 = 180.0f;
+		orienta_z1 = 0.0f;
+		movAuto_y1 = 0.0f;
+		movAuto_x2 = 1.5f;
+		movAuto_z2 = 1.5f;
+		movAuto_x3 = 0.0f;
+		movAuto_z3 = 0.0f;
+		animacion1 = animacion2 = false;
+		angleCarro2 = angleCarro3 = 45.0f;
+		giroCarro2 = giroCarro3 = 0.0f;
+		giroRuedas = 0.0f;
+		etapa_giro = 0;
+		etapa_track1 = etapa_track2 = 0;
+	}
 
 	//To play KeyFrame animation 
 	if (key == GLFW_KEY_P && action == GLFW_PRESS)
@@ -2412,4 +2969,166 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 	camera.ProcessMouseScroll(yoffset);
+}
+
+
+void initializeAudioSystem() {
+	// Inicializar OpenAL
+	audioDevice = alcOpenDevice(nullptr);
+	if (!audioDevice) {
+		std::cerr << "No se pudo abrir el dispositivo de audio" << std::endl;
+		return;
+	}
+
+	audioContext = alcCreateContext(audioDevice, nullptr);
+	if (!alcMakeContextCurrent(audioContext)) {
+		std::cerr << "No se pudo crear el contexto de audio" << std::endl;
+		return;
+	}
+
+	// Configurar propiedades del listener (oyente)
+	alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
+	alListener3f(AL_VELOCITY, 0.0f, 0.0f, 0.0f);
+
+	// Configurar orientación del listener (forward, up)
+	ALfloat listenerOri[] = { 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f };
+	alListenerfv(AL_ORIENTATION, listenerOri);
+}
+
+bool loadWavFile(const char* filename, ALuint* buffer) {
+	std::ifstream file(filename, std::ios::binary);
+	if (!file) {
+		std::cerr << "No se pudo abrir el archivo WAV: " << filename << std::endl;
+		return false;
+	}
+
+	char riff[4]; file.read(riff, 4);
+	file.ignore(4);
+	char wave[4]; file.read(wave, 4);
+
+	char fmt[4]; file.read(fmt, 4);
+	int subchunk1Size; file.read((char*)&subchunk1Size, 4);
+	short audioFormat; file.read((char*)&audioFormat, 2);
+	short numChannels; file.read((char*)&numChannels, 2);
+	int sampleRate; file.read((char*)&sampleRate, 4);
+	file.ignore(6);
+	short bitsPerSample; file.read((char*)&bitsPerSample, 2);
+
+	char dataHeader[4];
+	int dataSize;
+	while (true) {
+		file.read(dataHeader, 4);
+		file.read((char*)&dataSize, 4);
+		if (std::string(dataHeader, 4) == "data") break;
+		file.ignore(dataSize);
+	}
+
+	std::vector<char> data(dataSize);
+	file.read(data.data(), dataSize);
+
+	ALenum format;
+	if (numChannels == 1 && bitsPerSample == 8) format = AL_FORMAT_MONO8;
+	else if (numChannels == 1 && bitsPerSample == 16) format = AL_FORMAT_MONO16;
+	else if (numChannels == 2 && bitsPerSample == 8) format = AL_FORMAT_STEREO8;
+	else if (numChannels == 2 && bitsPerSample == 16) format = AL_FORMAT_STEREO16;
+	else {
+		std::cerr << "Formato WAV no soportado: " << filename << std::endl;
+		return false;
+	}
+
+	alGenBuffers(1, buffer);
+	alBufferData(*buffer, format, data.data(), dataSize, sampleRate);
+
+	std::cout << "Audio cargado: " << filename << std::endl;
+	return true;
+}
+
+void createAudioZone(const glm::vec3& center, float radius, const std::string& audioFile) {
+	AudioZone zone;
+	zone.center = center;
+	zone.radius = radius;
+	zone.audioFile = audioFile;
+	zone.isPlaying = false;
+
+	// Cargar el buffer de audio
+	if (loadWavFile(audioFile.c_str(), &zone.buffer)) {
+		// Crear la fuente de audio
+		alGenSources(1, &zone.source);
+		alSourcei(zone.source, AL_BUFFER, zone.buffer);
+
+		// Configurar propiedades 3D de la fuente
+		alSourcef(zone.source, AL_PITCH, 1.0f);
+		alSourcef(zone.source, AL_GAIN, 0.0f); // Iniciar en silencio
+		alSource3f(zone.source, AL_POSITION, center.x, center.y, center.z);
+		alSource3f(zone.source, AL_VELOCITY, 0.0f, 0.0f, 0.0f);
+		alSourcei(zone.source, AL_LOOPING, AL_TRUE);
+
+		// Configurar atenuación por distancia
+		alSourcef(zone.source, AL_REFERENCE_DISTANCE, radius * 0.3f);
+		alSourcef(zone.source, AL_MAX_DISTANCE, radius);
+		alSourcef(zone.source, AL_ROLLOFF_FACTOR, 1.0f);
+
+		audioZones.push_back(zone);
+		std::cout << "Zona de audio creada en: (" << center.x << ", " << center.y << ", " << center.z
+			<< ") con radio: " << radius << std::endl;
+	}
+}
+
+void updateAudioZones() {
+	// Actualizar posición del listener con la cámara
+	alListener3f(AL_POSITION, camera.Position.x, camera.Position.y, camera.Position.z);
+
+	// Actualizar orientación del listener
+	glm::vec3 forward = camera.Front;
+	glm::vec3 up = camera.Up;
+	ALfloat listenerOri[] = { forward.x, forward.y, forward.z, up.x, up.y, up.z };
+	alListenerfv(AL_ORIENTATION, listenerOri);
+
+	// Actualizar cada zona de audio
+	for (auto& zone : audioZones) {
+		float distance = glm::distance(camera.Position, zone.center);
+
+		if (distance <= zone.radius) {
+			// Dentro de la zona - calcular volumen basado en distancia
+			float volume = 1.0f - (distance / zone.radius);
+			volume = glm::clamp(volume, 0.0f, 1.0f);
+
+			alSourcef(zone.source, AL_GAIN, volume);
+
+			if (!zone.isPlaying) {
+				alSourcePlay(zone.source);
+				zone.isPlaying = true;
+				std::cout << "Reproduciendo audio: " << zone.audioFile << std::endl;
+			}
+		}
+		else {
+			// Fuera de la zona - silenciar
+			alSourcef(zone.source, AL_GAIN, 0.0f);
+
+			if (zone.isPlaying) {
+				alSourceStop(zone.source);
+				zone.isPlaying = false;
+				std::cout << "Deteniendo audio: " << zone.audioFile << std::endl;
+			}
+		}
+	}
+}
+
+void cleanupAudioSystem() {
+	// Detener y limpiar todas las zonas de audio
+	for (auto& zone : audioZones) {
+		alSourceStop(zone.source);
+		alDeleteSources(1, &zone.source);
+		alDeleteBuffers(1, &zone.buffer);
+	}
+	audioZones.clear();
+
+	// Limpiar contexto y dispositivo
+	alcMakeContextCurrent(nullptr);
+	if (audioContext) {
+		alcDestroyContext(audioContext);
+	}
+	if (audioDevice) {
+		alcCloseDevice(audioDevice);
+	}
 }
