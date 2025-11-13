@@ -71,7 +71,7 @@ GLFWmonitor* monitors;
 GLuint VBO[3], VAO[3], EBO[3];
 
 //Camera
-Camera camera(glm::vec3(0.0f, 10.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 5.0f, 3.0f));
 float MovementSpeed = 5.0f;
 GLfloat lastX = SCR_WIDTH / 2.0f,
 		lastY = SCR_HEIGHT / 2.0f;
@@ -111,15 +111,24 @@ glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
 glm::vec3 ambientColor = diffuseColor * glm::vec3(0.75f);
 
 // posiciones
-float	movAuto_x = 0.0f,
-movAuto_z = 0.0f,
-orienta = 90.0f;
-bool	animacion = false,
-recorrido1 = true,
-recorrido2 = false,
-recorrido3 = false,
-recorrido4 = false;
-
+float	movAuto_y1 = 0.0f,
+		movAuto_x2 = 1.5f,
+		movAuto_z2 = 1.5f,
+		movAuto_x3 = 0.0f,
+		movAuto_z3 = 0.0f,
+		orienta_x1 = 0.0f,
+		orienta_y1 = 180.0f,
+		orienta_z1 = 0.0f,
+		giroCarro2 = 0.0f,
+		angleCarro2 = 45.0f,
+		giroCarro3 = 0.0f,
+		angleCarro3 = 45.0f,
+		giroRuedas = 0.0f;
+int		etapa_giro = 0,
+		etapa_track1 = 0,
+		etapa_track2 = 0;
+bool	animacion1 = false,
+		animacion2 = false;
 
 //Keyframes (Manipulación y dibujo)
 float	posX = 0.0f,
@@ -769,10 +778,137 @@ void animate(void)
 		}
 	}
 
-	//Vehículo
-	if (animacion)
-	{
-		movAuto_x += 3.0f;
+	//Vehículos
+	if (animacion1){
+		orienta_y1 += 0.5f;
+		switch (etapa_giro) {
+		case 0:
+			if (orienta_y1 >= 360.0f) {
+				orienta_x1 += 0.3f;
+				movAuto_y1 = (orienta_x1 / 45.0f) * 7.0f;
+				if (orienta_x1 >= 45.0f || movAuto_y1 >= 7.0f) {
+					etapa_giro = 1;
+				}
+			}
+			break;
+		case 1:
+			if (orienta_y1 >= 720.0f) {
+				etapa_giro = 2;
+			}
+			break;
+		case 2:
+			orienta_x1 -= 0.3f;
+			movAuto_y1 = (abs(orienta_x1) / 45.0f) * 7.0f;
+			if (orienta_x1 <= -45.0f) {
+				etapa_giro = 3;
+			}
+			break;
+		case 3:
+			if (orienta_y1 >= 1080.0f) {
+				orienta_x1 += 0.3f;
+				movAuto_y1 = (orienta_x1 / -45.0f) * 7.0f;
+				if (orienta_x1 >= 0.0f || movAuto_y1 <= 0.0f) {
+					etapa_giro = 4;
+				}
+			}
+			break;
+		case 4:
+			if (orienta_y1 >= 1440.0f) {
+				orienta_y1 = 0.0f;
+				etapa_giro = 0;
+			}
+			break;
+		}
+	}
+	if (animacion2) {
+		giroRuedas += 20.0f;
+		if (giroRuedas >= 360.0f) {
+			giroRuedas = 0.0f;
+		}
+		switch (etapa_track1) {
+		case 0:
+			movAuto_x2 += 0.06f;
+			movAuto_z2 = movAuto_x2;
+			if (movAuto_z2 >= 1.7) {
+				etapa_track1 = 1;
+			}
+			break;
+		case 1:
+			if (giroCarro2 < 135.0f) {
+				giroCarro2 += 3.0f;
+			}
+			else {
+				giroCarro2 += 2.0f;
+			}
+			angleCarro2 += 2.0f;
+			movAuto_x2 = 0.0f + 2.3f * sin(glm::radians(angleCarro2));
+			movAuto_z2 = 3.25f - 2.3f * cos(glm::radians(angleCarro2));
+			if (angleCarro2 >= 315.0f) {
+				etapa_track1 = 2;
+			}
+			break;
+		case 2:
+			if (giroCarro2 > 270.0f) {
+				giroCarro2 -= 1.0f;
+			}
+			movAuto_x2 += 0.04f;
+			movAuto_z2 = movAuto_x2 * -1.0f;
+			if (movAuto_x2 >= 1.7f) {
+				etapa_track1 = 3;
+			}
+			break;
+		case 3:
+			giroCarro2 -= 1.0f;
+			angleCarro2 -= 1.0f;
+			movAuto_x2 = 0.0f - 2.3f * sin(glm::radians(angleCarro2));
+			movAuto_z2 = - 3.25f + 2.3f * cos(glm::radians(angleCarro2));
+			if (angleCarro2 <= 45.0f) {
+				etapa_track1 = 0;
+			}
+			break;
+		}
+		switch (etapa_track2) {
+		case 0:
+			if (giroCarro3 > 0.0f) {
+				giroCarro3 -= 1.0f;
+			}
+			movAuto_x3 += 0.04f;
+			movAuto_z3 = movAuto_x3;
+			if(movAuto_z3 >= 1.7) {
+				etapa_track2 = 1;
+			}
+			break;
+		case 1:
+			giroCarro3 -= 1.0f;
+			angleCarro3 += 1.0f;
+			movAuto_x3 = 0.0f + 2.3f * sin(glm::radians(angleCarro3));
+			movAuto_z3 = 3.25f - 2.3f * cos(glm::radians(angleCarro3));
+			if (angleCarro3 >= 315.0f) {
+				etapa_track2 = 2;
+			}
+			break;
+		case 2:
+			movAuto_x3 += 0.06f;
+			movAuto_z3 = movAuto_x3 * -1.0f;
+			if (movAuto_x3 >= 1.7f) {
+				etapa_track2 = 3;
+			}
+			break;
+		case 3:
+			if (giroCarro3 <= -180.0f) {
+				giroCarro3 += 3.0f;
+			}
+			else {
+				giroCarro3 += 2.0f;
+			}
+			angleCarro3 -= 2.0f;
+			movAuto_x3 = 0.0f - 2.3f * sin(glm::radians(angleCarro3));
+			movAuto_z3 = -3.25f + 2.3f * cos(glm::radians(angleCarro3));
+			if (angleCarro3 <= 45.0f) {
+				etapa_track2 = 0;
+			}
+			break;
+		}
 	}
 }
 
@@ -982,15 +1118,7 @@ int main() {
 
 	// load models
 	// -----------
-	//Model piso("resources/objects/piso/piso.obj");
-	//Model carro("resources/objects/lambo/carroceria.obj");
-	//Model llanta("resources/objects/lambo/Wheel.obj");
-	//Model casaVieja("resources/objects/casa/OldHouse.obj");
-	//Model cubo("resources/objects/cubo/cube02.obj");
-	//Model casaDoll("resources/objects/casa/DollHouse.obj");
 
-	//ModelAnim animacionPersonaje("resources/objects/Personaje1/Arm.dae");
-	//animacionPersonaje.initShaders(animShader.ID);
 	Model tercerPiso("resources/General_Models/MuseoJumex.obj");
 	Model segundoPiso("resources/General_Models/MuseoJumexSegundoPiso.obj");
 	Model primerPiso("resources/General_Models/MuseoJumexTercerPiso.obj");
@@ -1039,8 +1167,24 @@ int main() {
 	Model Colorful_Plant("resources/plants/Colorful_Plant/karafuruueki.obj");
 	Model Tree("resources/plants/Tree/Basic_Tree_1.obj");
 	Model Candle("resources/Candle/Model.obj");
-
-
+	//Tercer piso
+	Model carro1("resources/objects/Carro1/Carro1.obj");
+	Model carro2("resources/objects/Carro2/Carro2.obj");
+	Model carro3("resources/objects/Carro3/Carro3.obj");
+	Model carro4("resources/objects/Carro4/Cybertruck.obj");
+	Model carro5("resources/objects/Carro5/Suv_4x4.obj");
+	Model carro6("resources/objects/Carro6/Carro6.obj");
+	Model carro7("resources/objects/Carro7/mclaren_mp45.obj");
+	Model carro8("resources/objects/Carro8/Carro8.obj");
+	Model carro9("resources/objects/Carro9/Carro9.obj");
+	Model carro10("resources/objects/Carro10/Gta-spano-2010 obj.obj");
+	Model carro11("resources/objects/Carro11/Carro11.obj");
+	Model llanta11("resources/objects/Carro11/llanta2.obj");
+	Model carro12("resources/objects/Carro12/Carro.obj");
+	Model llanta12("resources/objects/Carro12/llanta.obj");
+	Model cubo("resources/objects/Cubo/Cubo.obj");
+	Model pista("resources/objects/Pista/track.obj");
+	Model base("resources/objects/Base/Base.obj");
 	
 	//Inicialización de KeyFrames
 	for (int i = 0; i < MAX_FRAMES; i++)
@@ -1642,7 +1786,10 @@ int main() {
 	mat4 tempTercero = mat4(1.0f);
 	mat4 tempEasels = mat4(1.0f);
 	mat4 tempCaballero = mat4(1.0f);
-
+	mat4 tmp11 = mat4(1.0f);
+	mat4 tmp12 = mat4(1.0f);
+	mat4 tmpTrack = mat4(1.0f);
+	mat4 tmpMini = mat4(1.0f);
 
 	// render loop
 	// -----------
@@ -1924,8 +2071,6 @@ int main() {
 		animShader.setMat4("model", modelOp);
 		personajeGal.Draw(animShader);
 
-
-
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Escenario Primitivas
 		// -------------------------------------------------------------------------------------------------------------------------
@@ -1959,6 +2104,7 @@ int main() {
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Escenario
 		// -------------------------------------------------------------------------------------------------------------------------
+
 		staticShader.use();
 		staticShader.setMat4("projection", projectionOp);
 		staticShader.setMat4("view", viewOp);
@@ -1971,7 +2117,7 @@ int main() {
 		tmp = modelOp = rotate(modelOp, radians(giroMonito), vec3(0.0f, 1.0f, 0.0));
 		staticShader.setMat4("model", modelOp);
 		vestibulo.Draw(staticShader);
-
+		
 		tempPrimero = modelOp = translate(tempJumex, vec3(0.0f, 9.50f, 0.0f));
 		tmp = modelOp = rotate(modelOp, radians(giroMonito), vec3(0.0f, 1.0f, 0.0));
 		staticShader.setMat4("model", modelOp);
@@ -1986,7 +2132,7 @@ int main() {
 		tmp = modelOp = rotate(modelOp, radians(giroMonito), vec3(0.0f, 1.0f, 0.0));
 		staticShader.setMat4("model", modelOp);
 		tercerPiso.Draw(staticShader);
-
+		
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Modelos de la planta baja
 		// -------------------------------------------------------------------------------------------------------------------------
@@ -2311,57 +2457,241 @@ int main() {
 			pintura11.Draw(staticShader); //15.7, 15.5, 42.2, r=-90
 		
 		// -------------------------------------------------------------------------------------------------------------------------
-		// Just in case
+		// Modelos 3er piso
 		// -------------------------------------------------------------------------------------------------------------------------
-		/*modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posX, posY, posZ));
-		tmp = modelOp = glm::rotate(modelOp, glm::radians(giroMonito), glm::vec3(0.0f, 1.0f, 0.0));
+		
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(20.0f, 42.0f, -20.0f));	//-2.0f, 42.0f, 33.0f
+		modelOp = glm::scale(modelOp, glm::vec3(0.012f));
+		modelOp = glm::rotate(modelOp, glm::radians(25.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
-		torso.Draw(staticShader);
-
-		//Pierna Der
-		modelOp = glm::translate(tmp, glm::vec3(-0.5f, 0.0f, -0.1f));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0));
-		modelOp = glm::rotate(modelOp, glm::radians(-rotRodIzq), glm::vec3(1.0f, 0.0f, 0.0f));
+		carro1.Draw(staticShader);
+		
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(19.0f, 39.51f, 0.0f));	//-21.0f, 39.51f, 23.0f
+		modelOp = glm::scale(modelOp, glm::vec3(0.03f));
+		modelOp = glm::rotate(modelOp, glm::radians(205.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
-		piernaDer.Draw(staticShader);
-
-		//Pie Der
-		modelOp = glm::translate(modelOp, glm::vec3(0, -0.9f, -0.2f));
+		carro2.Draw(staticShader);
+		
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(21.0f, 39.62f, 20.0f));	//-2.0f, 39.62f, 19.0f
+		modelOp = glm::scale(modelOp, glm::vec3(0.03f));
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
-		botaDer.Draw(staticShader);
-
-		//Pierna Izq
-		modelOp = glm::translate(tmp, glm::vec3(0.5f, 0.0f, -0.1f));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		carro3.Draw(staticShader);
+		
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 39.65f, 45.0f));	//0.0f, 39.65f, -45.0f
+		modelOp = glm::scale(modelOp, glm::vec3(0.08f));
+		modelOp = glm::rotate(modelOp, glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
-		piernaIzq.Draw(staticShader);
-
-		//Pie Iz
-		modelOp = glm::translate(modelOp, glm::vec3(0, -0.9f, -0.2f));
+		carro4.Draw(staticShader);
+		
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(20.0f, 39.1f, 37.0f));	//0.96
+		modelOp = glm::scale(modelOp, glm::vec3(0.008f));
+		modelOp = glm::rotate(modelOp, glm::radians(-160.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
-		botaDer.Draw(staticShader);	//Izq trase
+		carro5.Draw(staticShader);
 
-		//Brazo derecho
-		modelOp = glm::translate(tmp, glm::vec3(0.0f, -1.0f, 0.0f));
-		modelOp = glm::translate(modelOp, glm::vec3(-0.75f, 2.5f, 0));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-17.0f, 39.62f, 40.0f));	//0.96
+		modelOp = glm::scale(modelOp, glm::vec3(2.4f));
+		modelOp = glm::rotate(modelOp, glm::radians(-20.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
-		brazoDer.Draw(staticShader);
-
-		//Brazo izquierdo
-		modelOp = glm::translate(tmp, glm::vec3(0.0f, -1.0f, 0.0f));
-		modelOp = glm::translate(modelOp, glm::vec3(0.75f, 2.5f, 0));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		carro6.Draw(staticShader);
+		
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 40.0f + movAuto_y1, 18.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(orienta_y1), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(orienta_z1), glm::vec3(0.0f, 0.0f, 1.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(orienta_x1), glm::vec3(1.0f, 0.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(4.5f));
 		staticShader.setMat4("model", modelOp);
-		brazoIzq.Draw(staticShader);
+		carro7.Draw(staticShader);
 
-		//Cabeza
-		modelOp = glm::translate(tmp, glm::vec3(0.0f, -1.0f, 0.0f));
-		modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0));
-		modelOp = glm::translate(modelOp, glm::vec3(0.0f, 2.5f, 0));
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 39.7f, 18.0f));
+		tmpMini = modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(5.0f, 1.0f, 5.0f));
 		staticShader.setMat4("model", modelOp);
-		cabeza.Draw(staticShader);*/
+		base.Draw(staticShader);
+		
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-21.0f, 39.7f, 20.0f));	//-2.0f, 39.62f, 6.0f
+		modelOp = glm::scale(modelOp, glm::vec3(0.14f));
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro8.Draw(staticShader);
 
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-18.0f, 39.65f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.12f));
+		modelOp = glm::rotate(modelOp, glm::radians(155.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro9.Draw(staticShader);
+		
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-18.0f, 39.65f, -20.0f));//-21.0f, 39.65f, -17.0f
+		modelOp = glm::scale(modelOp, glm::vec3(0.07f));
+		modelOp = glm::rotate(modelOp, glm::radians(155.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro10.Draw(staticShader);
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 39.55f, -25.0f));
+		tmpMini = modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.5f, 0.5f, 2.0f));
+		staticShader.setMat4("model", modelOp);
+		cubo.Draw(staticShader);
+
+		modelOp = glm::translate(tmpMini, glm::vec3(1.0f, 1.88f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.0016f));
+		modelOp = glm::rotate(modelOp, glm::radians(225.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro2.Draw(staticShader);
+
+		modelOp = glm::translate(tmpMini, glm::vec3(-1.0f, 1.88f, -2.0f));	
+		modelOp = glm::scale(modelOp, glm::vec3(0.0016f));
+		modelOp = glm::rotate(modelOp, glm::radians(135.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro3.Draw(staticShader);
+
+		modelOp = glm::translate(tmpMini, glm::vec3(-1.0f, 1.89f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.004f));
+		modelOp = glm::rotate(modelOp, glm::radians(135.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro4.Draw(staticShader);
+
+		modelOp = glm::translate(tmpMini, glm::vec3(1.0f, 1.89f, 2.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.004f));
+		modelOp = glm::rotate(modelOp, glm::radians(225.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		carro10.Draw(staticShader);
+		
+		modelOp = glm::translate(tmpMini, glm::vec3(-1.0, 1.935f, 2.0));	//0.0f, 1.96f, 0.0f		//-1.7f, 1.96f, 4.8f
+		tmp11 = modelOp = glm::rotate(modelOp, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		carro11.Draw(staticShader);
+
+		modelOp = glm::translate(tmp11, glm::vec3(0.272f, 0.015f, -0.159f));
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta11.Draw(staticShader);
+
+		modelOp = glm::translate(tmp11, glm::vec3(-0.236f, 0.015f, -0.159f));
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta11.Draw(staticShader);
+
+		modelOp = glm::translate(tmp11, glm::vec3(0.272f, 0.015f, 0.159f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta11.Draw(staticShader);
+
+		modelOp = glm::translate(tmp11, glm::vec3(-0.236f, 0.015f, 0.159f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta11.Draw(staticShader);
+
+		modelOp = glm::translate(tmpMini, glm::vec3(1.0f, 1.925f, -2.0f));
+		tmp12 = modelOp = glm::rotate(modelOp, glm::radians(225.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		carro12.Draw(staticShader);
+
+		modelOp = glm::translate(tmp12, glm::vec3(-11.91f, 2.375f, -20.575f) * 0.013f);
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		llanta12.Draw(staticShader);
+
+		modelOp = glm::translate(tmp12, glm::vec3(-11.91f, 2.375f, 19.762f) * 0.013f);
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		llanta12.Draw(staticShader);
+
+		modelOp = glm::translate(tmp12, glm::vec3(11.91f, 2.375f, 19.762f) * 0.013f);
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		llanta12.Draw(staticShader);
+
+		modelOp = glm::translate(tmp12, glm::vec3(11.91f, 2.375f, -20.575f) * 0.013f);
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		llanta12.Draw(staticShader);
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 39.55f, -5.0f));
+		tmpTrack = modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.5f, 0.5f, 3.0f));
+		staticShader.setMat4("model", modelOp);
+		cubo.Draw(staticShader);
+
+		modelOp = glm::translate(tmpTrack, glm::vec3(0.0f, 1.9f, 0.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.07f));
+		staticShader.setMat4("model", modelOp);
+		pista.Draw(staticShader);
+
+		modelOp = glm::translate(tmpTrack, glm::vec3(movAuto_x2, 1.96f, -movAuto_z2));	//0.0f, 1.96f, 0.0f		//-1.7f, 1.96f, 4.8f
+		modelOp = glm::rotate(modelOp, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		tmp11 = modelOp = glm::rotate(modelOp, glm::radians(giroCarro2), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		carro11.Draw(staticShader);
+
+		modelOp = glm::translate(tmp11, glm::vec3(0.272f, 0.015f, -0.159f));
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(giroRuedas), glm::vec3(0.0f, 0.0f, 1.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta11.Draw(staticShader);
+		
+		modelOp = glm::translate(tmp11, glm::vec3(-0.236f, 0.015f, -0.159f));
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(giroRuedas), glm::vec3(0.0f, 0.0f, 1.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta11.Draw(staticShader);
+
+		modelOp = glm::translate(tmp11, glm::vec3(0.272f, 0.015f, 0.159f));
+		modelOp = glm::rotate(modelOp, glm::radians(giroRuedas), glm::vec3(0.0f, 0.0f, -1.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta11.Draw(staticShader);
+
+		modelOp = glm::translate(tmp11, glm::vec3(-0.236f, 0.015f, 0.159f));
+		modelOp = glm::rotate(modelOp, glm::radians(giroRuedas), glm::vec3(0.0f, 0.0f, -1.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+		staticShader.setMat4("model", modelOp);
+		llanta11.Draw(staticShader);
+
+		modelOp = glm::translate(tmpTrack, glm::vec3(movAuto_x3, 1.945f, movAuto_z3));
+		modelOp = glm::rotate(modelOp, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		tmp12 = modelOp = glm::rotate(modelOp, glm::radians(giroCarro3), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		carro12.Draw(staticShader);
+		
+		modelOp = glm::translate(tmp12, glm::vec3(-11.91f, 2.375f, -20.575f) * 0.013f);
+		modelOp = glm::rotate(modelOp, glm::radians(giroRuedas), glm::vec3(1.0f, 0.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		llanta12.Draw(staticShader);
+
+		modelOp = glm::translate(tmp12, glm::vec3(-11.91f, 2.375f, 19.762f) * 0.013f);
+		modelOp = glm::rotate(modelOp, glm::radians(giroRuedas), glm::vec3(1.0f, 0.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		llanta12.Draw(staticShader);
+
+		modelOp = glm::translate(tmp12, glm::vec3(11.91f, 2.375f, 19.762f) * 0.013f);
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(giroRuedas), glm::vec3(-1.0f, 0.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		llanta12.Draw(staticShader);
+
+		modelOp = glm::translate(tmp12, glm::vec3(11.91f, 2.375f, -20.575f) * 0.013f);
+		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(giroRuedas), glm::vec3(-1.0f, 0.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
+		staticShader.setMat4("model", modelOp);
+		llanta12.Draw(staticShader);
+		
 		//-------------------------------------------------------------------------------------
 		// draw skybox as last
 		// -------------------
@@ -2407,23 +2737,7 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode)
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, (float)deltaTime);
 
-	//To Configure Model
-	if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS)
-		posZ++;
-	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
-		posZ--;
-	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
-		posX--;
-	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
-		posX++;
-	if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
-		rotRodIzq--;
-	if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
-		rotRodIzq++;
-	if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS)
-		giroMonito--;
-	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
-		giroMonito++;
+
 	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
 		lightPosition.x++;
 	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
@@ -2454,7 +2768,25 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode)
 	}
 	//Car animation
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
-		animacion ^= true;
+		animacion1 ^= true;
+	if (key == GLFW_KEY_C && action == GLFW_PRESS)
+		animacion2 ^= true;
+	if (key == GLFW_KEY_R && action == GLFW_PRESS) {
+		orienta_x1 = 0.0f;
+		orienta_y1 = 180.0f;
+		orienta_z1 = 0.0f;
+		movAuto_y1 = 0.0f;
+		movAuto_x2 = 1.5f;
+		movAuto_z2 = 1.5f;
+		movAuto_x3 = 0.0f;
+		movAuto_z3 = 0.0f;
+		animacion1 = animacion2 = false;
+		angleCarro2 = angleCarro3 = 45.0f;
+		giroCarro2 = giroCarro3 = 0.0f;
+		giroRuedas = 0.0f;
+		etapa_giro = 0;
+		etapa_track1 = etapa_track2 = 0;
+	}
 
 	//To play KeyFrame animation 
 	if (key == GLFW_KEY_P && action == GLFW_PRESS)
