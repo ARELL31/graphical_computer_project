@@ -1,0 +1,32 @@
+# Blender 4.5.4 LTS MTL File: 'None'
+# www.blender.org
+
+newmtl Material1790
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+illum 9
+map_Kd Material1790.png
+map_d Material1790.png
+
+newmtl Material1807
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+illum 2
+map_Kd Material1807.png
+map_d Material1807.png
+
+newmtl Material2273
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+illum 2
+map_Kd Material2273.png
+map_d Material2273.png

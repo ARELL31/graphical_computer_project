@@ -500,7 +500,7 @@ int main() {
 
 
 	Model Colorful_Plant("resources/plants/Colorful_Plant/karafuruueki.obj");
-
+	Model Tree("resources/plants/Tree/Basic_Tree_1.obj");
 	Model Candle("resources/Candle/Model.obj");
 
 
@@ -986,6 +986,52 @@ int main() {
 		staticShader.setMat4("model", cuadroOp);
 		CaballeroBrazoIzquierdo.Draw(staticShader);
 
+		// Arboles decoracion 
+
+		for (int i = 0; i < 30; i++) {
+			float ang = radians(137.5f * i);
+			float r = 2.0f * sqrt(i);
+			float x = r * cos(ang) * 10.0f;
+			float z = r * sin(ang) * 10.0f;
+			mat4 arbolOp = translate(mat4(1.0f), vec3(200.0f + x, -3.0f, z));
+			arbolOp = rotate(arbolOp, radians(i * 12.0f), vec3(0.0f, 1.0f, 0.0f));
+			staticShader.setMat4("model", arbolOp);
+			Tree.Draw(staticShader);
+		}
+
+		for (int i = 0; i < 30; i++) {
+			float ang = radians(137.5f * i);
+			float r = 2.0f * sqrt(i);
+			float x = r * cos(ang) * 10.0f;
+			float z = r * sin(ang) * 10.0f;
+			mat4 arbolOp = translate(mat4(1.0f), vec3(-200.0f + x, -3.0f, z));
+			arbolOp = rotate(arbolOp, radians(i * 12.0f), vec3(0.0f, 1.0f, 0.0f));
+			staticShader.setMat4("model", arbolOp);
+			Tree.Draw(staticShader);
+		}
+
+		for (int i = 0; i < 30; i++) {
+			float ang = radians(137.5f * i);
+			float r = 2.0f * sqrt(i);
+			float x = r * cos(ang) * 10.0f;
+			float z = r * sin(ang) * 10.0f;
+			mat4 arbolOp = translate(mat4(1.0f), vec3(x, -3.0f, 200.0f + z));
+			arbolOp = rotate(arbolOp, radians(i * 12.0f), vec3(0.0f, 1.0f, 0.0f));
+			staticShader.setMat4("model", arbolOp);
+			Tree.Draw(staticShader);
+		}
+
+		for (int i = 0; i < 30; i++) {
+			float ang = radians(137.5f * i);
+			float r = 2.0f * sqrt(i);
+			float x = r * cos(ang) * 10.0f;
+			float z = r * sin(ang) * 10.0f;
+			mat4 arbolOp = translate(mat4(1.0f), vec3(x, -3.0f, -200.0f + z));
+			arbolOp = rotate(arbolOp, radians(i * 12.0f), vec3(0.0f, 1.0f, 0.0f));
+			staticShader.setMat4("model", arbolOp);
+			Tree.Draw(staticShader);
+		}
+
 			// Plantas de recepcion 
 
 		float radio = 6.0f;
@@ -996,7 +1042,7 @@ int main() {
 			float x = sin(angulo) * radio;
 			float z = cos(angulo) * radio;
 
-			cuadroOp = translate(tempCaballero, vec3(x, 2.2f, z));
+			cuadroOp = translate(tempCaballero, vec3(x, -2.2f, z));
 			cuadroOp = scale(cuadroOp, vec3(0.3f));
 			staticShader.setMat4("model", cuadroOp);
 			Colorful_Plant.Draw(staticShader);
@@ -1056,8 +1102,6 @@ int main() {
 		cuadroOp = translate(tempJumex, vec3(xIzq - lissajousX, 6.3f * 1.25f, 15.5f - lissajousZ * factorCentro));
 		staticShader.setMat4("model", cuadroOp);
 		Candle.Draw(staticShader);
-
-
 
 
 		// -------------------------------------------------------------------------------------------------------------------------
