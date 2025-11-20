@@ -96,7 +96,8 @@ unsigned int generateTextures(char*, bool, bool);	// De la práctica 6
 float	movX = 0.0f,
 movY = 0.0f,
 movZ = -5.0f,
-rotX = 0.0f;
+rotX = 0.0f,
+rotCuerpoDragon = 0;
 
 //Texture
 unsigned int	t_smile,
@@ -172,11 +173,16 @@ float	posX = 0.0f,
 		posZ = 0.0f,
 		rotRodIzq = 0.0f,
 		giroMonito = 0.0f,
+		rotAlaIzq = 0.0f,
+		rotAlaDer = 0.0f,
+
 //pinturas key frame
 //pinturas key frame - POSICIONES EN PAREDES
 		posXp1 = -19.7f,
 		posYp1 = 15.5f,
 		posZp1 = 7.0f,
+		rotAlaIzqInc = 0.0f,
+		rotAlaDerInc = 0.0f,
 		rotp1 = 180.0f,
 		scalep1 = 0.15f,
 
@@ -375,6 +381,9 @@ typedef struct _frame
 	float posZ;		//Variable para PosicionZ
 	float rotRodIzq;
 	float giroMonito;
+	float rotAlaIzq;
+	float rotAlaDer;
+
 
 	float avionX;
 	float avionY;
@@ -1419,6 +1428,10 @@ int main() {
 	Model mundi("resources/planta_baja/mundi.obj");
 	Model ultimacena("resources/planta_baja/ultimacena.obj");
 	Model vitruvio("resources/planta_baja/vitruvio.obj");
+	Model dragon("resources/objects/DragonAzul/Dragon.obj");
+	Model alaIzqDragon("resources/objects/DragonAzul/AlaIzaquierda/AlaIzaquierda.obj");
+	Model alaDerDragon("resources/objects/DragonAzul/AlaDerecha/AlaDerecha.obj");
+
 			
 			// Caballero de la planta baja
 
@@ -2186,6 +2199,8 @@ int main() {
 	mat4 tmp12 = mat4(1.0f);
 	mat4 tmpTrack = mat4(1.0f);
 	mat4 tmpMini = mat4(1.0f);
+	glm::mat4 tmpCuerpoDragon = glm::mat4(1.0f);
+	glm::mat4 tmpAlaIzquierda = glm::mat4(1.0f);
 
 	// render loop
 	// -----------
@@ -3155,6 +3170,48 @@ int main() {
 		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
 		staticShader.setMat4("model", modelOp);
 		llanta12.Draw(staticShader);
+
+		// Dragon 
+		float time = glfwGetTime();
+
+		float ampY = 2.5f;
+		float freqY = 0.8f;
+		posY = ampY * sin(freqY * time);
+
+		// Rotación de las alas
+		float ampRot = 25.0f;  
+		float freqRot = 3.0f;  
+		float rotAla = ampRot * sin(freqRot * time);
+
+		rotAlaIzq = rotAla;  
+		rotAlaDer = -rotAla;
+		rotCuerpoDragon -= 0.2;
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(20.0f, 170.0f, 35.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(20.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(rotCuerpoDragon), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = tmpCuerpoDragon = glm::translate(modelOp, glm::vec3(0.0f, posY, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		dragon.Draw(staticShader);
+		
+		modelOp = glm::translate(tmpCuerpoDragon, glm::vec3(20.78f, 0.25f, 0.69f));
+		modelOp = glm::rotate(modelOp,
+			glm::radians(rotAlaIzq),
+			glm::vec3(0.0f, 0.0f, 1.0f));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		alaIzqDragon.Draw(staticShader);
+
+		modelOp = glm::translate(tmpCuerpoDragon, glm::vec3(19.35f, 0.40f, 0.9f));
+		modelOp = glm::rotate(modelOp,
+			glm::radians(rotAlaDer),
+			glm::vec3(0.0f, 0.0f, 1.0f));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		alaDerDragon.Draw(staticShader);
+
+
 		
 		//-------------------------------------------------------------------------------------
 		// draw skybox as last
@@ -3230,6 +3287,15 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode)
 		camera.Pitch = -35.264f;
 		camera.Front = glm::normalize(glm::vec3(-1.0f, -0.4f, 1.0f));
 	}
+	if (glfwGetKey(window, GLFW_KEY_F1) == GLFW_PRESS)
+		rotAlaDer++;
+	if (glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS)
+		rotAlaDer--;
+	if (glfwGetKey(window, GLFW_KEY_F3) == GLFW_PRESS)
+		rotAlaIzq++;
+	if (glfwGetKey(window, GLFW_KEY_F4) == GLFW_PRESS)
+		rotAlaIzq--;
+
 	//Car animation
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
 		animacion1 ^= true;
