@@ -78,7 +78,7 @@ GLuint VBO[3], VAO[3], EBO[3];
 Camera camera(glm::vec3(0.0f, 5.0f, 3.0f));
 float MovementSpeed = 5.0f;
 GLfloat lastX = SCR_WIDTH / 2.0f,
-		lastY = SCR_HEIGHT / 2.0f;
+lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
 
 //Timing
@@ -116,30 +116,37 @@ glm::vec3 ambientColor = diffuseColor * glm::vec3(0.75f);
 
 // posiciones
 float	movAuto_y1 = 0.0f,
-		movAuto_x2 = 1.5f,
-		movAuto_z2 = 1.5f,
-		movAuto_x3 = 0.0f,
-		movAuto_z3 = 0.0f,
-		orienta_x1 = 0.0f,
-		orienta_y1 = 180.0f,
-		orienta_z1 = 0.0f,
-		giroCarro2 = 0.0f,
-		angleCarro2 = 45.0f,
-		giroCarro3 = 0.0f,
-		angleCarro3 = 45.0f,
-		giroRuedas = 0.0f;
+movAuto_x2 = 1.5f,
+movAuto_z2 = 1.5f,
+movAuto_x3 = 0.0f,
+movAuto_z3 = 0.0f,
+orienta_x1 = 0.0f,
+orienta_y1 = 180.0f,
+orienta_z1 = 0.0f,
+giroCarro2 = 0.0f,
+angleCarro2 = 45.0f,
+giroCarro3 = 0.0f,
+angleCarro3 = 45.0f,
+giroRuedas = 0.0f;
 int		etapa_giro = 0,
-		etapa_track1 = 0,
-		etapa_track2 = 0;
+etapa_track1 = 0,
+etapa_track2 = 0;
 bool	animacion1 = false,
-		animacion2 = false;
+animacion2 = false;
+
+
+float paraVelY = 0.0f;
+float paraGravity = -0.002f;
+float paraWind = 0.0f;
+float paraSway = 0.0f;
+float paraSwayAngle = 0.0f;
 
 float paraBaseX = 10.0f;
 float paraBaseY = 25.0f;
 float paraBaseZ = -20.0f;
 
 float paraOffsetY = 0.0f;
-float paraSpeed = 0.05f; 
+float paraSpeed = 0.05f;
 bool paraGoingDown = true;
 
 float helicoideX = -10.0f;
@@ -148,9 +155,31 @@ float helicoideZ = -20.0f;
 
 float heliceAngle = 0.0f;
 
-float ornX = 0.0f;   
-float ornY = 22.0f;    
-float ornZ = 20.0f; 
+float helicoideOffsetY = 0.0f;
+float helicoideVel = 0.02f;
+float helicoideDir = 1.0f;
+float helicoideVibration = 0.0f;
+
+bool camInsideHelicoide = false;
+glm::vec3 savedCameraPos;
+glm::vec3 savedCameraFront;
+float savedYaw, savedPitch;
+
+// Animación de vuelo del helicoide
+bool helicoideFlightActivated = false;
+int helicoideState = 0;    // 0 = normal, 1 = ascendiendo, 2 = volando, 3 = regresando
+
+float helicoideFlyX = 0.0f;
+float helicoideFlyY = 0.0f;
+float helicoideFlyZ = 0.0f;
+
+// altura maxima del vuelo
+const float HELICOIDE_ALTURA_VUELO = 150.0f;
+
+
+float ornX = 0.0f;
+float ornY = 22.0f;
+float ornZ = 20.0f;
 float ornScale = 0.3f;
 
 float ornWingAngle = 0.0f;
@@ -158,201 +187,201 @@ bool ornWingUp = true;
 
 //Keyframes (Manipulación y dibujo)
 float	posX = 0.0f,
-		posY = 0.0f,
-		posZ = 0.0f,
-		rotRodIzq = 0.0f,
-		giroMonito = 0.0f,
+posY = 0.0f,
+posZ = 0.0f,
+rotRodIzq = 0.0f,
+giroMonito = 0.0f,
 //pinturas key frame
 //pinturas key frame - POSICIONES EN PAREDES
-		posXp1 = -19.7f,
-		posYp1 = 15.5f,
-		posZp1 = 7.0f,
-		rotp1 = 180.0f,
-		scalep1 = 0.15f,
+posXp1 = -19.7f,
+posYp1 = 15.5f,
+posZp1 = 7.0f,
+rotp1 = 180.0f,
+scalep1 = 0.15f,
 
-		posXp2 = -19.7f,
-		posYp2 = 15.5f,
-		posZp2 = 17.0f,
-		rotp2 = 180.0f,
-		scalep2 = 0.17f,
+posXp2 = -19.7f,
+posYp2 = 15.5f,
+posZp2 = 17.0f,
+rotp2 = 180.0f,
+scalep2 = 0.17f,
 
-		posXp3 = -19.7f,
-		posYp3 = 15.5f,
-		posZp3 = 27.0f,
-		rotp3 = 180.0f,
-		scalep3 = 0.17f,
+posXp3 = -19.7f,
+posYp3 = 15.5f,
+posZp3 = 27.0f,
+rotp3 = 180.0f,
+scalep3 = 0.17f,
 
-		posXp4 = -19.7f,
-		posYp4 = 15.5f,
-		posZp4 = 37.0f,
-		rotp4 = 180.0f,
-		scalep4 = 0.169f,
+posXp4 = -19.7f,
+posYp4 = 15.5f,
+posZp4 = 37.0f,
+rotp4 = 180.0f,
+scalep4 = 0.169f,
 
-		posXp5 = 19.7f,
-		posYp5 = 15.5f,
-		posZp5 = 7.0f,
-		rotp5 = 0.0f,
-		scalep5 = 0.17f,
+posXp5 = 19.7f,
+posYp5 = 15.5f,
+posZp5 = 7.0f,
+rotp5 = 0.0f,
+scalep5 = 0.17f,
 
-		posXp6 = 19.7f,
-		posYp6 = 15.5f,
-		posZp6 = 17.0f,
-		rotp6 = 0.0f,
-		scalep6 = 0.169f,
+posXp6 = 19.7f,
+posYp6 = 15.5f,
+posZp6 = 17.0f,
+rotp6 = 0.0f,
+scalep6 = 0.169f,
 
-		posXp7 = 19.7f,
-		posYp7 = 15.5f,
-		posZp7 = 27.0f,
-		rotp7 = 0.0f,
-		scalep7 = 0.169f,
+posXp7 = 19.7f,
+posYp7 = 15.5f,
+posZp7 = 27.0f,
+rotp7 = 0.0f,
+scalep7 = 0.169f,
 
-		posXp8 = 19.7f,
-		posYp8 = 15.5f,
-		posZp8 = 37.0f,
-		rotp8 = 0.0f,
-		scalep8 = 0.169f,
+posXp8 = 19.7f,
+posYp8 = 15.5f,
+posZp8 = 37.0f,
+rotp8 = 0.0f,
+scalep8 = 0.169f,
 
-		posXp9 = 15.7f,
-		posYp9 = 15.5f,
-		posZp9 = -42.2f,
-		rotp9 = 90.0f,
-		scalep9 = 0.169f,
+posXp9 = 15.7f,
+posYp9 = 15.5f,
+posZp9 = -42.2f,
+rotp9 = 90.0f,
+scalep9 = 0.169f,
 
-		posXp10 = -15.7f,
-		posYp10 = 15.5f,
-		posZp10 = -42.2f,
-		rotp10 = 90.0f,
-		scalep10 = 0.169f,
+posXp10 = -15.7f,
+posYp10 = 15.5f,
+posZp10 = -42.2f,
+rotp10 = 90.0f,
+scalep10 = 0.169f,
 
-		posXp11 = -15.7f,
-		posYp11 = 15.5f,
-		posZp11 = 42.2f,
-		rotp11 = -90.0f,
-		scalep11 = 0.169f,
+posXp11 = -15.7f,
+posYp11 = 15.5f,
+posZp11 = 42.2f,
+rotp11 = -90.0f,
+scalep11 = 0.169f,
 
-		posXp12 = 15.7f,
-		posYp12 = 15.5f,
-		posZp12 = 42.2f,
-		rotp12 = -90.0f,
-		scalep12 = 0.169f;
+posXp12 = 15.7f,
+posYp12 = 15.5f,
+posZp12 = 42.2f,
+rotp12 = -90.0f,
+scalep12 = 0.169f;
 
 
 
-  float avionX = 0.0f,
-		avionY = 30.0f, 
-		avionZ = 0.0f,
-		avionRotY = 0.0f, 
-		avionRotX = 0.0f,  
-		avionRotZ = 0.0f, 
-		avionScale = 1.0f;
+float avionX = 0.0f,
+avionY = 30.0f,
+avionZ = 0.0f,
+avionRotY = 0.0f,
+avionRotX = 0.0f,
+avionRotZ = 0.0f,
+avionScale = 1.0f;
 
 // Variables para el atractor de Lorenz
-		float lorenz_x = 0.0f, lorenz_y = 9.8f, lorenz_z = 0.0f; // Posición inicial 
-		float lorenz_vx = 0.0f, lorenz_vy = 0.0f, lorenz_vz = 0.0f; // Velocidades
-		float dt = 0.01f;
-		const float sigma = 10.0f;
-		const float rho = 28.0f;
-		const float beta = 8.0f / 3.0f;
-		bool lorenz_active = false;
-		bool lorenz_was_active = false;
-		float lorenz_current_angle = glm::radians(90.0f); // Ángulo actual suavizado
-		const float lorenz_rotation_speed = 1.5f;
+float lorenz_x = 0.0f, lorenz_y = 9.8f, lorenz_z = 0.0f; // Posición inicial 
+float lorenz_vx = 0.0f, lorenz_vy = 0.0f, lorenz_vz = 0.0f; // Velocidades
+float dt = 0.01f;
+const float sigma = 10.0f;
+const float rho = 28.0f;
+const float beta = 8.0f / 3.0f;
+bool lorenz_active = false;
+bool lorenz_was_active = false;
+float lorenz_current_angle = glm::radians(90.0f); // Ángulo actual suavizado
+const float lorenz_rotation_speed = 1.5f;
 
 // Límites del primer piso 
-		const float PISO1_MIN_X = -18.0f;
-		const float PISO1_MAX_X = 18.0f;
-		const float PISO1_MIN_Z = -18.0f;
-		const float PISO1_MAX_Z = 18.0f;
-		const float PISO1_Y = 9.8f;
+const float PISO1_MIN_X = -18.0f;
+const float PISO1_MAX_X = 18.0f;
+const float PISO1_MIN_Z = -18.0f;
+const float PISO1_MAX_Z = 18.0f;
+const float PISO1_Y = 9.8f;
 // Parámetros de rebote
-		const float COEFICIENTE_REBOTE = 0.8f; // 0.0 = sin rebote, 1.0 = rebote perfecto
-		const float FRENADO_PARED = 0.9f;
+const float COEFICIENTE_REBOTE = 0.8f; // 0.0 = sin rebote, 1.0 = rebote perfecto
+const float FRENADO_PARED = 0.9f;
 
 float	incX = 0.0f,
-		incY = 0.0f,
-		incZ = 0.0f,
-		rotRodIzqInc = 0.0f,
-		giroMonitoInc = 0.0f,
-		//pinturas
-		incposXp1 = 0.0f,
-		incposYp1 = 0.0f,
-		incposZp1 = 0.0f,
-		incrotp1 = 0.0f,
-		incscalep1 = 0.0f,
+incY = 0.0f,
+incZ = 0.0f,
+rotRodIzqInc = 0.0f,
+giroMonitoInc = 0.0f,
+//pinturas
+incposXp1 = 0.0f,
+incposYp1 = 0.0f,
+incposZp1 = 0.0f,
+incrotp1 = 0.0f,
+incscalep1 = 0.0f,
 
-		incposXp2 = 0.0f,
-		incposYp2 = 0.0f,
-		incposZp2 = 0.0f,
-		incrotp2 = 0.0f,
-		incscalep2 = 0.0f,
+incposXp2 = 0.0f,
+incposYp2 = 0.0f,
+incposZp2 = 0.0f,
+incrotp2 = 0.0f,
+incscalep2 = 0.0f,
 
-		incposXp3 = 0.0f,
-		incposYp3 = 0.0f,
-		incposZp3 = 0.0f,
-		incrotp3 = 0.0f,
-		incscalep3 = 0.0f,
+incposXp3 = 0.0f,
+incposYp3 = 0.0f,
+incposZp3 = 0.0f,
+incrotp3 = 0.0f,
+incscalep3 = 0.0f,
 
-		incposXp4 = 0.0f,
-		incposYp4 = 0.0f,
-		incposZp4 = 0.0f,
-		incrotp4 = 0.0f,
-		incscalep4 = 0.0f,
+incposXp4 = 0.0f,
+incposYp4 = 0.0f,
+incposZp4 = 0.0f,
+incrotp4 = 0.0f,
+incscalep4 = 0.0f,
 
-		incposXp5 = 0.0f,
-		incposYp5 = 0.0f,
-		incposZp5 = 0.0f,
-		incrotp5 = 0.0f,
-		incscalep5 = 0.0f,
+incposXp5 = 0.0f,
+incposYp5 = 0.0f,
+incposZp5 = 0.0f,
+incrotp5 = 0.0f,
+incscalep5 = 0.0f,
 
-		incposXp6 = 0.0f,
-		incposYp6 = 0.0f,
-		incposZp6 = 0.0f,
-		incrotp6 = 0.0f,
-		incscalep6 = 0.0f,
+incposXp6 = 0.0f,
+incposYp6 = 0.0f,
+incposZp6 = 0.0f,
+incrotp6 = 0.0f,
+incscalep6 = 0.0f,
 
-		incposXp7 = 0.0f,
-		incposYp7 = 0.0f,
-		incposZp7 = 0.0f,
-		incrotp7 = 0.0f,
-		incscalep7 = 0.0f,
+incposXp7 = 0.0f,
+incposYp7 = 0.0f,
+incposZp7 = 0.0f,
+incrotp7 = 0.0f,
+incscalep7 = 0.0f,
 
-		incposXp8 = 0.0f,
-		incposYp8 = 0.0f,
-		incposZp8 = 0.0f,
-		incrotp8 = 0.0f,
-		incscalep8 = 0.0f,
+incposXp8 = 0.0f,
+incposYp8 = 0.0f,
+incposZp8 = 0.0f,
+incrotp8 = 0.0f,
+incscalep8 = 0.0f,
 
-		incposXp9 = 0.0f,
-		incposYp9 = 0.0f,
-		incposZp9 = 0.0f,
-		incrotp9 = 0.0f,
-		incscalep9 = 0.0f,
+incposXp9 = 0.0f,
+incposYp9 = 0.0f,
+incposZp9 = 0.0f,
+incrotp9 = 0.0f,
+incscalep9 = 0.0f,
 
-		incposXp10 = 0.0f,
-		incposYp10 = 0.0f,
-		incposZp10 = 0.0f,
-		incrotp10 = 0.0f,
-		incscalep10 = 0.0f,
+incposXp10 = 0.0f,
+incposYp10 = 0.0f,
+incposZp10 = 0.0f,
+incrotp10 = 0.0f,
+incscalep10 = 0.0f,
 
-		incposXp11 = 0.0f,
-		incposYp11 = 0.0f,
-		incposZp11 = 0.0f,
-		incrotp11 = 0.0f,
-		incscalep11 = 0.0f,
+incposXp11 = 0.0f,
+incposYp11 = 0.0f,
+incposZp11 = 0.0f,
+incrotp11 = 0.0f,
+incscalep11 = 0.0f,
 
-		incposXp12 = 0.0f,
-		incposYp12 = 0.0f,
-		incposZp12 = 0.0f,
-		incrotp12 = 0.0f,
-		incscalep12 = 0.0f;
+incposXp12 = 0.0f,
+incposYp12 = 0.0f,
+incposZp12 = 0.0f,
+incrotp12 = 0.0f,
+incscalep12 = 0.0f;
 
 float	incAvionX = 0.0f,
-		incAvionY = 0.0f,
-		incAvionZ = 0.0f,
-		incAvionRotY = 0.0f,
-		incAvionRotX = 0.0f,
-		incAvionRotZ = 0.0f,
-		incAvionScale = 0.0f;
+incAvionY = 0.0f,
+incAvionZ = 0.0f,
+incAvionRotY = 0.0f,
+incAvionRotX = 0.0f,
+incAvionRotZ = 0.0f,
+incAvionScale = 0.0f;
 
 #define MAX_FRAMES 22
 int i_max_steps = 60;
@@ -584,43 +613,43 @@ void resetElements(void)
 	posZp5 = KeyFrame[0].posZp5;
 	rotp5 = KeyFrame[0].rotp5;
 	scalep5 = KeyFrame[0].scalep5;
-	
+
 	posXp6 = KeyFrame[0].posXp6;
 	posYp6 = KeyFrame[0].posYp6;
 	posZp6 = KeyFrame[0].posZp6;
 	rotp6 = KeyFrame[0].rotp6;
 	scalep6 = KeyFrame[0].scalep6;
-	
+
 	posXp7 = KeyFrame[0].posXp7;
 	posYp7 = KeyFrame[0].posYp7;
 	posZp7 = KeyFrame[0].posZp7;
 	rotp7 = KeyFrame[0].rotp7;
 	scalep7 = KeyFrame[0].scalep7;
-	
+
 	posXp8 = KeyFrame[0].posXp8;
 	posYp8 = KeyFrame[0].posYp8;
 	posZp8 = KeyFrame[0].posZp8;
 	rotp8 = KeyFrame[0].rotp8;
 	scalep8 = KeyFrame[0].scalep8;
-	
+
 	posXp9 = KeyFrame[0].posXp9;
 	posYp9 = KeyFrame[0].posYp9;
 	posZp9 = KeyFrame[0].posZp9;
 	rotp9 = KeyFrame[0].rotp9;
 	scalep9 = KeyFrame[0].scalep9;
-	
+
 	posXp10 = KeyFrame[0].posXp10;
 	posYp10 = KeyFrame[0].posYp10;
 	posZp10 = KeyFrame[0].posZp10;
 	rotp10 = KeyFrame[0].rotp10;
 	scalep10 = KeyFrame[0].scalep10;
-	
+
 	posXp11 = KeyFrame[0].posXp11;
 	posYp11 = KeyFrame[0].posYp11;
 	posZp11 = KeyFrame[0].posZp11;
 	rotp11 = KeyFrame[0].rotp11;
 	scalep11 = KeyFrame[0].scalep11;
-	
+
 	posXp12 = KeyFrame[0].posXp12;
 	posYp12 = KeyFrame[0].posYp12;
 	posZp12 = KeyFrame[0].posZp12;
@@ -650,67 +679,67 @@ void interpolation(void)
 	incposZp1 = (KeyFrame[playIndex + 1].posZp1 - KeyFrame[playIndex].posZp1) / i_max_steps;
 	incrotp1 = (KeyFrame[playIndex + 1].rotp1 - KeyFrame[playIndex].rotp1) / i_max_steps;
 	incscalep1 = (KeyFrame[playIndex + 1].scalep1 - KeyFrame[playIndex].scalep1) / i_max_steps;
-	
+
 	incposXp2 = (KeyFrame[playIndex + 1].posXp2 - KeyFrame[playIndex].posXp2) / i_max_steps;
 	incposYp2 = (KeyFrame[playIndex + 1].posYp2 - KeyFrame[playIndex].posYp2) / i_max_steps;
 	incposZp2 = (KeyFrame[playIndex + 1].posZp2 - KeyFrame[playIndex].posZp2) / i_max_steps;
 	incrotp2 = (KeyFrame[playIndex + 1].rotp2 - KeyFrame[playIndex].rotp2) / i_max_steps;
 	incscalep2 = (KeyFrame[playIndex + 1].scalep2 - KeyFrame[playIndex].scalep2) / i_max_steps;
-	
+
 	incposXp3 = (KeyFrame[playIndex + 1].posXp3 - KeyFrame[playIndex].posXp3) / i_max_steps;
 	incposYp3 = (KeyFrame[playIndex + 1].posYp3 - KeyFrame[playIndex].posYp3) / i_max_steps;
 	incposZp3 = (KeyFrame[playIndex + 1].posZp3 - KeyFrame[playIndex].posZp3) / i_max_steps;
 	incrotp3 = (KeyFrame[playIndex + 1].rotp3 - KeyFrame[playIndex].rotp3) / i_max_steps;
 	incscalep3 = (KeyFrame[playIndex + 1].scalep3 - KeyFrame[playIndex].scalep3) / i_max_steps;
-	
+
 	incposXp4 = (KeyFrame[playIndex + 1].posXp4 - KeyFrame[playIndex].posXp4) / i_max_steps;
 	incposYp4 = (KeyFrame[playIndex + 1].posYp4 - KeyFrame[playIndex].posYp4) / i_max_steps;
 	incposZp4 = (KeyFrame[playIndex + 1].posZp4 - KeyFrame[playIndex].posZp4) / i_max_steps;
 	incrotp4 = (KeyFrame[playIndex + 1].rotp4 - KeyFrame[playIndex].rotp4) / i_max_steps;
 	incscalep4 = (KeyFrame[playIndex + 1].scalep4 - KeyFrame[playIndex].scalep4) / i_max_steps;
-	
+
 	incposXp5 = (KeyFrame[playIndex + 1].posXp5 - KeyFrame[playIndex].posXp5) / i_max_steps;
 	incposYp5 = (KeyFrame[playIndex + 1].posYp5 - KeyFrame[playIndex].posYp5) / i_max_steps;
 	incposZp5 = (KeyFrame[playIndex + 1].posZp5 - KeyFrame[playIndex].posZp5) / i_max_steps;
 	incrotp5 = (KeyFrame[playIndex + 1].rotp5 - KeyFrame[playIndex].rotp5) / i_max_steps;
 	incscalep5 = (KeyFrame[playIndex + 1].scalep5 - KeyFrame[playIndex].scalep5) / i_max_steps;
-	
+
 	incposXp6 = (KeyFrame[playIndex + 1].posXp6 - KeyFrame[playIndex].posXp6) / i_max_steps;
 	incposYp6 = (KeyFrame[playIndex + 1].posYp6 - KeyFrame[playIndex].posYp6) / i_max_steps;
 	incposZp6 = (KeyFrame[playIndex + 1].posZp6 - KeyFrame[playIndex].posZp6) / i_max_steps;
 	incrotp6 = (KeyFrame[playIndex + 1].rotp6 - KeyFrame[playIndex].rotp6) / i_max_steps;
 	incscalep6 = (KeyFrame[playIndex + 1].scalep6 - KeyFrame[playIndex].scalep6) / i_max_steps;
-	
+
 	incposXp7 = (KeyFrame[playIndex + 1].posXp7 - KeyFrame[playIndex].posXp7) / i_max_steps;
 	incposYp7 = (KeyFrame[playIndex + 1].posYp7 - KeyFrame[playIndex].posYp7) / i_max_steps;
 	incposZp7 = (KeyFrame[playIndex + 1].posZp7 - KeyFrame[playIndex].posZp7) / i_max_steps;
 	incrotp7 = (KeyFrame[playIndex + 1].rotp7 - KeyFrame[playIndex].rotp7) / i_max_steps;
 	incscalep7 = (KeyFrame[playIndex + 1].scalep7 - KeyFrame[playIndex].scalep7) / i_max_steps;
-	
+
 	incposXp8 = (KeyFrame[playIndex + 1].posXp8 - KeyFrame[playIndex].posXp8) / i_max_steps;
 	incposYp8 = (KeyFrame[playIndex + 1].posYp8 - KeyFrame[playIndex].posYp8) / i_max_steps;
 	incposZp8 = (KeyFrame[playIndex + 1].posZp8 - KeyFrame[playIndex].posZp8) / i_max_steps;
 	incrotp8 = (KeyFrame[playIndex + 1].rotp8 - KeyFrame[playIndex].rotp8) / i_max_steps;
 	incscalep8 = (KeyFrame[playIndex + 1].scalep8 - KeyFrame[playIndex].scalep8) / i_max_steps;
-	
+
 	incposXp9 = (KeyFrame[playIndex + 1].posXp9 - KeyFrame[playIndex].posXp9) / i_max_steps;
 	incposYp9 = (KeyFrame[playIndex + 1].posYp9 - KeyFrame[playIndex].posYp9) / i_max_steps;
 	incposZp9 = (KeyFrame[playIndex + 1].posZp9 - KeyFrame[playIndex].posZp9) / i_max_steps;
 	incrotp9 = (KeyFrame[playIndex + 1].rotp9 - KeyFrame[playIndex].rotp9) / i_max_steps;
 	incscalep9 = (KeyFrame[playIndex + 1].scalep9 - KeyFrame[playIndex].scalep9) / i_max_steps;
-	
+
 	incposXp10 = (KeyFrame[playIndex + 1].posXp10 - KeyFrame[playIndex].posXp10) / i_max_steps;
 	incposYp10 = (KeyFrame[playIndex + 1].posYp10 - KeyFrame[playIndex].posYp10) / i_max_steps;
 	incposZp10 = (KeyFrame[playIndex + 1].posZp10 - KeyFrame[playIndex].posZp10) / i_max_steps;
 	incrotp10 = (KeyFrame[playIndex + 1].rotp10 - KeyFrame[playIndex].rotp10) / i_max_steps;
 	incscalep10 = (KeyFrame[playIndex + 1].scalep10 - KeyFrame[playIndex].scalep10) / i_max_steps;
-	
+
 	incposXp11 = (KeyFrame[playIndex + 1].posXp11 - KeyFrame[playIndex].posXp11) / i_max_steps;
 	incposYp11 = (KeyFrame[playIndex + 1].posYp11 - KeyFrame[playIndex].posYp11) / i_max_steps;
 	incposZp11 = (KeyFrame[playIndex + 1].posZp11 - KeyFrame[playIndex].posZp11) / i_max_steps;
 	incrotp11 = (KeyFrame[playIndex + 1].rotp11 - KeyFrame[playIndex].rotp11) / i_max_steps;
 	incscalep11 = (KeyFrame[playIndex + 1].scalep11 - KeyFrame[playIndex].scalep11) / i_max_steps;
-	
+
 	incposXp12 = (KeyFrame[playIndex + 1].posXp12 - KeyFrame[playIndex].posXp12) / i_max_steps;
 	incposYp12 = (KeyFrame[playIndex + 1].posYp12 - KeyFrame[playIndex].posYp12) / i_max_steps;
 	incposZp12 = (KeyFrame[playIndex + 1].posZp12 - KeyFrame[playIndex].posZp12) / i_max_steps;
@@ -731,8 +760,8 @@ unsigned int generateTextures(const char* filename, bool alfa, bool isPrimitive)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	// load image, create texture and generate mipmaps
 	int width, height, nrChannels;
-	
-	if(isPrimitive)
+
+	if (isPrimitive)
 		stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
 	else
 		stbi_set_flip_vertically_on_load(false); // tell stb_image.h to flip loaded texture's on the y-axis.
@@ -770,7 +799,7 @@ void LoadTextures()
 
 
 
-void animate(void) 
+void animate(void)
 {
 	if (play)
 	{
@@ -886,7 +915,7 @@ void animate(void)
 	}
 
 	//Vehículos
-	if (animacion1){
+	if (animacion1) {
 		orienta_y1 += 0.5f;
 		switch (etapa_giro) {
 		case 0:
@@ -968,7 +997,7 @@ void animate(void)
 			giroCarro2 -= 1.0f;
 			angleCarro2 -= 1.0f;
 			movAuto_x2 = 0.0f - 2.3f * sin(glm::radians(angleCarro2));
-			movAuto_z2 = - 3.25f + 2.3f * cos(glm::radians(angleCarro2));
+			movAuto_z2 = -3.25f + 2.3f * cos(glm::radians(angleCarro2));
 			if (angleCarro2 <= 45.0f) {
 				etapa_track1 = 0;
 			}
@@ -981,7 +1010,7 @@ void animate(void)
 			}
 			movAuto_x3 += 0.04f;
 			movAuto_z3 = movAuto_x3;
-			if(movAuto_z3 >= 1.7) {
+			if (movAuto_z3 >= 1.7) {
 				etapa_track2 = 1;
 			}
 			break;
@@ -1019,35 +1048,173 @@ void animate(void)
 	}
 
 	// Límites del segundo piso
-	const float paraMinY = 22.4f;   
-	const float paraMaxY = 34.4f;  
+	const float paraMinY = 22.4f;
+	const float paraMaxY = 34.4f;
 
-	if (paraGoingDown)
+	/*if (paraGoingDown)
 	{
-		
+
 		paraOffsetY -= paraSpeed;
 		if ((paraBaseY + paraOffsetY) <= paraMinY)
 		{
 			paraOffsetY = paraMinY - paraBaseY;
-			paraGoingDown = false;    
+			paraGoingDown = false;
 		}
 	}
 	else
 	{
 		paraOffsetY = paraMaxY - paraBaseY;
-		paraGoingDown = true;   
+		paraGoingDown = true;
+	}*/
+
+	// ======================
+	// Paracaidas
+	// ======================
+
+	// Física: gravedad
+	paraVelY += paraGravity;          // acelera hacia abajo
+	paraOffsetY += paraVelY;
+
+	// Rebote con amortiguación
+	if ((paraBaseY + paraOffsetY) <= paraMinY) {
+		paraOffsetY = paraMinY - paraBaseY;
+		paraVelY *= -0.6f;           // rebote reducido
 	}
 
-	//Helice
-	heliceAngle += 1.0f;
-	if (heliceAngle > 360.0f) {
-		heliceAngle -= 360.0f;
+	if ((paraBaseY + paraOffsetY) >= paraMaxY) {
+		paraOffsetY = paraMaxY - paraBaseY;
+		paraVelY *= -0.4f;           // rebote en la parte alta
+	}
+
+	// Oscilación lateral suave (péndulo)
+	paraSwayAngle += 0.03f;
+	paraSway = sin(paraSwayAngle) * 0.5f;
+
+	// Viento aleatorio
+	paraWind += ((rand() % 100) / 5000.0f - 0.01f);
+	paraWind = glm::clamp(paraWind, -0.4f, 0.4f);
+
+
+	////Helice
+	//heliceAngle += 1.0f;
+	//if (heliceAngle > 360.0f) {
+	//	heliceAngle -= 360.0f;
+	//}
+
+	// ======================
+	// TORNILLO ANIMACIÓN
+	// ======================
+
+	// Límites para movimiento vertical del tornillo
+	const float HELICOIDE_MIN_Y = 23.0f;   // Un poco arriba del piso del 2do nivel
+	const float HELICOIDE_MAX_Y = 28.0f;   // Altura máxima permitida
+
+	// Subir y bajar en movimiento helicoidal
+	helicoideOffsetY += helicoideVel * helicoideDir;
+
+	// Calculamos la altura real del tornillo
+	float helicoideYactual = helicoideY + helicoideOffsetY;
+
+	// Si baja de más → rebota
+	if (helicoideYactual <= HELICOIDE_MIN_Y) {
+		helicoideOffsetY = HELICOIDE_MIN_Y - helicoideY;
+		helicoideDir *= -1;   // cambiar el sentido
+	}
+
+	// Si sube de más → rebota
+	if (helicoideYactual >= HELICOIDE_MAX_Y) {
+		helicoideOffsetY = HELICOIDE_MAX_Y - helicoideY;
+		helicoideDir *= -1;   // cambiar el sentido
+	}
+
+	// Vibración mecánica
+	helicoideVibration = sin((float)glfwGetTime() * 40.0f) * 0.02f;
+
+	// Aumentar velocidad suavemente
+	heliceAngle += 3.0f + sin((float)glfwGetTime() * 3.0f) * 1.5f;
+	if (heliceAngle >= 360.0f) heliceAngle -= 360.0f;
+
+	// ===============================
+	// ANIMACIÓN DE VUELO DEL TORNILLO
+	// ===============================
+	if (helicoideFlightActivated) {
+
+		if (helicoideState == 1) {
+			// Ascender recto
+			helicoideFlyY += 0.3f;
+			if (helicoideFlyY >= HELICOIDE_ALTURA_VUELO) {
+				helicoideState = 2; // cambiar a vuelo
+			}
+		}
+
+		else if (helicoideState == 2) {
+			// Volar en curva alrededor del museo
+			float t = glfwGetTime() * 0.4f;
+
+			helicoideFlyX = sin(t) * 55.0f;
+			helicoideFlyZ = cos(t) * 55.0f;
+
+			// después de una vuelta completa
+			if (t > 6.3f) {
+				helicoideState = 3;
+			}
+		}
+
+		else if (helicoideState == 3) {
+			// Regresar al museo (interpolación)
+			helicoideFlyX *= 0.95f;
+			helicoideFlyZ *= 0.95f;
+
+			helicoideFlyY -= 0.2f;
+
+			if (helicoideFlyY <= 0.0f) {
+				helicoideFlyY = 0.0f;
+				helicoideFlightActivated = false;
+				helicoideState = 0;
+
+				// Restablecer cámara normal
+				camInsideHelicoide = false;
+
+				camera.Position = savedCameraPos;
+				camera.Front = savedCameraFront;
+				camera.Yaw = savedYaw;
+				camera.Pitch = savedPitch;
+			}
+		}
+
+		if (camInsideHelicoide) {
+
+			// Posición real del tornillo mientras vuela
+			glm::vec3 helicoideCamPos(
+				helicoideX + helicoideFlyX,
+				helicoideY + helicoideFlyY + 0.8f,   // un poco más arriba para no ver el centro geométrico
+				helicoideZ + helicoideFlyZ
+			);
+
+			// Colocar la cámara en esa posición
+			camera.Position = helicoideCamPos;
+
+			// La dirección la controla SOLO el mouse
+		}
 	}
 
 	//Ornitoptero
-	float wingSpeed = 1.0f;    
-	float wingMaxAngle = 30.0f;   
+	/*float wingSpeed = 1.0f;
+	float wingMaxAngle = 30.0f;
 
+	if (ornWingUp) {
+		ornWingAngle += wingSpeed;
+		if (ornWingAngle >= wingMaxAngle)
+			ornWingUp = false;
+	}
+	else {
+		ornWingAngle -= wingSpeed;
+		if (ornWingAngle <= -wingMaxAngle)
+			ornWingUp = true;
+	}*/
+
+	float wingSpeed = 1.0f;
+	float wingMaxAngle = 30.0f;
 	if (ornWingUp) {
 		ornWingAngle += wingSpeed;
 		if (ornWingAngle >= wingMaxAngle)
@@ -1059,8 +1226,8 @@ void animate(void)
 			ornWingUp = true;
 	}
 
-	
-		if (lorenz_active) {
+
+	if (lorenz_active) {
 		// Ecuaciones de Lorenz
 		float dx = sigma * (lorenz_y - lorenz_x);
 		float dy = lorenz_x * (rho - lorenz_z) - lorenz_y;
@@ -1070,7 +1237,7 @@ void animate(void)
 		lorenz_vy += dy * dt;
 		lorenz_vz += dz * dt;
 
-					// NUEVO: Aplicar fricción general para hacerlo más lento
+		// NUEVO: Aplicar fricción general para hacerlo más lento
 		float friccion = 0.98f; //0.95 Mayor fricción para movimiento más lento
 		lorenz_vx *= friccion;
 		lorenz_vy *= friccion;
@@ -1319,7 +1486,7 @@ int main() {
 	myData();
 	glEnable(GL_DEPTH_TEST);
 
-	
+
 
 	// build and compile shaders
 	// -------------------------
@@ -1327,7 +1494,7 @@ int main() {
 	Shader staticShader("Shaders/shader_Lights.vs", "Shaders/shader_Lights_mod.fs");	//To use with static models
 	Shader skyboxShader("Shaders/skybox.vs", "Shaders/skybox.fs");	//To use with skybox
 	Shader animShader("Shaders/anim.vs", "Shaders/anim.fs");	//To use with animated models 
-	
+
 	vector<std::string> faces{
 		"resources/skybox/right.jpg",
 		"resources/skybox/left.jpg",
@@ -1382,8 +1549,8 @@ int main() {
 	Model mundi("resources/planta_baja/mundi.obj");
 	Model ultimacena("resources/planta_baja/ultimacena.obj");
 	Model vitruvio("resources/planta_baja/vitruvio.obj");
-			
-			// Caballero de la planta baja
+
+	// Caballero de la planta baja
 
 	Model CaballeroCuerpo("resources/caballero/cuerpo.obj");
 	Model CaballeroBrazoIzquierdo("resources/caballero/brazoIzquierdo.obj");
@@ -1395,7 +1562,7 @@ int main() {
 	Model Colorful_Plant("resources/plants/Colorful_Plant/karafuruueki.obj");
 	Model Tree("resources/plants/Tree/Basic_Tree_1.obj");
 	Model Candle("resources/Candle/Model.obj");
-	
+
 	//Segundo piso
 	Model paracaidas("resources/Paracaidas/paracaidas.obj");
 	Model helicoideBase("resources/Tornillo/Base.obj");
@@ -1403,6 +1570,11 @@ int main() {
 	Model OrnCuer("resources/Ornitoptero/Cuerpo.obj");
 	Model OrnAlDe("resources/Ornitoptero/AlaDer.obj");
 	Model OrnAlIz("resources/Ornitoptero/AlaIzq.obj");
+	Model tuboAlaIzq("resources/ornitoptero/TuvoAlaIzq.obj");
+	Model tuboAlaDer("resources/ornitoptero/TuvoAlaDer.obj");
+	Model cuerAlaIzq("resources/ornitoptero/CuerAlaIzq.obj");
+	Model cuerAlaDer("resources/ornitoptero/CuerAlaDer.obj");
+
 
 	//Tercer piso
 	Model carro1("resources/objects/Carro1/Carro1.obj");
@@ -1422,7 +1594,7 @@ int main() {
 	Model cubo("resources/objects/Cubo/Cubo.obj");
 	Model pista("resources/objects/Pista/track.obj");
 	Model base("resources/objects/Base/Base.obj");
-	
+
 	//Inicialización de KeyFrames
 	for (int i = 0; i < MAX_FRAMES; i++)
 	{
@@ -1451,7 +1623,7 @@ int main() {
 		KeyFrame[i].posZp2 = 0.0f;
 		KeyFrame[i].rotp2 = 0.0f;
 		KeyFrame[i].scalep2 = 0.0f;
-		
+
 		KeyFrame[i].posXp3 = 0.0f;
 		KeyFrame[i].posYp3 = 0.0f;
 		KeyFrame[i].posZp3 = 0.0f;
@@ -1488,25 +1660,25 @@ int main() {
 		KeyFrame[i].posZp8 = 0.0f;
 		KeyFrame[i].rotp8 = 0.0f;
 		KeyFrame[i].scalep8 = 0.0f;
-		
+
 		KeyFrame[i].posXp9 = 0.0f;
 		KeyFrame[i].posYp9 = 0.0f;
 		KeyFrame[i].posZp9 = 0.0f;
 		KeyFrame[i].rotp9 = 0.0f;
 		KeyFrame[i].scalep9 = 0.0f;
-		
+
 		KeyFrame[i].posXp10 = 0.0f;
 		KeyFrame[i].posYp10 = 0.0f;
 		KeyFrame[i].posZp10 = 0.0f;
 		KeyFrame[i].rotp10 = 0.0f;
 		KeyFrame[i].scalep10 = 0.0f;
-		
+
 		KeyFrame[i].posXp11 = 0.0f;
 		KeyFrame[i].posYp11 = 0.0f;
 		KeyFrame[i].posZp11 = 0.0f;
 		KeyFrame[i].rotp11 = 0.0f;
 		KeyFrame[i].scalep11 = 0.0f;
-		
+
 		KeyFrame[i].posXp12 = 0.0f;
 		KeyFrame[i].posYp12 = 0.0f;
 		KeyFrame[i].posZp12 = 0.0f;
@@ -1515,227 +1687,227 @@ int main() {
 	}
 
 	KeyFrame[0].posXp1 = -19.7f; //-19.7
-	KeyFrame[0].posYp1 = 15.5f; 
-	KeyFrame[0].posZp1 = 7.0f; 
+	KeyFrame[0].posYp1 = 15.5f;
+	KeyFrame[0].posZp1 = 7.0f;
 	KeyFrame[0].rotp1 = 180.0f;
 	KeyFrame[0].scalep1 = 0.15f,
 
-	KeyFrame[0].posXp2 = -19.7f; 
-	KeyFrame[0].posYp2 = 15.5f; 
-	KeyFrame[0].posZp2 = 17.0f; 
+		KeyFrame[0].posXp2 = -19.7f;
+	KeyFrame[0].posYp2 = 15.5f;
+	KeyFrame[0].posZp2 = 17.0f;
 	KeyFrame[0].rotp2 = 180.0f;
 	KeyFrame[0].scalep2 = 0.17f,
 
-	KeyFrame[0].posXp3 = -19.7f; 
-	KeyFrame[0].posYp3 = 15.5f; 
-	KeyFrame[0].posZp3 = 27.0f; 
+		KeyFrame[0].posXp3 = -19.7f;
+	KeyFrame[0].posYp3 = 15.5f;
+	KeyFrame[0].posZp3 = 27.0f;
 	KeyFrame[0].rotp3 = 180.0f;
 	KeyFrame[0].scalep3 = 0.17f,
 
-	KeyFrame[0].posXp4 = -19.7f; 
-	KeyFrame[0].posYp4 = 15.5f; 
-	KeyFrame[0].posZp4 = 37.0f; 
+		KeyFrame[0].posXp4 = -19.7f;
+	KeyFrame[0].posYp4 = 15.5f;
+	KeyFrame[0].posZp4 = 37.0f;
 	KeyFrame[0].rotp4 = 180.0f;
 	KeyFrame[0].scalep4 = 0.169f,
 
-	KeyFrame[0].posXp5 = 19.7f; 
-	KeyFrame[0].posYp5 = 15.5f; 
-	KeyFrame[0].posZp5 = 7.0f; 
+		KeyFrame[0].posXp5 = 19.7f;
+	KeyFrame[0].posYp5 = 15.5f;
+	KeyFrame[0].posZp5 = 7.0f;
 	KeyFrame[0].rotp5 = 0.0f;
 	KeyFrame[0].scalep5 = 0.17f,
-	
-	KeyFrame[0].posXp6 = 19.7f; 
-	KeyFrame[0].posYp6 = 15.5f; 
-	KeyFrame[0].posZp6 = 17.0f; 
+
+		KeyFrame[0].posXp6 = 19.7f;
+	KeyFrame[0].posYp6 = 15.5f;
+	KeyFrame[0].posZp6 = 17.0f;
 	KeyFrame[0].rotp6 = 0.0f;
 	KeyFrame[0].scalep6 = 0.169f,
-	
-	KeyFrame[0].posXp7 = 19.7f; 
-	KeyFrame[0].posYp7 = 15.5f; 
-	KeyFrame[0].posZp7 = 27.0f; 
+
+		KeyFrame[0].posXp7 = 19.7f;
+	KeyFrame[0].posYp7 = 15.5f;
+	KeyFrame[0].posZp7 = 27.0f;
 	KeyFrame[0].rotp7 = 0.0f;
 	KeyFrame[0].scalep7 = 0.169f,
-	
-	KeyFrame[0].posXp8 = 19.7f; 
-	KeyFrame[0].posYp8 = 15.5f; 
-	KeyFrame[0].posZp8 = 37.0f; 
+
+		KeyFrame[0].posXp8 = 19.7f;
+	KeyFrame[0].posYp8 = 15.5f;
+	KeyFrame[0].posZp8 = 37.0f;
 	KeyFrame[0].rotp8 = 0.0f;
 	KeyFrame[0].scalep8 = 0.169f,
-	
-	KeyFrame[0].posXp9 = 15.7f; 
-	KeyFrame[0].posYp9 = 15.5f; 
-	KeyFrame[0].posZp9 = -42.2f; 
+
+		KeyFrame[0].posXp9 = 15.7f;
+	KeyFrame[0].posYp9 = 15.5f;
+	KeyFrame[0].posZp9 = -42.2f;
 	KeyFrame[0].rotp9 = 90.0f;
 	KeyFrame[0].scalep9 = 0.169f,
 
-	KeyFrame[0].posXp10 = -15.7f; 
-	KeyFrame[0].posYp10 = 15.5f; 
-	KeyFrame[0].posZp10 = -42.2f; 
+		KeyFrame[0].posXp10 = -15.7f;
+	KeyFrame[0].posYp10 = 15.5f;
+	KeyFrame[0].posZp10 = -42.2f;
 	KeyFrame[0].rotp10 = 90.0f;
 	KeyFrame[0].scalep10 = 0.169f,
-	
-	KeyFrame[0].posXp11 = -15.7f; 
-	KeyFrame[0].posYp11 = 15.5f; 
-	KeyFrame[0].posZp11 = 42.2f; 
+
+		KeyFrame[0].posXp11 = -15.7f;
+	KeyFrame[0].posYp11 = 15.5f;
+	KeyFrame[0].posZp11 = 42.2f;
 	KeyFrame[0].rotp11 = -90.0f;
 	KeyFrame[0].scalep11 = 0.169f,
-	
-	KeyFrame[0].posXp12 = 15.7f; 
-	KeyFrame[0].posYp12 = 15.5f; 
-	KeyFrame[0].posZp12 = 42.2f; 
+
+		KeyFrame[0].posXp12 = 15.7f;
+	KeyFrame[0].posYp12 = 15.5f;
+	KeyFrame[0].posZp12 = 42.2f;
 	KeyFrame[0].rotp12 = -90.0f;
 	KeyFrame[0].scalep12 = 0.169f;
 
 
-	KeyFrame[1].posXp1 = -10.0f; 
-	KeyFrame[1].posYp1 = 16.7f; 
-	KeyFrame[1].posZp1 = 8.0f; 
+	KeyFrame[1].posXp1 = -10.0f;
+	KeyFrame[1].posYp1 = 16.7f;
+	KeyFrame[1].posZp1 = 8.0f;
 	KeyFrame[1].rotp1 = 270.0f;
 	KeyFrame[1].scalep1 = 0.18f;
 
-	KeyFrame[1].posXp2 = -10.0f; 
-	KeyFrame[1].posYp2 = 16.7f; 
-	KeyFrame[1].posZp2 = 18.0f; 
+	KeyFrame[1].posXp2 = -10.0f;
+	KeyFrame[1].posYp2 = 16.7f;
+	KeyFrame[1].posZp2 = 18.0f;
 	KeyFrame[1].rotp2 = 270.0f;
 	KeyFrame[1].scalep2 = 0.2f;
 
-	KeyFrame[1].posXp3 = -10.0f; 
-	KeyFrame[1].posYp3 = 16.7f; 
-	KeyFrame[1].posZp3 = 28.0f; 
+	KeyFrame[1].posXp3 = -10.0f;
+	KeyFrame[1].posYp3 = 16.7f;
+	KeyFrame[1].posZp3 = 28.0f;
 	KeyFrame[1].rotp3 = 270.0f;
 	KeyFrame[1].scalep3 = 0.2f;
 
-	KeyFrame[1].posXp4 = -10.0f; 
-	KeyFrame[1].posYp4 = 16.7f; 
-	KeyFrame[1].posZp4 = 38.0f; 
+	KeyFrame[1].posXp4 = -10.0f;
+	KeyFrame[1].posYp4 = 16.7f;
+	KeyFrame[1].posZp4 = 38.0f;
 	KeyFrame[1].rotp4 = 270.0f;
 	KeyFrame[1].scalep4 = 0.2f;
 
-	KeyFrame[1].posXp5 = 10.0f; 
-	KeyFrame[1].posYp5 = 16.7f; 
-	KeyFrame[1].posZp5 = 8.0f; 
+	KeyFrame[1].posXp5 = 10.0f;
+	KeyFrame[1].posYp5 = 16.7f;
+	KeyFrame[1].posZp5 = 8.0f;
 	KeyFrame[1].rotp5 = 270.0f;
 	KeyFrame[1].scalep5 = 0.2f;
 
-	KeyFrame[1].posXp6 = 10.0f; 
-	KeyFrame[1].posYp6 = 16.7f; 
-	KeyFrame[1].posZp6 = 18.0f; 
+	KeyFrame[1].posXp6 = 10.0f;
+	KeyFrame[1].posYp6 = 16.7f;
+	KeyFrame[1].posZp6 = 18.0f;
 	KeyFrame[1].rotp6 = 270.0f;
 	KeyFrame[1].scalep6 = 0.2f;
 
-	KeyFrame[1].posXp7 = 10.0f; 
-	KeyFrame[1].posYp7 = 16.7f; 
-	KeyFrame[1].posZp7 = 28.0f; 
+	KeyFrame[1].posXp7 = 10.0f;
+	KeyFrame[1].posYp7 = 16.7f;
+	KeyFrame[1].posZp7 = 28.0f;
 	KeyFrame[1].rotp7 = 270.0f;
 	KeyFrame[1].scalep7 = 0.2f;
 
-	KeyFrame[1].posXp8 = 10.0f; 
-	KeyFrame[1].posYp8 = 16.7f; 
-	KeyFrame[1].posZp8 = 38.0f; 
+	KeyFrame[1].posXp8 = 10.0f;
+	KeyFrame[1].posYp8 = 16.7f;
+	KeyFrame[1].posZp8 = 38.0f;
 	KeyFrame[1].rotp8 = 270.0f;
 	KeyFrame[1].scalep8 = 0.2f;
 
-	KeyFrame[1].posXp9 = 15.7f; 
-	KeyFrame[1].posYp9 = 14.0f; 
-	KeyFrame[1].posZp9 = -42.2f; 
+	KeyFrame[1].posXp9 = 15.7f;
+	KeyFrame[1].posYp9 = 14.0f;
+	KeyFrame[1].posZp9 = -42.2f;
 	KeyFrame[1].rotp9 = 45.0f;
 	KeyFrame[1].scalep9 = 0.8f;
 	KeyFrame[1].scalep9 = 0.12f;
 
-	KeyFrame[1].posXp10 = -20.0f; 
-	KeyFrame[1].posYp10 = 16.7f; 
-	KeyFrame[1].posZp10 = -47.0f; 
+	KeyFrame[1].posXp10 = -20.0f;
+	KeyFrame[1].posYp10 = 16.7f;
+	KeyFrame[1].posZp10 = -47.0f;
 	KeyFrame[1].rotp10 = 90.0f;
 	KeyFrame[1].scalep10 = 0.8f;
 
-	KeyFrame[1].posXp11 = -20.0f; 
-	KeyFrame[1].posYp11 = 16.7f; 
-	KeyFrame[1].posZp11 = 47.0f; 
+	KeyFrame[1].posXp11 = -20.0f;
+	KeyFrame[1].posYp11 = 16.7f;
+	KeyFrame[1].posZp11 = 47.0f;
 	KeyFrame[1].rotp11 = -90.0f;
 	KeyFrame[1].scalep11 = 0.8f;
 
-	KeyFrame[1].posXp12 = 20.0f; 
-	KeyFrame[1].posYp12 = 16.7f; 
-	KeyFrame[1].posZp12 = 47.0f; 
+	KeyFrame[1].posXp12 = 20.0f;
+	KeyFrame[1].posYp12 = 16.7f;
+	KeyFrame[1].posZp12 = 47.0f;
 	KeyFrame[1].rotp12 = -90.0f;
 	KeyFrame[1].scalep12 = 0.8f;
 
 
-	KeyFrame[2].posXp1 = -12.0f; 
-	KeyFrame[2].posYp1 = 14.9f; 
-	KeyFrame[2].posZp1 = 7.0f; 
+	KeyFrame[2].posXp1 = -12.0f;
+	KeyFrame[2].posYp1 = 14.9f;
+	KeyFrame[2].posZp1 = 7.0f;
 	KeyFrame[2].rotp1 = 360.0f;
 	KeyFrame[2].scalep1 = 0.11f;
 
-	KeyFrame[2].posXp2 = -12.0f; 
-	KeyFrame[2].posYp2 = 13.7f; 
-	KeyFrame[2].posZp2 = 17.0f; 
+	KeyFrame[2].posXp2 = -12.0f;
+	KeyFrame[2].posYp2 = 13.7f;
+	KeyFrame[2].posZp2 = 17.0f;
 	KeyFrame[2].rotp2 = 360.0f;
 	KeyFrame[2].scalep2 = 0.13f;
 
-	KeyFrame[2].posXp3 = -12.0f; 
-	KeyFrame[2].posYp3 = 13.7f; 
-	KeyFrame[2].posZp3 = 27.0f; 
+	KeyFrame[2].posXp3 = -12.0f;
+	KeyFrame[2].posYp3 = 13.7f;
+	KeyFrame[2].posZp3 = 27.0f;
 	KeyFrame[2].rotp3 = 360.0f;
 	KeyFrame[2].scalep3 = 0.13f;
 
 
-	KeyFrame[2].posXp4 = -12.0f; 
-	KeyFrame[2].posYp4 = 13.7f; 
-	KeyFrame[2].posZp4 = 37.0f; 
+	KeyFrame[2].posXp4 = -12.0f;
+	KeyFrame[2].posYp4 = 13.7f;
+	KeyFrame[2].posZp4 = 37.0f;
 	KeyFrame[2].rotp4 = 360.0f;
 	KeyFrame[2].scalep4 = 0.13f;
 
 
-	KeyFrame[2].posXp5 = 12.0f; 
-	KeyFrame[2].posYp5 = 13.7f; 
-	KeyFrame[2].posZp5 = 7.0f; 
+	KeyFrame[2].posXp5 = 12.0f;
+	KeyFrame[2].posYp5 = 13.7f;
+	KeyFrame[2].posZp5 = 7.0f;
 	KeyFrame[2].rotp5 = 360.0f;
 	KeyFrame[2].scalep5 = 0.13f;
 
-	KeyFrame[2].posXp6 = 12.0f; 
-	KeyFrame[2].posYp6 = 13.7f; 
-	KeyFrame[2].posZp6 = 17.0f; 
+	KeyFrame[2].posXp6 = 12.0f;
+	KeyFrame[2].posYp6 = 13.7f;
+	KeyFrame[2].posZp6 = 17.0f;
 	KeyFrame[2].rotp6 = 360.0f;
 	KeyFrame[2].scalep6 = 0.13f;
 
 
-	KeyFrame[2].posXp7 = 12.0f; 
-	KeyFrame[2].posYp7 = 13.7f; 
-	KeyFrame[2].posZp7 = 27.0f; 
+	KeyFrame[2].posXp7 = 12.0f;
+	KeyFrame[2].posYp7 = 13.7f;
+	KeyFrame[2].posZp7 = 27.0f;
 	KeyFrame[2].rotp7 = 360.0f;
 	KeyFrame[2].scalep7 = 0.13f;
 
 
-	KeyFrame[2].posXp8 = 12.0f; 
-	KeyFrame[2].posYp8 = 13.7f; 
-	KeyFrame[2].posZp8 = 37.0f; 
+	KeyFrame[2].posXp8 = 12.0f;
+	KeyFrame[2].posYp8 = 13.7f;
+	KeyFrame[2].posZp8 = 37.0f;
 	KeyFrame[2].rotp8 = 360.0f;
 	KeyFrame[2].scalep8 = 0.13f;
 
 
-	KeyFrame[2].posXp9 = 8.0f; 
-	KeyFrame[2].posYp9 = 13.5f; 
-	KeyFrame[2].posZp9 = -35.0f; 
+	KeyFrame[2].posXp9 = 8.0f;
+	KeyFrame[2].posYp9 = 13.5f;
+	KeyFrame[2].posZp9 = -35.0f;
 	KeyFrame[2].rotp9 = 270.0f;
 	KeyFrame[2].scalep9 = 0.15f;
 
 
-	KeyFrame[2].posXp10 = -20.0f; 
-	KeyFrame[2].posYp10 = 13.7f; 
-	KeyFrame[2].posZp10 = -47.0f; 
+	KeyFrame[2].posXp10 = -20.0f;
+	KeyFrame[2].posYp10 = 13.7f;
+	KeyFrame[2].posZp10 = -47.0f;
 	KeyFrame[2].rotp10 = 45.0f;
 
 
-	KeyFrame[2].posXp11 = -20.0f; 
-	KeyFrame[2].posYp11 = 13.7f; 
-	KeyFrame[2].posZp11 = 47.0f; 
+	KeyFrame[2].posXp11 = -20.0f;
+	KeyFrame[2].posYp11 = 13.7f;
+	KeyFrame[2].posZp11 = 47.0f;
 	KeyFrame[2].rotp11 = -135.0f;
 
 
-	KeyFrame[2].posXp12 = 20.0f; 
-	KeyFrame[2].posYp12 = 13.7f; 
-	KeyFrame[2].posZp12 = 47.0f; 
+	KeyFrame[2].posXp12 = 20.0f;
+	KeyFrame[2].posYp12 = 13.7f;
+	KeyFrame[2].posZp12 = 47.0f;
 	KeyFrame[2].rotp12 = -135.0f;
 
 	//KeyFrame[3]
@@ -2205,13 +2377,13 @@ int main() {
 		// LUCES DE FOCO PARA LOS CANDLE'S
 		// ===================================================================
 
-		glm::vec3 purpleDiffuse = glm::vec3(0.6f, 0.1f, 0.8f); 
-		glm::vec3 purpleAmbient = purpleDiffuse * glm::vec3(0.1f); 
-		glm::vec3 purpleSpecular = glm::vec3(1.0f); 
+		glm::vec3 purpleDiffuse = glm::vec3(0.6f, 0.1f, 0.8f);
+		glm::vec3 purpleAmbient = purpleDiffuse * glm::vec3(0.1f);
+		glm::vec3 purpleSpecular = glm::vec3(1.0f);
 
 		float lightHeight = 8.0f;
-		glm::mat4 candleModelMatrix; 
-		glm::vec3 candleWorldPos;  
+		glm::mat4 candleModelMatrix;
+		glm::vec3 candleWorldPos;
 
 		candleModelMatrix = translate(tempJumex, vec3(12.0f, lightHeight, -24.5f));
 		candleWorldPos = glm::vec3(candleModelMatrix[3]);
@@ -2220,7 +2392,7 @@ int main() {
 		staticShader.setVec3("pointLight[2].diffuse", purpleDiffuse);
 		staticShader.setVec3("pointLight[2].specular", purpleSpecular);
 		staticShader.setFloat("pointLight[2].constant", 1.0f);
-		staticShader.setFloat("pointLight[2].linear", 0.14f);  
+		staticShader.setFloat("pointLight[2].linear", 0.14f);
 		staticShader.setFloat("pointLight[2].quadratic", 0.07f);
 
 		candleModelMatrix = translate(tempJumex, vec3(12.0f, lightHeight, -14.5f));
@@ -2317,15 +2489,15 @@ int main() {
 		// LUCES DE FOCO ANARANJADAS DE ALTA INTENSIDAD PARA CADA CUADRO
 		// ===================================================================
 
-		staticShader.setVec3("spotLight[1].position", glm::vec3(-19.7f, 18.0f, 9.0f));   
-		staticShader.setVec3("spotLight[1].direction", glm::vec3(0.0f, -1.0f, 0.0f));   
-		staticShader.setVec3("spotLight[1].ambient", glm::vec3(0.8f, 0.4f, 0.1f));      
-		staticShader.setVec3("spotLight[1].diffuse", glm::vec3(1.0f, 0.5f, 0.1f));      
-		staticShader.setVec3("spotLight[1].specular", glm::vec3(1.0f, 0.7f, 0.3f));      
-		staticShader.setFloat("spotLight[1].cutOff", glm::cos(glm::radians(20.0f)));    
-		staticShader.setFloat("spotLight[1].outerCutOff", glm::cos(glm::radians(35.0f))); 
+		staticShader.setVec3("spotLight[1].position", glm::vec3(-19.7f, 18.0f, 9.0f));
+		staticShader.setVec3("spotLight[1].direction", glm::vec3(0.0f, -1.0f, 0.0f));
+		staticShader.setVec3("spotLight[1].ambient", glm::vec3(0.8f, 0.4f, 0.1f));
+		staticShader.setVec3("spotLight[1].diffuse", glm::vec3(1.0f, 0.5f, 0.1f));
+		staticShader.setVec3("spotLight[1].specular", glm::vec3(1.0f, 0.7f, 0.3f));
+		staticShader.setFloat("spotLight[1].cutOff", glm::cos(glm::radians(20.0f)));
+		staticShader.setFloat("spotLight[1].outerCutOff", glm::cos(glm::radians(35.0f)));
 		staticShader.setFloat("spotLight[1].constant", 1.0f);
-		staticShader.setFloat("spotLight[1].linear", 0.005f);   
+		staticShader.setFloat("spotLight[1].linear", 0.005f);
 		staticShader.setFloat("spotLight[1].quadratic", 0.0001f);
 
 		staticShader.setVec3("spotLight[2].position", glm::vec3(-19.7f, 18.0f, 21.0f));
@@ -2476,7 +2648,7 @@ int main() {
 		tmp = modelOp = rotate(modelOp, radians(giroMonito), vec3(0.0f, 1.0f, 0.0));
 		staticShader.setMat4("model", modelOp);
 		vestibulo.Draw(staticShader);
-		
+
 		tempPrimero = modelOp = translate(tempJumex, vec3(0.0f, 9.50f, 0.0f));
 		tmp = modelOp = rotate(modelOp, radians(giroMonito), vec3(0.0f, 1.0f, 0.0));
 		staticShader.setMat4("model", modelOp);
@@ -2491,11 +2663,11 @@ int main() {
 		tmp = modelOp = rotate(modelOp, radians(giroMonito), vec3(0.0f, 1.0f, 0.0));
 		staticShader.setMat4("model", modelOp);
 		tercerPiso.Draw(staticShader);
-		
+
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Modelos de la planta baja
 		// -------------------------------------------------------------------------------------------------------------------------
-		
+
 		for (int i = 0; i < 50; i = i + 10) {
 			tempEasels = modelOp = translate(tempJumex, vec3(12.0f, 1.0f, -25.0f + i));
 			modelOp = scale(modelOp, vec3(1.0f));
@@ -2573,14 +2745,14 @@ int main() {
 		vitruvio.Draw(staticShader);
 
 
-			// Caballero de recepcion
+		// Caballero de recepcion
 
 		float tiempo = glfwGetTime();
 		float angulo = sin(tiempo * 2.0f) * 10.0f;
 
 		tempCaballero = cuadroOp = translate(tempJumex, vec3(-2.0f, 1.0f, -24.5f));
 		cuadroOp = rotate(cuadroOp, radians(135.0f), vec3(0.0f, 1.0f, 0.0f));
-		cuadroOp = scale(cuadroOp, vec3( 10 * 0.17f));
+		cuadroOp = scale(cuadroOp, vec3(10 * 0.17f));
 		staticShader.setMat4("model", cuadroOp);
 		CaballeroPiernaIzquierda.Draw(staticShader);
 
@@ -2656,7 +2828,7 @@ int main() {
 			Tree.Draw(staticShader);
 		}
 
-			// Plantas de recepcion 
+		// Plantas de recepcion 
 
 		float radio = 6.0f;
 		int numPlantas = 5;
@@ -2672,12 +2844,12 @@ int main() {
 			Colorful_Plant.Draw(staticShader);
 		}
 
-			// Candle's de la planta baja
+		// Candle's de la planta baja
 		float PI = 3.141591;
 		float radio2 = 4.0f;
-		float freqX = 3.0f;   
-		float freqZ = 4.0f;  
-		float phase = PI / 2;  
+		float freqX = 3.0f;
+		float freqZ = 4.0f;
+		float phase = PI / 2;
 
 		float t = (sin(tiempo) * 0.5f) + 0.5f;
 		float xDer = mix(0.0f, 12.0f, t);
@@ -2731,171 +2903,273 @@ int main() {
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Modelos 1er piso
 		// -------------------------------------------------------------------------------------------------------------------------
-			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp1, posYp1, posZp1));
-			modelOp = glm::rotate(modelOp, glm::radians(rotp1), glm::vec3(0.0f, 1.0f, 0.0f));
-			modelOp = glm::scale(modelOp, glm::vec3(scalep1));
-			staticShader.setMat4("model", modelOp);
-			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-			pintura.Draw(staticShader); //-19.7, 15.5, 7.0, r=180  scale 0.15
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp1, posYp1, posZp1));
+		modelOp = glm::rotate(modelOp, glm::radians(rotp1), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(scalep1));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		pintura.Draw(staticShader); //-19.7, 15.5, 7.0, r=180  scale 0.15
 
-			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp2, posYp2, posZp2));
-			modelOp = glm::rotate(modelOp, glm::radians(rotp2), glm::vec3(0.0f, 1.0f, 0.0f));
-			modelOp = glm::scale(modelOp, glm::vec3(scalep2));
-			staticShader.setMat4("model", modelOp);
-			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-			pintura1.Draw(staticShader); //-19.7, 15.5, 17.0, r=180 scale 0.17
-	
-			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp3, posYp3, posZp3));
-			modelOp = glm::rotate(modelOp, glm::radians(rotp3), glm::vec3(0.0f, 1.0f, 0.0f));
-			modelOp = glm::scale(modelOp, glm::vec3(scalep3));
-			staticShader.setMat4("model", modelOp);
-			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-			pintura2.Draw(staticShader); //-19.7, 15.5, 27.0, r=180 scale 0.17
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp2, posYp2, posZp2));
+		modelOp = glm::rotate(modelOp, glm::radians(rotp2), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(scalep2));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		pintura1.Draw(staticShader); //-19.7, 15.5, 17.0, r=180 scale 0.17
 
-			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp4, posYp4, posZp4));
-			modelOp = glm::rotate(modelOp, glm::radians(rotp4), glm::vec3(0.0f, 1.0f, 0.0f));
-			modelOp = glm::scale(modelOp, glm::vec3(scalep4));
-			staticShader.setMat4("model", modelOp);
-			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-			pintura7.Draw(staticShader); //-19.7, 15.5, 37.0, r=180 scale 0.169
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp3, posYp3, posZp3));
+		modelOp = glm::rotate(modelOp, glm::radians(rotp3), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(scalep3));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		pintura2.Draw(staticShader); //-19.7, 15.5, 27.0, r=180 scale 0.17
 
-			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp5, posYp5, posZp5));
-			modelOp = glm::rotate(modelOp, glm::radians(rotp5), glm::vec3(0.0f, 1.0f, 0.0f));
-			modelOp = glm::scale(modelOp, glm::vec3(scalep5));
-			staticShader.setMat4("model", modelOp);
-			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-			pintura3.Draw(staticShader); //19.7, 15.5, 7.0, r=0 scale 0.17
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp4, posYp4, posZp4));
+		modelOp = glm::rotate(modelOp, glm::radians(rotp4), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(scalep4));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		pintura7.Draw(staticShader); //-19.7, 15.5, 37.0, r=180 scale 0.169
 
-			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp6, posYp6, posZp6));
-			modelOp = glm::rotate(modelOp, glm::radians(rotp6), glm::vec3(0.0f, 1.0f, 0.0f));
-			modelOp = glm::scale(modelOp, glm::vec3(scalep6));
-			staticShader.setMat4("model", modelOp);
-			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-			pintura4.Draw(staticShader); //19.7, 15.5, 17.0, r=0 s 0.169
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp5, posYp5, posZp5));
+		modelOp = glm::rotate(modelOp, glm::radians(rotp5), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(scalep5));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		pintura3.Draw(staticShader); //19.7, 15.5, 7.0, r=0 scale 0.17
 
-			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp7, posYp7, posZp7));
-			modelOp = glm::rotate(modelOp, glm::radians(rotp7), glm::vec3(0.0f, 1.0f, 0.0f));
-			modelOp = glm::scale(modelOp, glm::vec3(scalep7));
-			staticShader.setMat4("model", modelOp);
-			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-			pintura5.Draw(staticShader); //19.7, 15.5, 27.0, r=0 s 0.169
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp6, posYp6, posZp6));
+		modelOp = glm::rotate(modelOp, glm::radians(rotp6), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(scalep6));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		pintura4.Draw(staticShader); //19.7, 15.5, 17.0, r=0 s 0.169
 
-			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp8, posYp8, posZp8));
-			modelOp = glm::rotate(modelOp, glm::radians(rotp8), glm::vec3(0.0f, 1.0f, 0.0f));
-			modelOp = glm::scale(modelOp, glm::vec3(scalep8));
-			staticShader.setMat4("model", modelOp);
-			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-			pintura6.Draw(staticShader); //19.7, 15.5, 37.0, r=0 s 0.169 s 0.169
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp7, posYp7, posZp7));
+		modelOp = glm::rotate(modelOp, glm::radians(rotp7), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(scalep7));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		pintura5.Draw(staticShader); //19.7, 15.5, 27.0, r=0 s 0.169
 
-			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(15.7, 15.5, -42.2));
-			modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-			modelOp = glm::scale(modelOp, glm::vec3(0.169));
-			staticShader.setMat4("model", modelOp);
-			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-			pintura8.Draw(staticShader); //15.7, 15.5, -42.2, r=90 s 0.169
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp8, posYp8, posZp8));
+		modelOp = glm::rotate(modelOp, glm::radians(rotp8), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(scalep8));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		pintura6.Draw(staticShader); //19.7, 15.5, 37.0, r=0 s 0.169 s 0.169
 
-			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-15.7f, 15.5f, -42.2f));
-			modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-			modelOp = glm::scale(modelOp, glm::vec3(0.169f));
-			staticShader.setMat4("model", modelOp);
-			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-			pintura9.Draw(staticShader); //-15.7, 15.5, -42.2, r=90
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(15.7, 15.5, -42.2));
+		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.169));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		pintura8.Draw(staticShader); //15.7, 15.5, -42.2, r=90 s 0.169
 
-			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-15.7f, 15.5f, 42.2f));
-			modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-			modelOp = glm::scale(modelOp, glm::vec3(0.169f));
-			staticShader.setMat4("model", modelOp);
-			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-			pintura10.Draw(staticShader); //-15.7, 15.5, 42.2, r=-90
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-15.7f, 15.5f, -42.2f));
+		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.169f));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		pintura9.Draw(staticShader); //-15.7, 15.5, -42.2, r=90
 
-			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(15.7f, 15.5f, 42.2f));
-			modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-			modelOp = glm::scale(modelOp, glm::vec3(0.169f));
-			staticShader.setMat4("model", modelOp);
-			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-			pintura11.Draw(staticShader); //15.7, 15.5, 42.2, r=-90
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-15.7f, 15.5f, 42.2f));
+		modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.169f));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		pintura10.Draw(staticShader); //-15.7, 15.5, 42.2, r=-90
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(15.7f, 15.5f, 42.2f));
+		modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(0.169f));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		pintura11.Draw(staticShader); //15.7, 15.5, 42.2, r=-90
 
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Modelos 2do piso
 		// -------------------------------------------------------------------------------------------------------------------------
-			
-			//Paracaidas
-			glm::mat4 modelPara = glm::mat4(1.0f);
-			modelPara = glm::translate(modelPara, glm::vec3(paraBaseX, paraBaseY + paraOffsetY, paraBaseZ));
-			modelPara = glm::scale(modelPara, glm::vec3(0.05f));
-			staticShader.setMat4("model", modelPara);
-			paracaidas.Draw(staticShader);
 
-			//Tornillo
-			glm::mat4 modelHelicoide = glm::mat4(1.0f);
-			modelHelicoide = glm::translate(modelHelicoide, glm::vec3(helicoideX, helicoideY, helicoideZ));
-			modelHelicoide = glm::scale(modelHelicoide, glm::vec3(0.4f));
-			staticShader.setMat4("model", modelHelicoide);
-			helicoideBase.Draw(staticShader);
+		//Paracaidas
+		/*glm::mat4 modelPara = glm::mat4(1.0f);
+		modelPara = glm::translate(modelPara, glm::vec3(paraBaseX, paraBaseY + paraOffsetY, paraBaseZ));
+		modelPara = glm::scale(modelPara, glm::vec3(0.05f));
+		staticShader.setMat4("model", modelPara);
+		paracaidas.Draw(staticShader);*/
 
-			glm::mat4 modelHelice = modelHelicoide;
-			modelHelice = glm::translate(modelHelice, glm::vec3(0.0f, 1.0f, 0.0f));
-			modelHelice = glm::rotate(modelHelice, glm::radians(heliceAngle), glm::vec3(0, 1, 0));
-			staticShader.setMat4("model", modelHelice);
-			helicoideHelice.Draw(staticShader);
+		glm::mat4 modelPara = glm::mat4(1.0f);
+		modelPara = glm::translate(modelPara,
+			glm::vec3(paraBaseX + paraSway + paraWind,
+				paraBaseY + paraOffsetY,
+				paraBaseZ));
 
-			//Ornitoptero - Conectado con animación del avión
-			glm::mat4 modelOrn = glm::mat4(1.0f);
-			modelOrn = glm::translate(modelOrn, glm::vec3(avionX, avionY, avionZ));
-			modelOrn = glm::rotate(modelOrn, glm::radians(avionRotY - 45), glm::vec3(0.0f, 1.0f, 0.0f));
-			modelOrn = glm::rotate(modelOrn, glm::radians(avionRotX), glm::vec3(1.0f, 0.0f, 0.0f));
-			modelOrn = glm::rotate(modelOrn, glm::radians(avionRotZ ), glm::vec3(0.0f, 0.0f, 1.0f));
-			modelOrn = glm::scale(modelOrn, glm::vec3(ornScale)); 
-			staticShader.setMat4("model", modelOrn);
-			OrnCuer.Draw(staticShader);
+		modelPara = glm::rotate(modelPara, sin(paraSwayAngle) * 0.2f, glm::vec3(1, 0, 0));
+		modelPara = glm::rotate(modelPara, paraWind * 0.2f, glm::vec3(0, 0, 1));
 
-			// Alas con animación de aleteo
-			glm::vec3 pivotAlaDerLocal = glm::vec3(1.5f, 0.0f, 0.0f);
-			glm::vec3 pivotAlaIzqLocal = glm::vec3(-1.5f, 0.0f, 0.0f);
+		modelPara = glm::scale(modelPara, glm::vec3(0.05f));
+		staticShader.setMat4("model", modelPara);
+		paracaidas.Draw(staticShader);
 
-			glm::mat4 modelAlaDer = modelOrn;
-			modelAlaDer = glm::translate(modelAlaDer, pivotAlaDerLocal);
-			modelAlaDer = glm::rotate(modelAlaDer, glm::radians(ornWingAngle), glm::vec3(1.0f, 0.0f, 0.0f));
-			modelAlaDer = glm::translate(modelAlaDer, -pivotAlaDerLocal);
-			staticShader.setMat4("model", modelAlaDer);
-			OrnAlDe.Draw(staticShader);
+		//Tornillo
+		//glm::mat4 modelHelicoide = glm::mat4(1.0f);
+		//modelHelicoide = glm::translate(modelHelicoide, glm::vec3(helicoideX, helicoideY, helicoideZ));
+		//modelHelicoide = glm::scale(modelHelicoide, glm::vec3(0.4f));
+		//staticShader.setMat4("model", modelHelicoide);
+		//helicoideBase.Draw(staticShader);
 
-			glm::mat4 modelAlaIzq = modelOrn;
-			modelAlaIzq = glm::translate(modelAlaIzq, pivotAlaIzqLocal);
-			modelAlaIzq = glm::rotate(modelAlaIzq, glm::radians(-ornWingAngle), glm::vec3(1.0f, 0.0f, 0.0f));
-			modelAlaIzq = glm::translate(modelAlaIzq, -pivotAlaIzqLocal);
-			staticShader.setMat4("model", modelAlaIzq);
-			OrnAlIz.Draw(staticShader);
+		//glm::mat4 modelHelice = modelHelicoide;
+		//modelHelice = glm::translate(modelHelice, glm::vec3(0.0f, 1.0f, 0.0f));
+		//modelHelice = glm::rotate(modelHelice, glm::radians(heliceAngle), glm::vec3(0, 1, 0));
+		//staticShader.setMat4("model", modelHelice);
+		//helicoideHelice.Draw(staticShader);
+
+		glm::mat4 modelHelicoide = glm::mat4(1.0f);
+		glm::vec3 finalPos = glm::vec3(
+			helicoideX + helicoideFlyX,
+			helicoideY + helicoideOffsetY + helicoideVibration + helicoideFlyY,
+			helicoideZ + helicoideFlyZ
+		);
+
+		modelHelicoide = glm::translate(modelHelicoide, finalPos);
+
+		modelHelicoide = glm::rotate(
+			modelHelicoide,
+			(float)(sin((float)glfwGetTime() * 2.0f) * 0.05f),
+			glm::vec3(0.0f, 0.0f, 1.0f)
+		);
+
+		modelHelicoide = glm::scale(modelHelicoide, glm::vec3(0.4f));
+		staticShader.setMat4("model", modelHelicoide);
+		helicoideBase.Draw(staticShader);
+
+		glm::mat4 modelHelice = modelHelicoide;
+		modelHelice = glm::rotate(modelHelice, glm::radians(heliceAngle), glm::vec3(0, 1, 0));
+		staticShader.setMat4("model", modelHelice);
+		helicoideHelice.Draw(staticShader);
+
+		////Ornitoptero - Conectado con animación del avión
+		//glm::mat4 modelOrn = glm::mat4(1.0f);
+		//modelOrn = glm::translate(modelOrn, glm::vec3(avionX, avionY, avionZ));
+		//modelOrn = glm::rotate(modelOrn, glm::radians(avionRotY - 45), glm::vec3(0.0f, 1.0f, 0.0f));
+		//modelOrn = glm::rotate(modelOrn, glm::radians(avionRotX), glm::vec3(1.0f, 0.0f, 0.0f));
+		//modelOrn = glm::rotate(modelOrn, glm::radians(avionRotZ ), glm::vec3(0.0f, 0.0f, 1.0f));
+		//modelOrn = glm::scale(modelOrn, glm::vec3(ornScale)); 
+		//staticShader.setMat4("model", modelOrn);
+		//OrnCuer.Draw(staticShader);
+
+		//// Alas con animación de aleteo
+		//glm::vec3 pivotAlaDerLocal = glm::vec3(1.5f, 0.0f, 0.0f);
+		//glm::vec3 pivotAlaIzqLocal = glm::vec3(-1.5f, 0.0f, 0.0f);
+
+		//glm::mat4 modelAlaDer = modelOrn;
+		//modelAlaDer = glm::translate(modelAlaDer, pivotAlaDerLocal);
+		//modelAlaDer = glm::rotate(modelAlaDer, glm::radians(ornWingAngle), glm::vec3(1.0f, 0.0f, 0.0f));
+		//modelAlaDer = glm::translate(modelAlaDer, -pivotAlaDerLocal);
+		//staticShader.setMat4("model", modelAlaDer);
+		//OrnAlDe.Draw(staticShader);
+
+		//glm::mat4 modelAlaIzq = modelOrn;
+		//modelAlaIzq = glm::translate(modelAlaIzq, pivotAlaIzqLocal);
+		//modelAlaIzq = glm::rotate(modelAlaIzq, glm::radians(-ornWingAngle), glm::vec3(1.0f, 0.0f, 0.0f));
+		//modelAlaIzq = glm::translate(modelAlaIzq, -pivotAlaIzqLocal);
+		//staticShader.setMat4("model", modelAlaIzq);
+		//OrnAlIz.Draw(staticShader);
+
+		// ===============================================================
+		// ORNITÓPTERO COMPLETO
+		// ===============================================================
+
+		// --------------------
+		// Cuerpo del ornitóptero
+		// --------------------
+		glm::mat4 modelOrn = glm::mat4(1.0f);
+		modelOrn = glm::translate(modelOrn, glm::vec3(avionX, avionY, avionZ));
+		modelOrn = glm::rotate(modelOrn, glm::radians(avionRotY - 45), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOrn = glm::rotate(modelOrn, glm::radians(avionRotX), glm::vec3(1.0f, 0.0f, 0.0f));
+		modelOrn = glm::rotate(modelOrn, glm::radians(avionRotZ), glm::vec3(0.0f, 0.0f, 1.0f));
+		modelOrn = glm::scale(modelOrn, glm::vec3(ornScale));
+		staticShader.setMat4("model", modelOrn);
+		OrnCuer.Draw(staticShader);
+
+		// ===============================================================
+		// TUBO ALA DERECHA (YA FUNCIONA CORRECTO)
+		// ===============================================================
+		// pivot del tubo derecho (centro real del OBJ)
+		glm::vec3 tuboDerPivot = glm::vec3(1.5f, 24.969f, -5.1195f);
+
+		glm::mat4 modelTuboDer = modelOrn;
+		modelTuboDer = glm::translate(modelTuboDer, tuboDerPivot);
+
+		// gira sobre su propio eje X
+		modelTuboDer = glm::rotate(modelTuboDer, glm::radians(ornWingAngle), glm::vec3(1, 0, 0));
+
+		modelTuboDer = glm::translate(modelTuboDer, -tuboDerPivot);
+
+		staticShader.setMat4("model", modelTuboDer);
+		tuboAlaDer.Draw(staticShader);
+
+		// --------------------
+		// Ala derecha siguiendo al tubo
+		// --------------------
+		glm::mat4 modelAlaDer = modelTuboDer;
+		staticShader.setMat4("model", modelAlaDer);
+		cuerAlaDer.Draw(staticShader);
+
+
+		// ===============================================================
+		// TUBO ALA IZQUIERDA (VALORES CORREGIDOS DEL OBJ IZQUIERDO)
+		// ===============================================================
+		// pivot del tubo izquierdo (centro real del modelo)
+		glm::vec3 tuboIzqPivot = glm::vec3(-1.5f, 24.969f, -15.52035f);
+
+		glm::mat4 modelTuboIzq = modelOrn;
+		modelTuboIzq = glm::translate(modelTuboIzq, tuboIzqPivot);
+
+		// 🔥 gira sobre su propio eje X (inverso para espejo)
+		modelTuboIzq = glm::rotate(modelTuboIzq, glm::radians(-ornWingAngle), glm::vec3(1, 0, 0));
+
+		modelTuboIzq = glm::translate(modelTuboIzq, -tuboIzqPivot);
+
+		staticShader.setMat4("model", modelTuboIzq);
+		tuboAlaIzq.Draw(staticShader);
+
+		// --------------------
+		// Ala izquierda siguiendo al tubo
+		// --------------------
+		glm::mat4 modelAlaIzq = modelTuboIzq;
+		staticShader.setMat4("model", modelAlaIzq);
+		cuerAlaIzq.Draw(staticShader);
 
 
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Modelos 3er piso
 		// -------------------------------------------------------------------------------------------------------------------------
-		
+
 		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(20.0f, 42.0f, -20.0f));	//-2.0f, 42.0f, 33.0f
 		modelOp = glm::scale(modelOp, glm::vec3(0.012f));
 		modelOp = glm::rotate(modelOp, glm::radians(25.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
 		carro1.Draw(staticShader);
-		
+
 		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(19.0f, 39.51f, 0.0f));	//-21.0f, 39.51f, 23.0f
 		modelOp = glm::scale(modelOp, glm::vec3(0.03f));
 		modelOp = glm::rotate(modelOp, glm::radians(205.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
 		carro2.Draw(staticShader);
-		
+
 		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(21.0f, 39.62f, 20.0f));	//-2.0f, 39.62f, 19.0f
 		modelOp = glm::scale(modelOp, glm::vec3(0.03f));
 		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
 		carro3.Draw(staticShader);
-		
+
 		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 39.65f, 45.0f));	//0.0f, 39.65f, -45.0f
 		modelOp = glm::scale(modelOp, glm::vec3(0.08f));
 		modelOp = glm::rotate(modelOp, glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
 		carro4.Draw(staticShader);
-		
+
 		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(20.0f, 39.1f, 37.0f));	//0.96
 		modelOp = glm::scale(modelOp, glm::vec3(0.008f));
 		modelOp = glm::rotate(modelOp, glm::radians(-160.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -2907,7 +3181,7 @@ int main() {
 		modelOp = glm::rotate(modelOp, glm::radians(-20.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
 		carro6.Draw(staticShader);
-		
+
 		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 40.0f + movAuto_y1, 18.0f));
 		modelOp = glm::rotate(modelOp, glm::radians(orienta_y1), glm::vec3(0.0f, 1.0f, 0.0f));
 		modelOp = glm::rotate(modelOp, glm::radians(orienta_z1), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -2921,7 +3195,7 @@ int main() {
 		modelOp = glm::scale(modelOp, glm::vec3(5.0f, 1.0f, 5.0f));
 		staticShader.setMat4("model", modelOp);
 		base.Draw(staticShader);
-		
+
 		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-21.0f, 39.7f, 20.0f));	//-2.0f, 39.62f, 6.0f
 		modelOp = glm::scale(modelOp, glm::vec3(0.14f));
 		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -2933,7 +3207,7 @@ int main() {
 		modelOp = glm::rotate(modelOp, glm::radians(155.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
 		carro9.Draw(staticShader);
-		
+
 		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-18.0f, 39.65f, -20.0f));//-21.0f, 39.65f, -17.0f
 		modelOp = glm::scale(modelOp, glm::vec3(0.07f));
 		modelOp = glm::rotate(modelOp, glm::radians(155.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -2952,7 +3226,7 @@ int main() {
 		staticShader.setMat4("model", modelOp);
 		carro2.Draw(staticShader);
 
-		modelOp = glm::translate(tmpMini, glm::vec3(-1.0f, 1.88f, -2.0f));	
+		modelOp = glm::translate(tmpMini, glm::vec3(-1.0f, 1.88f, -2.0f));
 		modelOp = glm::scale(modelOp, glm::vec3(0.0016f));
 		modelOp = glm::rotate(modelOp, glm::radians(135.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
@@ -2969,7 +3243,7 @@ int main() {
 		modelOp = glm::rotate(modelOp, glm::radians(225.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", modelOp);
 		carro10.Draw(staticShader);
-		
+
 		modelOp = glm::translate(tmpMini, glm::vec3(-1.0, 1.935f, 2.0));	//0.0f, 1.96f, 0.0f		//-1.7f, 1.96f, 4.8f
 		tmp11 = modelOp = glm::rotate(modelOp, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
@@ -3051,7 +3325,7 @@ int main() {
 		modelOp = glm::scale(modelOp, glm::vec3(1.0f));
 		staticShader.setMat4("model", modelOp);
 		llanta11.Draw(staticShader);
-		
+
 		modelOp = glm::translate(tmp11, glm::vec3(-0.236f, 0.015f, -0.159f));
 		modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		modelOp = glm::rotate(modelOp, glm::radians(giroRuedas), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -3077,7 +3351,7 @@ int main() {
 		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
 		staticShader.setMat4("model", modelOp);
 		carro12.Draw(staticShader);
-		
+
 		modelOp = glm::translate(tmp12, glm::vec3(-11.91f, 2.375f, -20.575f) * 0.013f);
 		modelOp = glm::rotate(modelOp, glm::radians(giroRuedas), glm::vec3(1.0f, 0.0f, 0.0f));
 		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
@@ -3103,7 +3377,7 @@ int main() {
 		modelOp = glm::scale(modelOp, glm::vec3(0.013f));
 		staticShader.setMat4("model", modelOp);
 		llanta12.Draw(staticShader);
-		
+
 		//-------------------------------------------------------------------------------------
 		// draw skybox as last
 		// -------------------
@@ -3117,7 +3391,7 @@ int main() {
 			SDL_Delay((int)(LOOP_TIME - deltaTime));
 		}
 
-		
+
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);
@@ -3135,7 +3409,7 @@ int main() {
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
-void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) 
+void my_input(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
@@ -3230,20 +3504,44 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode)
 		}
 	}
 
-		if (key == GLFW_KEY_O && action == GLFW_PRESS) {
-			if (!lorenz_active && !lorenz_was_active) {  // Solo activar si nunca se ha activado
-				lorenz_active = true;
-				lorenz_was_active = true;  // Marcar como que ya se activó
-				std::cout << "Atractor de Lorenz " << std::endl;
-				// Iniciar con pequeña velocidad
-				lorenz_x = 0.1f;
-				lorenz_z = 0.1f;
-			}
-			else if (lorenz_was_active) {
-				std::cout << "La animación ya fue iniciada. " << std::endl;
-			}
+	if (key == GLFW_KEY_O && action == GLFW_PRESS) {
+		if (!lorenz_active && !lorenz_was_active) {  // Solo activar si nunca se ha activado
+			lorenz_active = true;
+			lorenz_was_active = true;  // Marcar como que ya se activó
+			std::cout << "Atractor de Lorenz " << std::endl;
+			// Iniciar con pequeña velocidad
+			lorenz_x = 0.1f;
+			lorenz_z = 0.1f;
 		}
+		else if (lorenz_was_active) {
+			std::cout << "La animación ya fue iniciada. " << std::endl;
+		}
+	}
 
+	if (key == GLFW_KEY_V && action == GLFW_PRESS) {
+		helicoideFlightActivated = true;
+		helicoideState = 1;
+
+		// Guardar estado de la cámara
+		savedCameraPos = camera.Position;
+		savedCameraFront = camera.Front;
+		savedYaw = camera.Yaw;
+		savedPitch = camera.Pitch;
+
+		// Activar modo de cámara dentro del tornillo
+		camInsideHelicoide = true;
+	}
+
+	if (!camInsideHelicoide) {
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+			camera.ProcessKeyboard(FORWARD, (float)deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			camera.ProcessKeyboard(BACKWARD, (float)deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			camera.ProcessKeyboard(LEFT, (float)deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			camera.ProcessKeyboard(RIGHT, (float)deltaTime);
+	}
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -3254,7 +3552,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 }
 
 // glfw: whenever the mouse moves, this callback is called
-void mouse_callback(GLFWwindow* window, double xpos, double ypos) 
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	if (firstMouse)
 	{
