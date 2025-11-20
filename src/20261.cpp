@@ -96,7 +96,8 @@ unsigned int generateTextures(char*, bool, bool);	// De la práctica 6
 float	movX = 0.0f,
 movY = 0.0f,
 movZ = -5.0f,
-rotX = 0.0f;
+rotX = 0.0f,
+rotCuerpoDragon = 0;
 
 //Texture
 unsigned int	t_smile,
@@ -141,13 +142,23 @@ float paraWind = 0.0f;
 float paraSway = 0.0f;
 float paraSwayAngle = 0.0f;
 
+//Paracaidas
 float paraBaseX = 10.0f;
 float paraBaseY = 25.0f;
 float paraBaseZ = -20.0f;
-
 float paraOffsetY = 0.0f;
 float paraSpeed = 0.05f;
 bool paraGoingDown = true;
+// Oscilaciones Pendulares - Paracaídas
+bool paracaidasActivado = true;        
+float gravedad = 9.81f;                
+float anguloBalanceo = 0.0f;
+float velocidadAngular = 0.0f;
+float longitudCuerdas = 3.0f;
+float amortiguacion = 0.5f;
+float fuerzaViento = 0.0f;
+float factorVelocidadPendulo = 0.1f;       
+float frecuenciaViento = 0.5f;
 
 float helicoideX = -10.0f;
 float helicoideY = 22.0f;
@@ -187,93 +198,98 @@ bool ornWingUp = true;
 
 //Keyframes (Manipulación y dibujo)
 float	posX = 0.0f,
-posY = 0.0f,
-posZ = 0.0f,
-rotRodIzq = 0.0f,
-giroMonito = 0.0f,
+		posY = 0.0f,
+		posZ = 0.0f,
+		rotRodIzq = 0.0f,
+		giroMonito = 0.0f,
+		rotAlaIzq = 0.0f,
+		rotAlaDer = 0.0f,
+
 //pinturas key frame
 //pinturas key frame - POSICIONES EN PAREDES
-posXp1 = -19.7f,
-posYp1 = 15.5f,
-posZp1 = 7.0f,
-rotp1 = 180.0f,
-scalep1 = 0.15f,
+		posXp1 = -19.7f,
+		posYp1 = 15.5f,
+		posZp1 = 7.0f,
+		rotAlaIzqInc = 0.0f,
+		rotAlaDerInc = 0.0f,
+		rotp1 = 180.0f,
+		scalep1 = 0.15f,
 
-posXp2 = -19.7f,
-posYp2 = 15.5f,
-posZp2 = 17.0f,
-rotp2 = 180.0f,
-scalep2 = 0.17f,
+		posXp2 = -19.7f,
+		posYp2 = 15.5f,
+		posZp2 = 17.0f,
+		rotp2 = 180.0f,
+		scalep2 = 0.17f,
 
-posXp3 = -19.7f,
-posYp3 = 15.5f,
-posZp3 = 27.0f,
-rotp3 = 180.0f,
-scalep3 = 0.17f,
+		posXp3 = -19.7f,
+		posYp3 = 15.5f,
+		posZp3 = 27.0f,
+		rotp3 = 180.0f,
+		scalep3 = 0.17f,
 
-posXp4 = -19.7f,
-posYp4 = 15.5f,
-posZp4 = 37.0f,
-rotp4 = 180.0f,
-scalep4 = 0.169f,
+		posXp4 = -19.7f,
+		posYp4 = 15.5f,
+		posZp4 = 37.0f,
+		rotp4 = 180.0f,
+		scalep4 = 0.169f,
 
-posXp5 = 19.7f,
-posYp5 = 15.5f,
-posZp5 = 7.0f,
-rotp5 = 0.0f,
-scalep5 = 0.17f,
+		posXp5 = 19.7f,
+		posYp5 = 15.5f,
+		posZp5 = 7.0f,
+		rotp5 = 0.0f,
+		scalep5 = 0.17f,
 
-posXp6 = 19.7f,
-posYp6 = 15.5f,
-posZp6 = 17.0f,
-rotp6 = 0.0f,
-scalep6 = 0.169f,
+		posXp6 = 19.7f,
+		posYp6 = 15.5f,
+		posZp6 = 17.0f,
+		rotp6 = 0.0f,
+		scalep6 = 0.169f,
 
-posXp7 = 19.7f,
-posYp7 = 15.5f,
-posZp7 = 27.0f,
-rotp7 = 0.0f,
-scalep7 = 0.169f,
+		posXp7 = 19.7f,
+		posYp7 = 15.5f,
+		posZp7 = 27.0f,
+		rotp7 = 0.0f,
+		scalep7 = 0.169f,
 
-posXp8 = 19.7f,
-posYp8 = 15.5f,
-posZp8 = 37.0f,
-rotp8 = 0.0f,
-scalep8 = 0.169f,
+		posXp8 = 19.7f,
+		posYp8 = 15.5f,
+		posZp8 = 37.0f,
+		rotp8 = 0.0f,
+		scalep8 = 0.169f,
 
-posXp9 = 15.7f,
-posYp9 = 15.5f,
-posZp9 = -42.2f,
-rotp9 = 90.0f,
-scalep9 = 0.169f,
+		posXp9 = 15.7f,
+		posYp9 = 15.5f,
+		posZp9 = -42.2f,
+		rotp9 = 90.0f,
+		scalep9 = 0.169f,
 
-posXp10 = -15.7f,
-posYp10 = 15.5f,
-posZp10 = -42.2f,
-rotp10 = 90.0f,
-scalep10 = 0.169f,
+		posXp10 = -15.7f,
+		posYp10 = 15.5f,
+		posZp10 = -42.2f,
+		rotp10 = 90.0f,
+		scalep10 = 0.169f,
 
-posXp11 = -15.7f,
-posYp11 = 15.5f,
-posZp11 = 42.2f,
-rotp11 = -90.0f,
-scalep11 = 0.169f,
+		posXp11 = -15.7f,
+		posYp11 = 15.5f,
+		posZp11 = 42.2f,
+		rotp11 = -90.0f,
+		scalep11 = 0.169f,
 
-posXp12 = 15.7f,
-posYp12 = 15.5f,
-posZp12 = 42.2f,
-rotp12 = -90.0f,
-scalep12 = 0.169f;
+		posXp12 = 15.7f,
+		posYp12 = 15.5f,
+		posZp12 = 42.2f,
+		rotp12 = -90.0f,
+		scalep12 = 0.169f;
 
 
 
-float avionX = 0.0f,
-avionY = 30.0f,
-avionZ = 0.0f,
-avionRotY = 0.0f,
-avionRotX = 0.0f,
-avionRotZ = 0.0f,
-avionScale = 1.0f;
+  float avionX = 0.0f,
+		avionY = 30.0f, 
+		avionZ = 0.0f,
+		avionRotY = 0.0f, 
+		avionRotX = 0.0f,  
+		avionRotZ = 0.0f, 
+		avionScale = 1.0f;
 
 // Variables para el atractor de Lorenz
 float lorenz_x = 0.0f, lorenz_y = 9.8f, lorenz_z = 0.0f; // Posición inicial 
@@ -394,6 +410,9 @@ typedef struct _frame
 	float posZ;		//Variable para PosicionZ
 	float rotRodIzq;
 	float giroMonito;
+	float rotAlaIzq;
+	float rotAlaDer;
+
 
 	float avionX;
 	float avionY;
@@ -1047,38 +1066,51 @@ void animate(void)
 		}
 	}
 
-	// Límites del segundo piso
-	const float paraMinY = 22.4f;
-	const float paraMaxY = 34.4f;
+	if (paracaidasActivado) {
+		// Límites del segundo piso
+		const float paraMinY = 22.4f;
+		const float paraMaxY = 34.4f;
 
-	/*if (paraGoingDown)
-	{
-
-		paraOffsetY -= paraSpeed;
-		if ((paraBaseY + paraOffsetY) <= paraMinY)
+		if (paraGoingDown)
 		{
-			paraOffsetY = paraMinY - paraBaseY;
-			paraGoingDown = false;
+
+			paraOffsetY -= paraSpeed;
+			if ((paraBaseY + paraOffsetY) <= paraMinY)
+			{
+				paraOffsetY = paraMinY - paraBaseY;
+				paraGoingDown = false;
+			}
 		}
-	}
-	else
-	{
-		paraOffsetY = paraMaxY - paraBaseY;
-		paraGoingDown = true;
-	}*/
+		else
+		{
+			paraOffsetY = paraMaxY - paraBaseY;
+			paraGoingDown = true;
+		}
 
-	// ======================
-	// Paracaidas
-	// ======================
+		float aceleracionAngular = (-gravedad / longitudCuerdas) * sin(anguloBalanceo) - amortiguacion * velocidadAngular;
 
-	// Física: gravedad
-	paraVelY += paraGravity;          // acelera hacia abajo
-	paraOffsetY += paraVelY;
+		float dtScaled = deltaTime * 0.001f * factorVelocidadPendulo;
+		velocidadAngular += aceleracionAngular * dtScaled;
+		anguloBalanceo += velocidadAngular * dtScaled;
 
-	// Rebote con amortiguación
-	if ((paraBaseY + paraOffsetY) <= paraMinY) {
-		paraOffsetY = paraMinY - paraBaseY;
-		paraVelY *= -0.6f;           // rebote reducido
+		// LÍMITES ESTRICTOS: 30° TOTAL (15° a cada lado)
+		const float anguloMaximo = glm::radians(15.0f);
+		if (abs(anguloBalanceo) > anguloMaximo) {
+			anguloBalanceo = anguloMaximo * (anguloBalanceo > 0 ? 1.0f : -1.0f);
+			velocidadAngular = -velocidadAngular * 0.3f; // Rebote controlado
+		}
+
+		velocidadAngular *= 0.992f;
+
+		float distanciaAlCentro = abs(anguloBalanceo);
+		if (distanciaAlCentro > glm::radians(10.0f)) {
+			float fuerzaRetorno = (distanciaAlCentro - glm::radians(10.0f)) * 2.0f;
+			anguloBalanceo -= fuerzaRetorno * (anguloBalanceo > 0 ? 1.0f : -1.0f) * dtScaled;
+		}
+
+		fuerzaViento = sin(glfwGetTime() * 0.3f) * 0.08f;
+		anguloBalanceo += fuerzaViento * dtScaled;
+
 	}
 
 	if ((paraBaseY + paraOffsetY) >= paraMaxY) {
@@ -1549,8 +1581,12 @@ int main() {
 	Model mundi("resources/planta_baja/mundi.obj");
 	Model ultimacena("resources/planta_baja/ultimacena.obj");
 	Model vitruvio("resources/planta_baja/vitruvio.obj");
+	Model dragon("resources/objects/DragonAzul/Dragon.obj");
+	Model alaIzqDragon("resources/objects/DragonAzul/AlaIzaquierda/AlaIzaquierda.obj");
+	Model alaDerDragon("resources/objects/DragonAzul/AlaDerecha/AlaDerecha.obj");
 
-	// Caballero de la planta baja
+			
+			// Caballero de la planta baja
 
 	Model CaballeroCuerpo("resources/caballero/cuerpo.obj");
 	Model CaballeroBrazoIzquierdo("resources/caballero/brazoIzquierdo.obj");
@@ -1807,35 +1843,34 @@ int main() {
 	KeyFrame[1].rotp8 = 270.0f;
 	KeyFrame[1].scalep8 = 0.2f;
 
-	KeyFrame[1].posXp9 = 15.7f;
-	KeyFrame[1].posYp9 = 14.0f;
-	KeyFrame[1].posZp9 = -42.2f;
-	KeyFrame[1].rotp9 = 45.0f;
-	KeyFrame[1].scalep9 = 0.8f;
-	KeyFrame[1].scalep9 = 0.12f;
+	KeyFrame[1].posXp9 = 10.0f;    
+	KeyFrame[1].posYp9 = 16.5f;    
+	KeyFrame[1].posZp9 = -30.0f;   
+	KeyFrame[1].rotp9 = 120.0f;    
+	KeyFrame[1].scalep9 = 0.20f;
 
-	KeyFrame[1].posXp10 = -20.0f;
-	KeyFrame[1].posYp10 = 16.7f;
-	KeyFrame[1].posZp10 = -47.0f;
-	KeyFrame[1].rotp10 = 90.0f;
-	KeyFrame[1].scalep10 = 0.8f;
+	KeyFrame[1].posXp10 = -8.0f;  
+	KeyFrame[1].posYp10 = 16.8f;  
+	KeyFrame[1].posZp10 = -35.2f;
+	KeyFrame[1].rotp10 = 70.0f;    
+	KeyFrame[1].scalep10 = 0.19f;
 
-	KeyFrame[1].posXp11 = -20.0f;
-	KeyFrame[1].posYp11 = 16.7f;
-	KeyFrame[1].posZp11 = 47.0f;
-	KeyFrame[1].rotp11 = -90.0f;
-	KeyFrame[1].scalep11 = 0.8f;
+	KeyFrame[1].posXp11 = 8.0f;
+	KeyFrame[1].posYp11 = 17.2f;   
+	KeyFrame[1].posZp11 = 30.0f;   
+	KeyFrame[1].rotp11 = -60.0f;   
+	KeyFrame[1].scalep11 = 0.21f;
 
-	KeyFrame[1].posXp12 = 20.0f;
-	KeyFrame[1].posYp12 = 16.7f;
-	KeyFrame[1].posZp12 = 47.0f;
-	KeyFrame[1].rotp12 = -90.0f;
-	KeyFrame[1].scalep12 = 0.8f;
+	KeyFrame[1].posXp12 = -10.0f;   
+	KeyFrame[1].posYp12 = 16.9f;   
+	KeyFrame[1].posZp12 = 35.0f;   
+	KeyFrame[1].rotp12 = -120.0f;  
+	KeyFrame[1].scalep12 = 0.20f;
 
-
-	KeyFrame[2].posXp1 = -12.0f;
-	KeyFrame[2].posYp1 = 14.9f;
-	KeyFrame[2].posZp1 = 7.0f;
+	//KeyFrame 2
+	KeyFrame[2].posXp1 = -12.0f; 
+	KeyFrame[2].posYp1 = 14.9f; 
+	KeyFrame[2].posZp1 = 7.0f; 
 	KeyFrame[2].rotp1 = 360.0f;
 	KeyFrame[2].scalep1 = 0.11f;
 
@@ -1885,30 +1920,28 @@ int main() {
 	KeyFrame[2].rotp8 = 360.0f;
 	KeyFrame[2].scalep8 = 0.13f;
 
+	KeyFrame[2].posXp9 = -12.0f;
+	KeyFrame[2].posYp9 = 17.5f;
+	KeyFrame[2].posZp9 = -15.0f;
+	KeyFrame[2].rotp9 = 45.0f;     
+	KeyFrame[2].scalep9 = 0.13f;
 
-	KeyFrame[2].posXp9 = 8.0f;
-	KeyFrame[2].posYp9 = 13.5f;
-	KeyFrame[2].posZp9 = -35.0f;
-	KeyFrame[2].rotp9 = 270.0f;
-	KeyFrame[2].scalep9 = 0.15f;
+	KeyFrame[2].posXp10 = 12.0f;
+	KeyFrame[2].posYp10 = 18.0f;   
+	KeyFrame[2].posZp10 = -15.0f;
+	KeyFrame[2].rotp10 = -45.0f;  
+	KeyFrame[2].scalep10 = 0.13f;
 
+	KeyFrame[2].posXp11 = -12.0f;
+	KeyFrame[2].posYp11 = 17.8f;
+	KeyFrame[2].posZp11 = 15.0f;
+	KeyFrame[2].rotp11 = -135.0f;     
+	KeyFrame[2].scalep11 = 0.13f;
 
-	KeyFrame[2].posXp10 = -20.0f;
-	KeyFrame[2].posYp10 = 13.7f;
-	KeyFrame[2].posZp10 = -47.0f;
-	KeyFrame[2].rotp10 = 45.0f;
-
-
-	KeyFrame[2].posXp11 = -20.0f;
-	KeyFrame[2].posYp11 = 13.7f;
-	KeyFrame[2].posZp11 = 47.0f;
-	KeyFrame[2].rotp11 = -135.0f;
-
-
-	KeyFrame[2].posXp12 = 20.0f;
-	KeyFrame[2].posYp12 = 13.7f;
-	KeyFrame[2].posZp12 = 47.0f;
-	KeyFrame[2].rotp12 = -135.0f;
+	KeyFrame[2].posXp12 = 12.0f;
+	KeyFrame[2].posYp12 = 18.2f;   
+	KeyFrame[2].posZp12 = 15.0f;
+	KeyFrame[2].rotp12 = 135.0f;   
 
 	//KeyFrame[3]
 	KeyFrame[3].posXp1 = -13.5f;
@@ -1959,26 +1992,31 @@ int main() {
 	KeyFrame[3].rotp8 = 450.0f;
 	KeyFrame[3].scalep8 = 0.14f;
 
-	KeyFrame[3].posXp9 = 5.0f;
-	KeyFrame[3].posYp9 = 13.0f;
-	KeyFrame[3].posZp9 = -20.0f;
-	KeyFrame[3].rotp9 = 45.0f;
-	KeyFrame[3].scalep9 = 0.17f;
+	float radius = 3.0f;
 
-	KeyFrame[3].posXp10 = -20.0f;
-	KeyFrame[3].posYp10 = 13.7f;
-	KeyFrame[3].posZp10 = -47.0f;
-	KeyFrame[3].rotp10 = 45.0f;
+	KeyFrame[3].posXp9 = 0.0f + radius * cos(glm::radians(45.0f));   
+	KeyFrame[3].posYp9 = 12.0f;
+	KeyFrame[3].posZp9 = 0.0f + radius * sin(glm::radians(45.0f));   
+	KeyFrame[3].rotp9 = 135.0f;    
+	KeyFrame[3].scalep9 = 0.14f;
 
-	KeyFrame[3].posXp11 = -20.0f;
-	KeyFrame[3].posYp11 = 13.7f;
-	KeyFrame[3].posZp11 = 47.0f;
-	KeyFrame[3].rotp11 = -135.0f;
+	KeyFrame[3].posXp10 = 0.0f + radius * cos(glm::radians(135.0f));  
+	KeyFrame[3].posYp10 = 12.2f;
+	KeyFrame[3].posZp10 = 0.0f + radius * sin(glm::radians(135.0f));  
+	KeyFrame[3].rotp10 = 225.0f;
+	KeyFrame[3].scalep10 = 0.14f;
 
-	KeyFrame[3].posXp12 = 20.0f;
-	KeyFrame[3].posYp12 = 13.7f;
-	KeyFrame[3].posZp12 = 47.0f;
-	KeyFrame[3].rotp12 = -135.0f;
+	KeyFrame[3].posXp11 = 0.0f + radius * cos(glm::radians(225.0f));  
+	KeyFrame[3].posYp11 = 11.8f;
+	KeyFrame[3].posZp11 = 0.0f + radius * sin(glm::radians(225.0f));  
+	KeyFrame[3].rotp11 = 315.0f;
+	KeyFrame[3].scalep11 = 0.14f;
+
+	KeyFrame[3].posXp12 = 0.0f + radius * cos(glm::radians(315.0f));  
+	KeyFrame[3].posYp12 = 12.1f;
+	KeyFrame[3].posZp12 = 0.0f + radius * sin(glm::radians(315.0f));  
+	KeyFrame[3].rotp12 = 45.0f;
+	KeyFrame[3].scalep12 = 0.14f;
 
 	//keyframe 4
 	KeyFrame[4].posXp1 = -15.5f;
@@ -2029,26 +2067,29 @@ int main() {
 	KeyFrame[4].rotp8 = 540.0f;
 	KeyFrame[4].scalep8 = 0.11f;
 
-	KeyFrame[4].posXp9 = -5.0f;
+	KeyFrame[4].posXp9 = -8.0f;    
 	KeyFrame[4].posYp9 = 14.0f;
-	KeyFrame[4].posZp9 = -15.0f;
+	KeyFrame[4].posZp9 = -8.0f;
 	KeyFrame[4].rotp9 = 135.0f;
-	KeyFrame[4].scalep9 = 0.13f;
+	KeyFrame[4].scalep9 = 0.11f;
 
-	KeyFrame[4].posXp10 = -20.0f;
-	KeyFrame[4].posYp10 = 13.7f;
-	KeyFrame[4].posZp10 = -47.0f;
-	KeyFrame[4].rotp10 = 45.0f;
+	KeyFrame[4].posXp10 = 8.0f;    
+	KeyFrame[4].posYp10 = 14.5f;
+	KeyFrame[4].posZp10 = -8.0f;
+	KeyFrame[4].rotp10 = 225.0f;
+	KeyFrame[4].scalep10 = 0.11f;
 
-	KeyFrame[4].posXp11 = -20.0f;
-	KeyFrame[4].posYp11 = 13.7f;
-	KeyFrame[4].posZp11 = 47.0f;
-	KeyFrame[4].rotp11 = -135.0f;
+	KeyFrame[4].posXp11 = -8.0f;   
+	KeyFrame[4].posYp11 = 13.8f;
+	KeyFrame[4].posZp11 = 8.0f;
+	KeyFrame[4].rotp11 = 45.0f;
+	KeyFrame[4].scalep11 = 0.11f;
 
-	KeyFrame[4].posXp12 = 20.0f;
-	KeyFrame[4].posYp12 = 13.7f;
-	KeyFrame[4].posZp12 = 47.0f;
-	KeyFrame[4].rotp12 = -135.0f;
+	KeyFrame[4].posXp12 = 8.0f;    
+	KeyFrame[4].posYp12 = 14.2f;
+	KeyFrame[4].posZp12 = 8.0f;
+	KeyFrame[4].rotp12 = 315.0f;
+	KeyFrame[4].scalep12 = 0.11f;
 
 	//keyframe 5
 	KeyFrame[5].posXp1 = -16.0f;
@@ -2099,26 +2140,29 @@ int main() {
 	KeyFrame[5].rotp8 = 630.0f;
 	KeyFrame[5].scalep8 = 0.14f;
 
-	KeyFrame[5].posXp9 = 12.0f;
-	KeyFrame[5].posYp9 = 14.9f;
-	KeyFrame[5].posZp9 = -30.0f;
-	KeyFrame[5].rotp9 = 225.0f;
-	KeyFrame[5].scalep9 = 0.16f;
+	KeyFrame[5].posXp9 = 14.0f;    
+	KeyFrame[5].posYp9 = 15.7f;
+	KeyFrame[5].posZp9 = -40.0f;   
+	KeyFrame[5].rotp9 = 95.0f;     
+	KeyFrame[5].scalep9 = 0.14f;
 
-	KeyFrame[5].posXp10 = -20.0f;
-	KeyFrame[5].posYp10 = 13.7f;
-	KeyFrame[5].posZp10 = -47.0f;
-	KeyFrame[5].rotp10 = 45.0f;
+	KeyFrame[5].posXp10 = -14.0f;  
+	KeyFrame[5].posYp10 = 16.1f;
+	KeyFrame[5].posZp10 = -40.0f;  
+	KeyFrame[5].rotp10 = 85.0f;    
+	KeyFrame[5].scalep10 = 0.14f;
 
-	KeyFrame[5].posXp11 = -20.0f;
-	KeyFrame[5].posYp11 = 13.7f;
-	KeyFrame[5].posZp11 = 47.0f;
-	KeyFrame[5].rotp11 = -135.0f;
+	KeyFrame[5].posXp11 = -14.0f;  
+	KeyFrame[5].posYp11 = 15.9f;
+	KeyFrame[5].posZp11 = 40.0f;   
+	KeyFrame[5].rotp11 = -95.0f;   
+	KeyFrame[5].scalep11 = 0.14f;
 
-	KeyFrame[5].posXp12 = 20.0f;
-	KeyFrame[5].posYp12 = 13.7f;
-	KeyFrame[5].posZp12 = 47.0f;
-	KeyFrame[5].rotp12 = -135.0f;
+	KeyFrame[5].posXp12 = 14.0f;   
+	KeyFrame[5].posYp12 = 15.8f;
+	KeyFrame[5].posZp12 = 40.0f;   
+	KeyFrame[5].rotp12 = -85.0f;   
+	KeyFrame[5].scalep12 = 0.14f;
 
 	//keyframe 6
 	KeyFrame[6].posXp1 = -19.7f; //-19.7
@@ -2313,6 +2357,8 @@ int main() {
 	mat4 tmp12 = mat4(1.0f);
 	mat4 tmpTrack = mat4(1.0f);
 	mat4 tmpMini = mat4(1.0f);
+	glm::mat4 tmpCuerpoDragon = glm::mat4(1.0f);
+	glm::mat4 tmpAlaIzquierda = glm::mat4(1.0f);
 
 	// render loop
 	// -----------
@@ -2952,194 +2998,92 @@ int main() {
 		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
 		pintura5.Draw(staticShader); //19.7, 15.5, 27.0, r=0 s 0.169
 
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp8, posYp8, posZp8));
-		modelOp = glm::rotate(modelOp, glm::radians(rotp8), glm::vec3(0.0f, 1.0f, 0.0f));
-		modelOp = glm::scale(modelOp, glm::vec3(scalep8));
-		staticShader.setMat4("model", modelOp);
-		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-		pintura6.Draw(staticShader); //19.7, 15.5, 37.0, r=0 s 0.169 s 0.169
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp9, posYp9, posZp9));
+			modelOp = glm::rotate(modelOp, glm::radians(rotp9), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(scalep9));
+			staticShader.setMat4("model", modelOp);
+			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+			pintura8.Draw(staticShader); //15.7, 15.5, -42.2, r=90 s 0.169
 
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(15.7, 15.5, -42.2));
-		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		modelOp = glm::scale(modelOp, glm::vec3(0.169));
-		staticShader.setMat4("model", modelOp);
-		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-		pintura8.Draw(staticShader); //15.7, 15.5, -42.2, r=90 s 0.169
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp10, posYp10, posZp10));
+			modelOp = glm::rotate(modelOp, glm::radians(rotp10), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(scalep10));
+			staticShader.setMat4("model", modelOp);
+			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+			pintura9.Draw(staticShader); //-15.7, 15.5, -42.2, r=90
 
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-15.7f, 15.5f, -42.2f));
-		modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		modelOp = glm::scale(modelOp, glm::vec3(0.169f));
-		staticShader.setMat4("model", modelOp);
-		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-		pintura9.Draw(staticShader); //-15.7, 15.5, -42.2, r=90
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp11, posYp11, posZp11));
+			modelOp = glm::rotate(modelOp, glm::radians(rotp11), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(scalep11));
+			staticShader.setMat4("model", modelOp);
+			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+			pintura10.Draw(staticShader); //-15.7, 15.5, 42.2, r=-90
 
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-15.7f, 15.5f, 42.2f));
-		modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		modelOp = glm::scale(modelOp, glm::vec3(0.169f));
-		staticShader.setMat4("model", modelOp);
-		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-		pintura10.Draw(staticShader); //-15.7, 15.5, 42.2, r=-90
-
-		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(15.7f, 15.5f, 42.2f));
-		modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		modelOp = glm::scale(modelOp, glm::vec3(0.169f));
-		staticShader.setMat4("model", modelOp);
-		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
-		pintura11.Draw(staticShader); //15.7, 15.5, 42.2, r=-90
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp12, posYp12, posZp12));
+			modelOp = glm::rotate(modelOp, glm::radians(rotp12), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(scalep12));
+			staticShader.setMat4("model", modelOp);
+			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+			pintura11.Draw(staticShader); //15.7, 15.5, 42.2, r=-90
 
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Modelos 2do piso
 		// -------------------------------------------------------------------------------------------------------------------------
+			
+			//Paracaidas
+			glm::mat4 modelPara = glm::mat4(1.0f);
+			modelPara = glm::translate(modelPara, glm::vec3(paraBaseX, paraBaseY + paraOffsetY, paraBaseZ));
 
-		//Paracaidas
-		/*glm::mat4 modelPara = glm::mat4(1.0f);
-		modelPara = glm::translate(modelPara, glm::vec3(paraBaseX, paraBaseY + paraOffsetY, paraBaseZ));
-		modelPara = glm::scale(modelPara, glm::vec3(0.05f));
-		staticShader.setMat4("model", modelPara);
-		paracaidas.Draw(staticShader);*/
+			float rotacionY = glfwGetTime() * 8.0f; // 8° por segundo
+			modelPara = glm::rotate(modelPara, glm::radians(rotacionY), glm::vec3(0.0f, 1.0f, 0.0f));
+			// OSCILACIÓN PENDULAR
+			// Primero rotar alrededor del punto de suspensión (simula las cuerdas)
+			float anguloGrados = glm::degrees(anguloBalanceo);
+			modelPara = glm::rotate(modelPara, anguloGrados, glm::vec3(0.0f, 0.0f, 1.0f));
+			modelPara = glm::scale(modelPara, glm::vec3(0.05f));
+			staticShader.setMat4("model", modelPara);
+			paracaidas.Draw(staticShader);
 
-		glm::mat4 modelPara = glm::mat4(1.0f);
-		modelPara = glm::translate(modelPara,
-			glm::vec3(paraBaseX + paraSway + paraWind,
-				paraBaseY + paraOffsetY,
-				paraBaseZ));
+			//Tornillo
+			glm::mat4 modelHelicoide = glm::mat4(1.0f);
+			modelHelicoide = glm::translate(modelHelicoide, glm::vec3(helicoideX, helicoideY, helicoideZ));
+			modelHelicoide = glm::scale(modelHelicoide, glm::vec3(0.4f));
+			staticShader.setMat4("model", modelHelicoide);
+			helicoideBase.Draw(staticShader);
 
-		modelPara = glm::rotate(modelPara, sin(paraSwayAngle) * 0.2f, glm::vec3(1, 0, 0));
-		modelPara = glm::rotate(modelPara, paraWind * 0.2f, glm::vec3(0, 0, 1));
+			glm::mat4 modelHelice = modelHelicoide;
+			modelHelice = glm::translate(modelHelice, glm::vec3(0.0f, 1.0f, 0.0f));
+			modelHelice = glm::rotate(modelHelice, glm::radians(heliceAngle), glm::vec3(0, 1, 0));
+			staticShader.setMat4("model", modelHelice);
+			helicoideHelice.Draw(staticShader);
 
-		modelPara = glm::scale(modelPara, glm::vec3(0.05f));
-		staticShader.setMat4("model", modelPara);
-		paracaidas.Draw(staticShader);
+			//Ornitoptero - Conectado con animación del avión
+			glm::mat4 modelOrn = glm::mat4(1.0f);
+			modelOrn = glm::translate(modelOrn, glm::vec3(avionX, avionY, avionZ));
+			modelOrn = glm::rotate(modelOrn, glm::radians(avionRotY - 45), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOrn = glm::rotate(modelOrn, glm::radians(avionRotX), glm::vec3(1.0f, 0.0f, 0.0f));
+			modelOrn = glm::rotate(modelOrn, glm::radians(avionRotZ ), glm::vec3(0.0f, 0.0f, 1.0f));
+			modelOrn = glm::scale(modelOrn, glm::vec3(ornScale)); 
+			staticShader.setMat4("model", modelOrn);
+			OrnCuer.Draw(staticShader);
 
-		//Tornillo
-		//glm::mat4 modelHelicoide = glm::mat4(1.0f);
-		//modelHelicoide = glm::translate(modelHelicoide, glm::vec3(helicoideX, helicoideY, helicoideZ));
-		//modelHelicoide = glm::scale(modelHelicoide, glm::vec3(0.4f));
-		//staticShader.setMat4("model", modelHelicoide);
-		//helicoideBase.Draw(staticShader);
+			// Alas con animación de aleteo
+			glm::vec3 pivotAlaDerLocal = glm::vec3(1.5f, 0.0f, 0.0f);
+			glm::vec3 pivotAlaIzqLocal = glm::vec3(-1.5f, 0.0f, 0.0f);
 
-		//glm::mat4 modelHelice = modelHelicoide;
-		//modelHelice = glm::translate(modelHelice, glm::vec3(0.0f, 1.0f, 0.0f));
-		//modelHelice = glm::rotate(modelHelice, glm::radians(heliceAngle), glm::vec3(0, 1, 0));
-		//staticShader.setMat4("model", modelHelice);
-		//helicoideHelice.Draw(staticShader);
+			glm::mat4 modelAlaDer = modelOrn;
+			modelAlaDer = glm::translate(modelAlaDer, pivotAlaDerLocal);
+			modelAlaDer = glm::rotate(modelAlaDer, glm::radians(ornWingAngle), glm::vec3(1.0f, 0.0f, 0.0f));
+			modelAlaDer = glm::translate(modelAlaDer, -pivotAlaDerLocal);
+			staticShader.setMat4("model", modelAlaDer);
+			OrnAlDe.Draw(staticShader);
 
-		glm::mat4 modelHelicoide = glm::mat4(1.0f);
-		glm::vec3 finalPos = glm::vec3(
-			helicoideX + helicoideFlyX,
-			helicoideY + helicoideOffsetY + helicoideVibration + helicoideFlyY,
-			helicoideZ + helicoideFlyZ
-		);
-
-		modelHelicoide = glm::translate(modelHelicoide, finalPos);
-
-		modelHelicoide = glm::rotate(
-			modelHelicoide,
-			(float)(sin((float)glfwGetTime() * 2.0f) * 0.05f),
-			glm::vec3(0.0f, 0.0f, 1.0f)
-		);
-
-		modelHelicoide = glm::scale(modelHelicoide, glm::vec3(0.4f));
-		staticShader.setMat4("model", modelHelicoide);
-		helicoideBase.Draw(staticShader);
-
-		glm::mat4 modelHelice = modelHelicoide;
-		modelHelice = glm::rotate(modelHelice, glm::radians(heliceAngle), glm::vec3(0, 1, 0));
-		staticShader.setMat4("model", modelHelice);
-		helicoideHelice.Draw(staticShader);
-
-		////Ornitoptero - Conectado con animación del avión
-		//glm::mat4 modelOrn = glm::mat4(1.0f);
-		//modelOrn = glm::translate(modelOrn, glm::vec3(avionX, avionY, avionZ));
-		//modelOrn = glm::rotate(modelOrn, glm::radians(avionRotY - 45), glm::vec3(0.0f, 1.0f, 0.0f));
-		//modelOrn = glm::rotate(modelOrn, glm::radians(avionRotX), glm::vec3(1.0f, 0.0f, 0.0f));
-		//modelOrn = glm::rotate(modelOrn, glm::radians(avionRotZ ), glm::vec3(0.0f, 0.0f, 1.0f));
-		//modelOrn = glm::scale(modelOrn, glm::vec3(ornScale)); 
-		//staticShader.setMat4("model", modelOrn);
-		//OrnCuer.Draw(staticShader);
-
-		//// Alas con animación de aleteo
-		//glm::vec3 pivotAlaDerLocal = glm::vec3(1.5f, 0.0f, 0.0f);
-		//glm::vec3 pivotAlaIzqLocal = glm::vec3(-1.5f, 0.0f, 0.0f);
-
-		//glm::mat4 modelAlaDer = modelOrn;
-		//modelAlaDer = glm::translate(modelAlaDer, pivotAlaDerLocal);
-		//modelAlaDer = glm::rotate(modelAlaDer, glm::radians(ornWingAngle), glm::vec3(1.0f, 0.0f, 0.0f));
-		//modelAlaDer = glm::translate(modelAlaDer, -pivotAlaDerLocal);
-		//staticShader.setMat4("model", modelAlaDer);
-		//OrnAlDe.Draw(staticShader);
-
-		//glm::mat4 modelAlaIzq = modelOrn;
-		//modelAlaIzq = glm::translate(modelAlaIzq, pivotAlaIzqLocal);
-		//modelAlaIzq = glm::rotate(modelAlaIzq, glm::radians(-ornWingAngle), glm::vec3(1.0f, 0.0f, 0.0f));
-		//modelAlaIzq = glm::translate(modelAlaIzq, -pivotAlaIzqLocal);
-		//staticShader.setMat4("model", modelAlaIzq);
-		//OrnAlIz.Draw(staticShader);
-
-		// ===============================================================
-		// ORNITÓPTERO COMPLETO
-		// ===============================================================
-
-		// --------------------
-		// Cuerpo del ornitóptero
-		// --------------------
-		glm::mat4 modelOrn = glm::mat4(1.0f);
-		modelOrn = glm::translate(modelOrn, glm::vec3(avionX, avionY, avionZ));
-		modelOrn = glm::rotate(modelOrn, glm::radians(avionRotY - 45), glm::vec3(0.0f, 1.0f, 0.0f));
-		modelOrn = glm::rotate(modelOrn, glm::radians(avionRotX), glm::vec3(1.0f, 0.0f, 0.0f));
-		modelOrn = glm::rotate(modelOrn, glm::radians(avionRotZ), glm::vec3(0.0f, 0.0f, 1.0f));
-		modelOrn = glm::scale(modelOrn, glm::vec3(ornScale));
-		staticShader.setMat4("model", modelOrn);
-		OrnCuer.Draw(staticShader);
-
-		// ===============================================================
-		// TUBO ALA DERECHA (YA FUNCIONA CORRECTO)
-		// ===============================================================
-		// pivot del tubo derecho (centro real del OBJ)
-		glm::vec3 tuboDerPivot = glm::vec3(1.5f, 24.969f, -5.1195f);
-
-		glm::mat4 modelTuboDer = modelOrn;
-		modelTuboDer = glm::translate(modelTuboDer, tuboDerPivot);
-
-		// gira sobre su propio eje X
-		modelTuboDer = glm::rotate(modelTuboDer, glm::radians(ornWingAngle), glm::vec3(1, 0, 0));
-
-		modelTuboDer = glm::translate(modelTuboDer, -tuboDerPivot);
-
-		staticShader.setMat4("model", modelTuboDer);
-		tuboAlaDer.Draw(staticShader);
-
-		// --------------------
-		// Ala derecha siguiendo al tubo
-		// --------------------
-		glm::mat4 modelAlaDer = modelTuboDer;
-		staticShader.setMat4("model", modelAlaDer);
-		cuerAlaDer.Draw(staticShader);
-
-
-		// ===============================================================
-		// TUBO ALA IZQUIERDA (VALORES CORREGIDOS DEL OBJ IZQUIERDO)
-		// ===============================================================
-		// pivot del tubo izquierdo (centro real del modelo)
-		glm::vec3 tuboIzqPivot = glm::vec3(-1.5f, 24.969f, -15.52035f);
-
-		glm::mat4 modelTuboIzq = modelOrn;
-		modelTuboIzq = glm::translate(modelTuboIzq, tuboIzqPivot);
-
-		// 🔥 gira sobre su propio eje X (inverso para espejo)
-		modelTuboIzq = glm::rotate(modelTuboIzq, glm::radians(-ornWingAngle), glm::vec3(1, 0, 0));
-
-		modelTuboIzq = glm::translate(modelTuboIzq, -tuboIzqPivot);
-
-		staticShader.setMat4("model", modelTuboIzq);
-		tuboAlaIzq.Draw(staticShader);
-
-		// --------------------
-		// Ala izquierda siguiendo al tubo
-		// --------------------
-		glm::mat4 modelAlaIzq = modelTuboIzq;
-		staticShader.setMat4("model", modelAlaIzq);
-		cuerAlaIzq.Draw(staticShader);
+			glm::mat4 modelAlaIzq = modelOrn;
+			modelAlaIzq = glm::translate(modelAlaIzq, pivotAlaIzqLocal);
+			modelAlaIzq = glm::rotate(modelAlaIzq, glm::radians(-ornWingAngle), glm::vec3(1.0f, 0.0f, 0.0f));
+			modelAlaIzq = glm::translate(modelAlaIzq, -pivotAlaIzqLocal);
+			staticShader.setMat4("model", modelAlaIzq);
+			OrnAlIz.Draw(staticShader);
 
 
 		// -------------------------------------------------------------------------------------------------------------------------
@@ -3378,6 +3322,48 @@ int main() {
 		staticShader.setMat4("model", modelOp);
 		llanta12.Draw(staticShader);
 
+		// Dragon 
+		float time = glfwGetTime();
+
+		float ampY = 2.5f;
+		float freqY = 0.8f;
+		posY = ampY * sin(freqY * time);
+
+		// Rotación de las alas
+		float ampRot = 25.0f;  
+		float freqRot = 3.0f;  
+		float rotAla = ampRot * sin(freqRot * time);
+
+		rotAlaIzq = rotAla;  
+		rotAlaDer = -rotAla;
+		rotCuerpoDragon -= 0.2;
+
+		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(20.0f, 170.0f, 35.0f));
+		modelOp = glm::scale(modelOp, glm::vec3(20.0f));
+		modelOp = glm::rotate(modelOp, glm::radians(rotCuerpoDragon), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelOp = tmpCuerpoDragon = glm::translate(modelOp, glm::vec3(0.0f, posY, 0.0f));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		dragon.Draw(staticShader);
+		
+		modelOp = glm::translate(tmpCuerpoDragon, glm::vec3(20.78f, 0.25f, 0.69f));
+		modelOp = glm::rotate(modelOp,
+			glm::radians(rotAlaIzq),
+			glm::vec3(0.0f, 0.0f, 1.0f));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		alaIzqDragon.Draw(staticShader);
+
+		modelOp = glm::translate(tmpCuerpoDragon, glm::vec3(19.35f, 0.40f, 0.9f));
+		modelOp = glm::rotate(modelOp,
+			glm::radians(rotAlaDer),
+			glm::vec3(0.0f, 0.0f, 1.0f));
+		staticShader.setMat4("model", modelOp);
+		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
+		alaDerDragon.Draw(staticShader);
+
+
+		
 		//-------------------------------------------------------------------------------------
 		// draw skybox as last
 		// -------------------
@@ -3452,6 +3438,15 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode)
 		camera.Pitch = -35.264f;
 		camera.Front = glm::normalize(glm::vec3(-1.0f, -0.4f, 1.0f));
 	}
+	if (glfwGetKey(window, GLFW_KEY_F1) == GLFW_PRESS)
+		rotAlaDer++;
+	if (glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS)
+		rotAlaDer--;
+	if (glfwGetKey(window, GLFW_KEY_F3) == GLFW_PRESS)
+		rotAlaIzq++;
+	if (glfwGetKey(window, GLFW_KEY_F4) == GLFW_PRESS)
+		rotAlaIzq--;
+
 	//Car animation
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
 		animacion1 ^= true;
