@@ -236,6 +236,16 @@ float	posX = 0.0f,
 		rotp12 = -90.0f,
 		scalep12 = 0.169f;
 
+
+
+  float avionX = 0.0f,
+		avionY = 30.0f, 
+		avionZ = 0.0f,
+		avionRotY = 0.0f, 
+		avionRotX = 0.0f,  
+		avionRotZ = 0.0f, 
+		avionScale = 1.0f;
+
 // Variables para el atractor de Lorenz
 		float lorenz_x = 0.0f, lorenz_y = 9.8f, lorenz_z = 0.0f; // Posición inicial 
 		float lorenz_vx = 0.0f, lorenz_vy = 0.0f, lorenz_vz = 0.0f; // Velocidades
@@ -334,7 +344,15 @@ float	incX = 0.0f,
 		incrotp12 = 0.0f,
 		incscalep12 = 0.0f;
 
-#define MAX_FRAMES 9
+float	incAvionX = 0.0f,
+		incAvionY = 0.0f,
+		incAvionZ = 0.0f,
+		incAvionRotY = 0.0f,
+		incAvionRotX = 0.0f,
+		incAvionRotZ = 0.0f,
+		incAvionScale = 0.0f;
+
+#define MAX_FRAMES 22
 int i_max_steps = 60;
 int i_curr_steps = 0;
 typedef struct _frame
@@ -345,6 +363,15 @@ typedef struct _frame
 	float posZ;		//Variable para PosicionZ
 	float rotRodIzq;
 	float giroMonito;
+
+	float avionX;
+	float avionY;
+	float avionZ;
+	float avionRotY;
+	float avionRotX;
+	float avionRotZ;
+	float avionScale;
+
 	//Variables para pinturas KeyFrames
 	float posXp1 = 0.0f;
 	float posYp1 = 0.0f;
@@ -410,7 +437,7 @@ typedef struct _frame
 }FRAME;
 
 FRAME KeyFrame[MAX_FRAMES];
-int FrameIndex = 7;			//introducir número en caso de tener Key guardados
+int FrameIndex = 22;			//introducir número en caso de tener Key guardados
 bool play = false;
 int playIndex = 0;
 
@@ -425,6 +452,14 @@ void saveFrame(void)
 
 	KeyFrame[FrameIndex].rotRodIzq = rotRodIzq;
 	KeyFrame[FrameIndex].giroMonito = giroMonito;
+
+	KeyFrame[FrameIndex].avionX = avionX;
+	KeyFrame[FrameIndex].avionY = avionY;
+	KeyFrame[FrameIndex].avionZ = avionZ;
+	KeyFrame[FrameIndex].avionRotY = avionRotY;
+	KeyFrame[FrameIndex].avionRotX = avionRotX;
+	KeyFrame[FrameIndex].avionRotZ = avionRotZ;
+	KeyFrame[FrameIndex].avionScale = avionScale;
 
 	KeyFrame[FrameIndex].posXp1 = posXp1;
 	KeyFrame[FrameIndex].posYp1 = posYp1;
@@ -510,6 +545,14 @@ void resetElements(void)
 	rotRodIzq = KeyFrame[0].rotRodIzq;
 	giroMonito = KeyFrame[0].giroMonito;
 
+	avionX = KeyFrame[0].avionX;
+	avionY = KeyFrame[0].avionY;
+	avionZ = KeyFrame[0].avionZ;
+	avionRotY = KeyFrame[0].avionRotY;
+	avionRotX = KeyFrame[0].avionRotX;
+	avionRotZ = KeyFrame[0].avionRotZ;
+	avionScale = KeyFrame[0].avionScale;
+
 	posXp1 = KeyFrame[0].posXp1;
 	posYp1 = KeyFrame[0].posYp1;
 	posZp1 = KeyFrame[0].posZp1;
@@ -591,6 +634,14 @@ void interpolation(void)
 
 	rotRodIzqInc = (KeyFrame[playIndex + 1].rotRodIzq - KeyFrame[playIndex].rotRodIzq) / i_max_steps;
 	giroMonitoInc = (KeyFrame[playIndex + 1].giroMonito - KeyFrame[playIndex].giroMonito) / i_max_steps;
+
+	incAvionX = (KeyFrame[playIndex + 1].avionX - KeyFrame[playIndex].avionX) / i_max_steps;
+	incAvionY = (KeyFrame[playIndex + 1].avionY - KeyFrame[playIndex].avionY) / i_max_steps;
+	incAvionZ = (KeyFrame[playIndex + 1].avionZ - KeyFrame[playIndex].avionZ) / i_max_steps;
+	incAvionRotY = (KeyFrame[playIndex + 1].avionRotY - KeyFrame[playIndex].avionRotY) / i_max_steps;
+	incAvionRotX = (KeyFrame[playIndex + 1].avionRotX - KeyFrame[playIndex].avionRotX) / i_max_steps;
+	incAvionRotZ = (KeyFrame[playIndex + 1].avionRotZ - KeyFrame[playIndex].avionRotZ) / i_max_steps;
+	incAvionScale = (KeyFrame[playIndex + 1].avionScale - KeyFrame[playIndex].avionScale) / i_max_steps;
 
 	incposXp1 = (KeyFrame[playIndex + 1].posXp1 - KeyFrame[playIndex].posXp1) / i_max_steps;
 	incposYp1 = (KeyFrame[playIndex + 1].posYp1 - KeyFrame[playIndex].posYp1) / i_max_steps;
@@ -747,6 +798,14 @@ void animate(void)
 
 			rotRodIzq += rotRodIzqInc;
 			giroMonito += giroMonitoInc;
+
+			avionX += incAvionX;
+			avionY += incAvionY;
+			avionZ += incAvionZ;
+			avionRotY += incAvionRotY;
+			avionRotX += incAvionRotX;
+			avionRotZ += incAvionRotZ;
+			avionScale += incAvionScale;
 
 			posXp1 += incposXp1;
 			posYp1 += incposYp1;
@@ -1352,6 +1411,14 @@ int main() {
 		KeyFrame[i].rotRodIzq = 0;
 		KeyFrame[i].giroMonito = 0;
 
+		KeyFrame[i].avionX = 0.0f;
+		KeyFrame[i].avionY = 30.0f;
+		KeyFrame[i].avionZ = 0.0f;
+		KeyFrame[i].avionRotY = 0.0f;
+		KeyFrame[i].avionRotX = 0.0f;
+		KeyFrame[i].avionRotZ = 0.0f;
+		KeyFrame[i].avionScale = 1.0f;
+
 		KeyFrame[i].posXp1 = 0.0f;
 		KeyFrame[i].posYp1 = 0.0f;
 		KeyFrame[i].posZp1 = 0.0f;
@@ -1929,6 +1996,112 @@ int main() {
 	KeyFrame[6].posYp12 = 15.5f;
 	KeyFrame[6].posZp12 = 42.2f;
 	KeyFrame[6].rotp12 = -90.0f;
+
+
+	int avionAnimationState = 0;
+	float avionAdvanceDistance = 0.0f;
+	float avionLoopAngle = 0.0f;
+	float avionOriginalX, avionOriginalY, avionOriginalZ;
+
+	// ===== FASE 1: DESPEGUE Y ASCENSO INICIAL =====
+	KeyFrame[0].avionX = 45.0f;
+	KeyFrame[0].avionY = -4.0f;
+	KeyFrame[0].avionZ = 65.0f;
+	KeyFrame[0].avionRotY = -45.0f;
+	KeyFrame[0].avionRotX = 0.0f;
+	KeyFrame[0].avionRotZ = 0.0f;
+	KeyFrame[0].avionScale = 0.05f;
+
+	KeyFrame[1].avionX = 45.0f;
+	KeyFrame[1].avionY = 0.0f;
+	KeyFrame[1].avionZ = 85.0f;
+	KeyFrame[1].avionRotY = -45.0f;
+	KeyFrame[1].avionRotX = 0.0f;
+	KeyFrame[1].avionRotZ = 0.0f;
+	KeyFrame[1].avionScale = 0.05f;
+
+	KeyFrame[2].avionX = 45.0f;
+	KeyFrame[2].avionY = 4.0f;
+	KeyFrame[2].avionZ = 105.0f;
+	KeyFrame[2].avionRotY = -45.0f;
+	KeyFrame[2].avionRotX = 0.0f;
+	KeyFrame[2].avionRotZ = 0.0f;
+	KeyFrame[2].avionScale = 0.05f;
+
+	KeyFrame[3].avionX = 45.0f;
+	KeyFrame[3].avionY = 8.0f;
+	KeyFrame[3].avionZ = 125.0f;
+	KeyFrame[3].avionRotY = -45.0f;
+	KeyFrame[3].avionRotX = 0.0f;
+	KeyFrame[3].avionRotZ = 0.0f;
+	KeyFrame[3].avionScale = 0.05f;
+
+	KeyFrame[4].avionX = 46.0f;
+	KeyFrame[4].avionY = 8.0f;
+	KeyFrame[4].avionZ = 145.0f;
+	KeyFrame[4].avionRotY = -45.0f;
+	KeyFrame[4].avionRotX = 0.0f;
+	KeyFrame[4].avionRotZ = 0.0f;
+	KeyFrame[4].avionScale = 0.05f;
+
+	// ===== FASE 2: GIRO  =====
+
+	KeyFrame[5].avionX = 46.0f;
+	KeyFrame[5].avionY = 8.0f;
+	KeyFrame[5].avionZ = 155.0f;
+	KeyFrame[5].avionRotY = -45.0f;
+	KeyFrame[5].avionRotX = 0.0f;
+	KeyFrame[5].avionRotZ = 35.0f;
+	KeyFrame[5].avionScale = 0.05f;
+
+	KeyFrame[6].avionX = 46.0f;
+	KeyFrame[6].avionY = 14.0f;
+	KeyFrame[6].avionZ = 155.0f;
+	KeyFrame[6].avionRotY = -45.0f;
+	KeyFrame[6].avionRotX = 0.0f;
+	KeyFrame[6].avionRotZ = 65.0f;
+	KeyFrame[6].avionScale = 0.05f;
+
+	KeyFrame[7].avionX = 46.0f;
+	KeyFrame[7].avionY = 54.0f;
+	KeyFrame[7].avionZ = 135.0f;
+	KeyFrame[7].avionRotY = -45.0f;
+	KeyFrame[7].avionRotX = 0.0f;
+	KeyFrame[7].avionRotZ = 165.0f;
+	KeyFrame[7].avionScale = 0.05f;
+
+	KeyFrame[8].avionX = 46.0f;
+	KeyFrame[8].avionY = 24.0f;
+	KeyFrame[8].avionZ = 115.0f;
+	KeyFrame[8].avionRotY = -45.0f;
+	KeyFrame[8].avionRotX = 0.0f;
+	KeyFrame[8].avionRotZ = 245.0f;
+	KeyFrame[8].avionScale = 0.05f;
+
+	KeyFrame[8].avionX = 46.0f;
+	KeyFrame[8].avionY = 24.0f;
+	KeyFrame[8].avionZ = 125.0f;
+	KeyFrame[8].avionRotY = -45.0f;
+	KeyFrame[8].avionRotX = 0.0f;
+	KeyFrame[8].avionRotZ = 360.0f;
+	KeyFrame[8].avionScale = 0.05f;
+
+	KeyFrame[9].avionX = 46.0f;
+	KeyFrame[9].avionY = 24.0f;
+	KeyFrame[9].avionZ = 155.0f;
+	KeyFrame[9].avionRotY = -45.0f;
+	KeyFrame[9].avionRotX = 0.0f;
+	KeyFrame[9].avionRotZ = 360.0f;
+	KeyFrame[9].avionScale = 0.05f;
+
+	KeyFrame[10].avionX = 46.0f;
+	KeyFrame[10].avionY = 24.0f;
+	KeyFrame[10].avionZ = 285.0f;
+	KeyFrame[10].avionRotY = -45.0f;
+	KeyFrame[10].avionRotX = 0.0f;
+	KeyFrame[10].avionRotZ = 360.0f;
+	KeyFrame[10].avionScale = 0.05f;
+
 
 	// create transformations and Projection
 	glm::mat4 modelOp = glm::mat4(1.0f);		// initialize Matrix, Use this matrix for individual models
@@ -2645,25 +2818,30 @@ int main() {
 			staticShader.setMat4("model", modelHelice);
 			helicoideHelice.Draw(staticShader);
 
-			//Ornitoptero
+			//Ornitoptero - Conectado con animación del avión
 			glm::mat4 modelOrn = glm::mat4(1.0f);
-			modelOrn = glm::translate(modelOrn, glm::vec3(ornX, ornY, ornZ));
-			modelOrn = glm::scale(modelOrn, glm::vec3(ornScale));
+			modelOrn = glm::translate(modelOrn, glm::vec3(avionX, avionY, avionZ));
+			modelOrn = glm::rotate(modelOrn, glm::radians(avionRotY - 45), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOrn = glm::rotate(modelOrn, glm::radians(avionRotX), glm::vec3(1.0f, 0.0f, 0.0f));
+			modelOrn = glm::rotate(modelOrn, glm::radians(avionRotZ ), glm::vec3(0.0f, 0.0f, 1.0f));
+			modelOrn = glm::scale(modelOrn, glm::vec3(ornScale)); 
 			staticShader.setMat4("model", modelOrn);
 			OrnCuer.Draw(staticShader);
 
-			glm::vec3 pivotAlaDerLocal = glm::vec3(1.5f, 0.0f, 0.0f);  
-			glm::vec3 pivotAlaIzqLocal = glm::vec3(-1.5f, 0.0f, 0.0f); 
+			// Alas con animación de aleteo
+			glm::vec3 pivotAlaDerLocal = glm::vec3(1.5f, 0.0f, 0.0f);
+			glm::vec3 pivotAlaIzqLocal = glm::vec3(-1.5f, 0.0f, 0.0f);
 
 			glm::mat4 modelAlaDer = modelOrn;
 			modelAlaDer = glm::translate(modelAlaDer, pivotAlaDerLocal);
-			modelAlaDer = glm::rotate(modelAlaDer,glm::radians(ornWingAngle),glm::vec3(1.0f, 0.0f, 0.0f));  // eje del tubo
+			modelAlaDer = glm::rotate(modelAlaDer, glm::radians(ornWingAngle), glm::vec3(1.0f, 0.0f, 0.0f));
 			modelAlaDer = glm::translate(modelAlaDer, -pivotAlaDerLocal);
 			staticShader.setMat4("model", modelAlaDer);
 			OrnAlDe.Draw(staticShader);
 
 			glm::mat4 modelAlaIzq = modelOrn;
-			modelAlaIzq = glm::translate(modelAlaIzq, pivotAlaIzqLocal); modelAlaIzq = glm::rotate(modelAlaIzq, glm::radians(-ornWingAngle), glm::vec3(1.0f, 0.0f, 0.0f));
+			modelAlaIzq = glm::translate(modelAlaIzq, pivotAlaIzqLocal);
+			modelAlaIzq = glm::rotate(modelAlaIzq, glm::radians(-ornWingAngle), glm::vec3(1.0f, 0.0f, 0.0f));
 			modelAlaIzq = glm::translate(modelAlaIzq, -pivotAlaIzqLocal);
 			staticShader.setMat4("model", modelAlaIzq);
 			OrnAlIz.Draw(staticShader);
