@@ -255,6 +255,8 @@ float	posX = 0.0f,
 		const float beta = 8.0f / 3.0f;
 		bool lorenz_active = false;
 		bool lorenz_was_active = false;
+		float lorenz_current_angle = glm::radians(90.0f); // Ángulo actual suavizado
+		const float lorenz_rotation_speed = 1.5f;
 
 // Límites del primer piso 
 		const float PISO1_MIN_X = -18.0f;
@@ -263,8 +265,8 @@ float	posX = 0.0f,
 		const float PISO1_MAX_Z = 18.0f;
 		const float PISO1_Y = 9.8f;
 // Parámetros de rebote
-		const float COEFICIENTE_REBOTE = 0.7f; // 0.0 = sin rebote, 1.0 = rebote perfecto
-		const float FRENADO_PARED = 0.8f;
+		const float COEFICIENTE_REBOTE = 0.8f; // 0.0 = sin rebote, 1.0 = rebote perfecto
+		const float FRENADO_PARED = 0.9f;
 
 float	incX = 0.0f,
 		incY = 0.0f,
@@ -1068,6 +1070,12 @@ void animate(void)
 		lorenz_vy += dy * dt;
 		lorenz_vz += dz * dt;
 
+					// NUEVO: Aplicar fricción general para hacerlo más lento
+		float friccion = 0.98f; //0.95 Mayor fricción para movimiento más lento
+		lorenz_vx *= friccion;
+		lorenz_vy *= friccion;
+		lorenz_vz *= friccion;
+
 		float new_x = lorenz_x + lorenz_vx * dt;
 		float new_z = lorenz_z + lorenz_vz * dt;
 
@@ -1107,14 +1115,27 @@ void animate(void)
 
 		// Mantener altura fija y velocidad vertical mínima
 		lorenz_y = PISO1_Y;
-		lorenz_vy *= 0.5f; // Amortiguar movimiento vertical
+		lorenz_vy *= 0.3f; // Amortiguar movimiento vertical
 
 		// Limitar velocidades máximas
-		float velocidad_max = 15.0f;
+		float velocidad_max = 9.0f;
 		float speed = sqrt(lorenz_vx * lorenz_vx + lorenz_vz * lorenz_vz);
 		if (speed > velocidad_max) {
 			lorenz_vx = (lorenz_vx / speed) * velocidad_max;
 			lorenz_vz = (lorenz_vz / speed) * velocidad_max;
+		}
+		if (abs(lorenz_vx) > 0.02f || abs(lorenz_vz) > 0.02f) {
+			float target_angle = atan2(lorenz_vx, lorenz_vz);
+
+			// Calcular diferencia de ángulo
+			float angle_diff = target_angle - lorenz_current_angle;
+
+			// Normalizar la diferencia al rango [-PI, PI]
+			while (angle_diff > glm::pi<float>()) angle_diff -= 2.0f * glm::pi<float>();
+			while (angle_diff < -glm::pi<float>()) angle_diff += 2.0f * glm::pi<float>();
+
+			// Aplicar rotación suavizada
+			lorenz_current_angle += angle_diff * lorenz_rotation_speed * dt;
 		}
 	}
 }
@@ -2397,15 +2418,15 @@ int main() {
 		// -------------------------------------------------------------------------------------------------------------------------
 		modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(lorenz_x, lorenz_y, lorenz_z + 15.0f));
 		modelOp = glm::scale(modelOp, glm::vec3(0.04f));
-		//modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		if (lorenz_active && (abs(lorenz_vx) > 0.1f || abs(lorenz_vz) > 0.1f)) {
-			float move_angle = atan2(lorenz_vx, lorenz_vz);
-			modelOp = glm::rotate(modelOp, move_angle, glm::vec3(0.0f, 1.0f, 0.0f));
-		}
-		else {
+		modelOp = glm::rotate(modelOp, lorenz_current_angle, glm::vec3(0.0f, 1.0f, 0.0f));
+		//if (lorenz_active && (abs(lorenz_vx) > 0.1f || abs(lorenz_vz) > 0.1f)) {
+			//float move_angle = atan2(lorenz_vx, lorenz_vz);
+			//modelOp = glm::rotate(modelOp, move_angle, glm::vec3(0.0f, 1.0f, 0.0f));
+		//}
+		//else {
 			// Rotación por defecto si no hay movimiento significativo
-			modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		}
+			//modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		//}
 		animShader.setMat4("model", modelOp);
 		personajeGal.Draw(animShader);
 
