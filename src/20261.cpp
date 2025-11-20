@@ -1672,32 +1672,31 @@ int main() {
 	KeyFrame[1].rotp8 = 270.0f;
 	KeyFrame[1].scalep8 = 0.2f;
 
-	KeyFrame[1].posXp9 = 15.7f; 
-	KeyFrame[1].posYp9 = 14.0f; 
-	KeyFrame[1].posZp9 = -42.2f; 
-	KeyFrame[1].rotp9 = 45.0f;
-	KeyFrame[1].scalep9 = 0.8f;
-	KeyFrame[1].scalep9 = 0.12f;
+	KeyFrame[1].posXp9 = 10.0f;    
+	KeyFrame[1].posYp9 = 16.5f;    
+	KeyFrame[1].posZp9 = -30.0f;   
+	KeyFrame[1].rotp9 = 120.0f;    
+	KeyFrame[1].scalep9 = 0.20f;
 
-	KeyFrame[1].posXp10 = -20.0f; 
-	KeyFrame[1].posYp10 = 16.7f; 
-	KeyFrame[1].posZp10 = -47.0f; 
-	KeyFrame[1].rotp10 = 90.0f;
-	KeyFrame[1].scalep10 = 0.8f;
+	KeyFrame[1].posXp10 = -8.0f;  
+	KeyFrame[1].posYp10 = 16.8f;  
+	KeyFrame[1].posZp10 = -35.2f;
+	KeyFrame[1].rotp10 = 70.0f;    
+	KeyFrame[1].scalep10 = 0.19f;
 
-	KeyFrame[1].posXp11 = -20.0f; 
-	KeyFrame[1].posYp11 = 16.7f; 
-	KeyFrame[1].posZp11 = 47.0f; 
-	KeyFrame[1].rotp11 = -90.0f;
-	KeyFrame[1].scalep11 = 0.8f;
+	KeyFrame[1].posXp11 = 8.0f;
+	KeyFrame[1].posYp11 = 17.2f;   
+	KeyFrame[1].posZp11 = 30.0f;   
+	KeyFrame[1].rotp11 = -60.0f;   
+	KeyFrame[1].scalep11 = 0.21f;
 
-	KeyFrame[1].posXp12 = 20.0f; 
-	KeyFrame[1].posYp12 = 16.7f; 
-	KeyFrame[1].posZp12 = 47.0f; 
-	KeyFrame[1].rotp12 = -90.0f;
-	KeyFrame[1].scalep12 = 0.8f;
+	KeyFrame[1].posXp12 = -10.0f;   
+	KeyFrame[1].posYp12 = 16.9f;   
+	KeyFrame[1].posZp12 = 35.0f;   
+	KeyFrame[1].rotp12 = -120.0f;  
+	KeyFrame[1].scalep12 = 0.20f;
 
-
+	//KeyFrame 2
 	KeyFrame[2].posXp1 = -12.0f; 
 	KeyFrame[2].posYp1 = 14.9f; 
 	KeyFrame[2].posZp1 = 7.0f; 
@@ -1750,30 +1749,28 @@ int main() {
 	KeyFrame[2].rotp8 = 360.0f;
 	KeyFrame[2].scalep8 = 0.13f;
 
+	KeyFrame[2].posXp9 = -12.0f;
+	KeyFrame[2].posYp9 = 17.5f;
+	KeyFrame[2].posZp9 = -15.0f;
+	KeyFrame[2].rotp9 = 45.0f;     
+	KeyFrame[2].scalep9 = 0.13f;
 
-	KeyFrame[2].posXp9 = 8.0f; 
-	KeyFrame[2].posYp9 = 13.5f; 
-	KeyFrame[2].posZp9 = -35.0f; 
-	KeyFrame[2].rotp9 = 270.0f;
-	KeyFrame[2].scalep9 = 0.15f;
+	KeyFrame[2].posXp10 = 12.0f;
+	KeyFrame[2].posYp10 = 18.0f;   
+	KeyFrame[2].posZp10 = -15.0f;
+	KeyFrame[2].rotp10 = -45.0f;  
+	KeyFrame[2].scalep10 = 0.13f;
 
+	KeyFrame[2].posXp11 = -12.0f;
+	KeyFrame[2].posYp11 = 17.8f;
+	KeyFrame[2].posZp11 = 15.0f;
+	KeyFrame[2].rotp11 = -135.0f;     
+	KeyFrame[2].scalep11 = 0.13f;
 
-	KeyFrame[2].posXp10 = -20.0f; 
-	KeyFrame[2].posYp10 = 13.7f; 
-	KeyFrame[2].posZp10 = -47.0f; 
-	KeyFrame[2].rotp10 = 45.0f;
-
-
-	KeyFrame[2].posXp11 = -20.0f; 
-	KeyFrame[2].posYp11 = 13.7f; 
-	KeyFrame[2].posZp11 = 47.0f; 
-	KeyFrame[2].rotp11 = -135.0f;
-
-
-	KeyFrame[2].posXp12 = 20.0f; 
-	KeyFrame[2].posYp12 = 13.7f; 
-	KeyFrame[2].posZp12 = 47.0f; 
-	KeyFrame[2].rotp12 = -135.0f;
+	KeyFrame[2].posXp12 = 12.0f;
+	KeyFrame[2].posYp12 = 18.2f;   
+	KeyFrame[2].posZp12 = 15.0f;
+	KeyFrame[2].rotp12 = 135.0f;   
 
 	//KeyFrame[3]
 	KeyFrame[3].posXp1 = -13.5f;
@@ -1824,26 +1821,31 @@ int main() {
 	KeyFrame[3].rotp8 = 450.0f;
 	KeyFrame[3].scalep8 = 0.14f;
 
-	KeyFrame[3].posXp9 = 5.0f;
-	KeyFrame[3].posYp9 = 13.0f;
-	KeyFrame[3].posZp9 = -20.0f;
-	KeyFrame[3].rotp9 = 45.0f;
-	KeyFrame[3].scalep9 = 0.17f;
+	float radius = 3.0f;
 
-	KeyFrame[3].posXp10 = -20.0f;
-	KeyFrame[3].posYp10 = 13.7f;
-	KeyFrame[3].posZp10 = -47.0f;
-	KeyFrame[3].rotp10 = 45.0f;
+	KeyFrame[3].posXp9 = 0.0f + radius * cos(glm::radians(45.0f));   
+	KeyFrame[3].posYp9 = 12.0f;
+	KeyFrame[3].posZp9 = 0.0f + radius * sin(glm::radians(45.0f));   
+	KeyFrame[3].rotp9 = 135.0f;    
+	KeyFrame[3].scalep9 = 0.14f;
 
-	KeyFrame[3].posXp11 = -20.0f;
-	KeyFrame[3].posYp11 = 13.7f;
-	KeyFrame[3].posZp11 = 47.0f;
-	KeyFrame[3].rotp11 = -135.0f;
+	KeyFrame[3].posXp10 = 0.0f + radius * cos(glm::radians(135.0f));  
+	KeyFrame[3].posYp10 = 12.2f;
+	KeyFrame[3].posZp10 = 0.0f + radius * sin(glm::radians(135.0f));  
+	KeyFrame[3].rotp10 = 225.0f;
+	KeyFrame[3].scalep10 = 0.14f;
 
-	KeyFrame[3].posXp12 = 20.0f;
-	KeyFrame[3].posYp12 = 13.7f;
-	KeyFrame[3].posZp12 = 47.0f;
-	KeyFrame[3].rotp12 = -135.0f;
+	KeyFrame[3].posXp11 = 0.0f + radius * cos(glm::radians(225.0f));  
+	KeyFrame[3].posYp11 = 11.8f;
+	KeyFrame[3].posZp11 = 0.0f + radius * sin(glm::radians(225.0f));  
+	KeyFrame[3].rotp11 = 315.0f;
+	KeyFrame[3].scalep11 = 0.14f;
+
+	KeyFrame[3].posXp12 = 0.0f + radius * cos(glm::radians(315.0f));  
+	KeyFrame[3].posYp12 = 12.1f;
+	KeyFrame[3].posZp12 = 0.0f + radius * sin(glm::radians(315.0f));  
+	KeyFrame[3].rotp12 = 45.0f;
+	KeyFrame[3].scalep12 = 0.14f;
 
 	//keyframe 4
 	KeyFrame[4].posXp1 = -15.5f;
@@ -1894,26 +1896,29 @@ int main() {
 	KeyFrame[4].rotp8 = 540.0f;
 	KeyFrame[4].scalep8 = 0.11f;
 
-	KeyFrame[4].posXp9 = -5.0f;
+	KeyFrame[4].posXp9 = -8.0f;    
 	KeyFrame[4].posYp9 = 14.0f;
-	KeyFrame[4].posZp9 = -15.0f;
+	KeyFrame[4].posZp9 = -8.0f;
 	KeyFrame[4].rotp9 = 135.0f;
-	KeyFrame[4].scalep9 = 0.13f;
+	KeyFrame[4].scalep9 = 0.11f;
 
-	KeyFrame[4].posXp10 = -20.0f;
-	KeyFrame[4].posYp10 = 13.7f;
-	KeyFrame[4].posZp10 = -47.0f;
-	KeyFrame[4].rotp10 = 45.0f;
+	KeyFrame[4].posXp10 = 8.0f;    
+	KeyFrame[4].posYp10 = 14.5f;
+	KeyFrame[4].posZp10 = -8.0f;
+	KeyFrame[4].rotp10 = 225.0f;
+	KeyFrame[4].scalep10 = 0.11f;
 
-	KeyFrame[4].posXp11 = -20.0f;
-	KeyFrame[4].posYp11 = 13.7f;
-	KeyFrame[4].posZp11 = 47.0f;
-	KeyFrame[4].rotp11 = -135.0f;
+	KeyFrame[4].posXp11 = -8.0f;   
+	KeyFrame[4].posYp11 = 13.8f;
+	KeyFrame[4].posZp11 = 8.0f;
+	KeyFrame[4].rotp11 = 45.0f;
+	KeyFrame[4].scalep11 = 0.11f;
 
-	KeyFrame[4].posXp12 = 20.0f;
-	KeyFrame[4].posYp12 = 13.7f;
-	KeyFrame[4].posZp12 = 47.0f;
-	KeyFrame[4].rotp12 = -135.0f;
+	KeyFrame[4].posXp12 = 8.0f;    
+	KeyFrame[4].posYp12 = 14.2f;
+	KeyFrame[4].posZp12 = 8.0f;
+	KeyFrame[4].rotp12 = 315.0f;
+	KeyFrame[4].scalep12 = 0.11f;
 
 	//keyframe 5
 	KeyFrame[5].posXp1 = -16.0f;
@@ -1964,26 +1969,29 @@ int main() {
 	KeyFrame[5].rotp8 = 630.0f;
 	KeyFrame[5].scalep8 = 0.14f;
 
-	KeyFrame[5].posXp9 = 12.0f;
-	KeyFrame[5].posYp9 = 14.9f;
-	KeyFrame[5].posZp9 = -30.0f;
-	KeyFrame[5].rotp9 = 225.0f;
-	KeyFrame[5].scalep9 = 0.16f;
+	KeyFrame[5].posXp9 = 14.0f;    
+	KeyFrame[5].posYp9 = 15.7f;
+	KeyFrame[5].posZp9 = -40.0f;   
+	KeyFrame[5].rotp9 = 95.0f;     
+	KeyFrame[5].scalep9 = 0.14f;
 
-	KeyFrame[5].posXp10 = -20.0f;
-	KeyFrame[5].posYp10 = 13.7f;
-	KeyFrame[5].posZp10 = -47.0f;
-	KeyFrame[5].rotp10 = 45.0f;
+	KeyFrame[5].posXp10 = -14.0f;  
+	KeyFrame[5].posYp10 = 16.1f;
+	KeyFrame[5].posZp10 = -40.0f;  
+	KeyFrame[5].rotp10 = 85.0f;    
+	KeyFrame[5].scalep10 = 0.14f;
 
-	KeyFrame[5].posXp11 = -20.0f;
-	KeyFrame[5].posYp11 = 13.7f;
-	KeyFrame[5].posZp11 = 47.0f;
-	KeyFrame[5].rotp11 = -135.0f;
+	KeyFrame[5].posXp11 = -14.0f;  
+	KeyFrame[5].posYp11 = 15.9f;
+	KeyFrame[5].posZp11 = 40.0f;   
+	KeyFrame[5].rotp11 = -95.0f;   
+	KeyFrame[5].scalep11 = 0.14f;
 
-	KeyFrame[5].posXp12 = 20.0f;
-	KeyFrame[5].posYp12 = 13.7f;
-	KeyFrame[5].posZp12 = 47.0f;
-	KeyFrame[5].rotp12 = -135.0f;
+	KeyFrame[5].posXp12 = 14.0f;   
+	KeyFrame[5].posYp12 = 15.8f;
+	KeyFrame[5].posZp12 = 40.0f;   
+	KeyFrame[5].rotp12 = -85.0f;   
+	KeyFrame[5].scalep12 = 0.14f;
 
 	//keyframe 6
 	KeyFrame[6].posXp1 = -19.7f; //-19.7
@@ -2824,30 +2832,30 @@ int main() {
 			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
 			pintura6.Draw(staticShader); //19.7, 15.5, 37.0, r=0 s 0.169 s 0.169
 
-			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(15.7, 15.5, -42.2));
-			modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-			modelOp = glm::scale(modelOp, glm::vec3(0.169));
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp9, posYp9, posZp9));
+			modelOp = glm::rotate(modelOp, glm::radians(rotp9), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(scalep9));
 			staticShader.setMat4("model", modelOp);
 			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
 			pintura8.Draw(staticShader); //15.7, 15.5, -42.2, r=90 s 0.169
 
-			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-15.7f, 15.5f, -42.2f));
-			modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-			modelOp = glm::scale(modelOp, glm::vec3(0.169f));
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp10, posYp10, posZp10));
+			modelOp = glm::rotate(modelOp, glm::radians(rotp10), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(scalep10));
 			staticShader.setMat4("model", modelOp);
 			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
 			pintura9.Draw(staticShader); //-15.7, 15.5, -42.2, r=90
 
-			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-15.7f, 15.5f, 42.2f));
-			modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-			modelOp = glm::scale(modelOp, glm::vec3(0.169f));
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp11, posYp11, posZp11));
+			modelOp = glm::rotate(modelOp, glm::radians(rotp11), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(scalep11));
 			staticShader.setMat4("model", modelOp);
 			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
 			pintura10.Draw(staticShader); //-15.7, 15.5, 42.2, r=-90
 
-			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(15.7f, 15.5f, 42.2f));
-			modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-			modelOp = glm::scale(modelOp, glm::vec3(0.169f));
+			modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(posXp12, posYp12, posZp12));
+			modelOp = glm::rotate(modelOp, glm::radians(rotp12), glm::vec3(0.0f, 1.0f, 0.0f));
+			modelOp = glm::scale(modelOp, glm::vec3(scalep12));
 			staticShader.setMat4("model", modelOp);
 			staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
 			pintura11.Draw(staticShader); //15.7, 15.5, 42.2, r=-90
