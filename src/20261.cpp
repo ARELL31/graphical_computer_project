@@ -284,7 +284,7 @@ float	posX = 0.0f,
 
 
   float avionX = 0.0f,
-		avionY = 30.0f, 
+		avionY = 23.0f, 
 		avionZ = 0.0f,
 		avionRotY = 0.0f, 
 		avionRotX = 0.0f,  
@@ -1112,6 +1112,9 @@ void animate(void)
 		anguloBalanceo += fuerzaViento * dtScaled;
 
 	}
+
+	const float paraMinY = 22.4f;
+	const float paraMaxY = 34.4f;
 
 	if ((paraBaseY + paraOffsetY) >= paraMaxY) {
 		paraOffsetY = paraMaxY - paraBaseY;
@@ -3057,33 +3060,64 @@ int main() {
 			staticShader.setMat4("model", modelHelice);
 			helicoideHelice.Draw(staticShader);
 
-			//Ornitoptero - Conectado con animación del avión
+			//Ornitoptero
 			glm::mat4 modelOrn = glm::mat4(1.0f);
 			modelOrn = glm::translate(modelOrn, glm::vec3(avionX, avionY, avionZ));
 			modelOrn = glm::rotate(modelOrn, glm::radians(avionRotY - 45), glm::vec3(0.0f, 1.0f, 0.0f));
 			modelOrn = glm::rotate(modelOrn, glm::radians(avionRotX), glm::vec3(1.0f, 0.0f, 0.0f));
-			modelOrn = glm::rotate(modelOrn, glm::radians(avionRotZ ), glm::vec3(0.0f, 0.0f, 1.0f));
-			modelOrn = glm::scale(modelOrn, glm::vec3(ornScale)); 
+			modelOrn = glm::rotate(modelOrn, glm::radians(avionRotZ), glm::vec3(0.0f, 0.0f, 1.0f));
+			modelOrn = glm::scale(modelOrn, glm::vec3(ornScale));
 			staticShader.setMat4("model", modelOrn);
 			OrnCuer.Draw(staticShader);
 
-			// Alas con animación de aleteo
-			glm::vec3 pivotAlaDerLocal = glm::vec3(1.5f, 0.0f, 0.0f);
-			glm::vec3 pivotAlaIzqLocal = glm::vec3(-1.5f, 0.0f, 0.0f);
+			// ===============================================================
+			// TUBO ALA DERECHA
+			// ===============================================================
+			// pivot del tubo derecho (centro real del OBJ)
+			glm::vec3 tuboDerPivot = glm::vec3(1.5f, 24.969f, -5.1195f);
 
-			glm::mat4 modelAlaDer = modelOrn;
-			modelAlaDer = glm::translate(modelAlaDer, pivotAlaDerLocal);
-			modelAlaDer = glm::rotate(modelAlaDer, glm::radians(ornWingAngle), glm::vec3(1.0f, 0.0f, 0.0f));
-			modelAlaDer = glm::translate(modelAlaDer, -pivotAlaDerLocal);
+			glm::mat4 modelTuboDer = modelOrn;
+			modelTuboDer = glm::translate(modelTuboDer, tuboDerPivot);
+
+			// gira sobre su propio eje X
+			modelTuboDer = glm::rotate(modelTuboDer, glm::radians(ornWingAngle), glm::vec3(1, 0, 0));
+
+			modelTuboDer = glm::translate(modelTuboDer, -tuboDerPivot);
+
+			staticShader.setMat4("model", modelTuboDer);
+			tuboAlaDer.Draw(staticShader);
+
+			// --------------------
+			// Ala derecha siguiendo al tubo
+			// --------------------
+			glm::mat4 modelAlaDer = modelTuboDer;
 			staticShader.setMat4("model", modelAlaDer);
-			OrnAlDe.Draw(staticShader);
+			cuerAlaDer.Draw(staticShader);
 
-			glm::mat4 modelAlaIzq = modelOrn;
-			modelAlaIzq = glm::translate(modelAlaIzq, pivotAlaIzqLocal);
-			modelAlaIzq = glm::rotate(modelAlaIzq, glm::radians(-ornWingAngle), glm::vec3(1.0f, 0.0f, 0.0f));
-			modelAlaIzq = glm::translate(modelAlaIzq, -pivotAlaIzqLocal);
+
+			// ===============================================================
+			// TUBO ALA IZQUIERDA (VALORES CORREGIDOS DEL OBJ IZQUIERDO)
+			// ===============================================================
+			// pivot del tubo izquierdo (centro real del modelo)
+			glm::vec3 tuboIzqPivot = glm::vec3(-1.5f, 24.969f, -15.52035f);
+
+			glm::mat4 modelTuboIzq = modelOrn;
+			modelTuboIzq = glm::translate(modelTuboIzq, tuboIzqPivot);
+
+			// gira sobre su propio eje X (inverso para espejo)
+			modelTuboIzq = glm::rotate(modelTuboIzq, glm::radians(-ornWingAngle), glm::vec3(1, 0, 0));
+
+			modelTuboIzq = glm::translate(modelTuboIzq, -tuboIzqPivot);
+
+			staticShader.setMat4("model", modelTuboIzq);
+			tuboAlaIzq.Draw(staticShader);
+
+			// --------------------
+			// Ala izquierda siguiendo al tubo
+			// --------------------
+			glm::mat4 modelAlaIzq = modelTuboIzq;
 			staticShader.setMat4("model", modelAlaIzq);
-			OrnAlIz.Draw(staticShader);
+			cuerAlaIzq.Draw(staticShader);
 
 
 		// -------------------------------------------------------------------------------------------------------------------------
