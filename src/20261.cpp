@@ -134,13 +134,23 @@ int		etapa_giro = 0,
 bool	animacion1 = false,
 		animacion2 = false;
 
+//Paracaidas
 float paraBaseX = 10.0f;
 float paraBaseY = 25.0f;
 float paraBaseZ = -20.0f;
-
 float paraOffsetY = 0.0f;
-float paraSpeed = 0.05f; 
+float paraSpeed = 0.0009f; 
 bool paraGoingDown = true;
+// Oscilaciones Pendulares - Paracaídas
+bool paracaidasActivado = true;        
+float gravedad = 9.81f;                
+float anguloBalanceo = 0.0f;
+float velocidadAngular = 0.0f;
+float longitudCuerdas = 3.0f;
+float amortiguacion = 0.5f;
+float fuerzaViento = 0.0f;
+float factorVelocidadPendulo = 0.1f;       
+float frecuenciaViento = 0.5f;
 
 float helicoideX = -10.0f;
 float helicoideY = 22.0f;
@@ -1018,24 +1028,51 @@ void animate(void)
 		}
 	}
 
-	// Límites del segundo piso
-	const float paraMinY = 22.4f;   
-	const float paraMaxY = 34.4f;  
+	if (paracaidasActivado) {
+		// Límites del segundo piso
+		const float paraMinY = 22.4f;
+		const float paraMaxY = 34.4f;
 
-	if (paraGoingDown)
-	{
-		
-		paraOffsetY -= paraSpeed;
-		if ((paraBaseY + paraOffsetY) <= paraMinY)
+		if (paraGoingDown)
 		{
-			paraOffsetY = paraMinY - paraBaseY;
-			paraGoingDown = false;    
+
+			paraOffsetY -= paraSpeed;
+			if ((paraBaseY + paraOffsetY) <= paraMinY)
+			{
+				paraOffsetY = paraMinY - paraBaseY;
+				paraGoingDown = false;
+			}
 		}
-	}
-	else
-	{
-		paraOffsetY = paraMaxY - paraBaseY;
-		paraGoingDown = true;   
+		else
+		{
+			paraOffsetY = paraMaxY - paraBaseY;
+			paraGoingDown = true;
+		}
+
+		float aceleracionAngular = (-gravedad / longitudCuerdas) * sin(anguloBalanceo) - amortiguacion * velocidadAngular;
+
+		float dtScaled = deltaTime * 0.001f * factorVelocidadPendulo;
+		velocidadAngular += aceleracionAngular * dtScaled;
+		anguloBalanceo += velocidadAngular * dtScaled;
+
+		// LÍMITES ESTRICTOS: 30° TOTAL (15° a cada lado)
+		const float anguloMaximo = glm::radians(15.0f);
+		if (abs(anguloBalanceo) > anguloMaximo) {
+			anguloBalanceo = anguloMaximo * (anguloBalanceo > 0 ? 1.0f : -1.0f);
+			velocidadAngular = -velocidadAngular * 0.3f; // Rebote controlado
+		}
+
+		velocidadAngular *= 0.992f;
+
+		float distanciaAlCentro = abs(anguloBalanceo);
+		if (distanciaAlCentro > glm::radians(10.0f)) {
+			float fuerzaRetorno = (distanciaAlCentro - glm::radians(10.0f)) * 2.0f;
+			anguloBalanceo -= fuerzaRetorno * (anguloBalanceo > 0 ? 1.0f : -1.0f) * dtScaled;
+		}
+
+		fuerzaViento = sin(glfwGetTime() * 0.3f) * 0.08f;
+		anguloBalanceo += fuerzaViento * dtScaled;
+
 	}
 
 	//Helice
@@ -2822,6 +2859,13 @@ int main() {
 			//Paracaidas
 			glm::mat4 modelPara = glm::mat4(1.0f);
 			modelPara = glm::translate(modelPara, glm::vec3(paraBaseX, paraBaseY + paraOffsetY, paraBaseZ));
+
+			float rotacionY = glfwGetTime() * 8.0f; // 8° por segundo
+			modelPara = glm::rotate(modelPara, glm::radians(rotacionY), glm::vec3(0.0f, 1.0f, 0.0f));
+			// OSCILACIÓN PENDULAR
+			// Primero rotar alrededor del punto de suspensión (simula las cuerdas)
+			float anguloGrados = glm::degrees(anguloBalanceo);
+			modelPara = glm::rotate(modelPara, anguloGrados, glm::vec3(0.0f, 0.0f, 1.0f));
 			modelPara = glm::scale(modelPara, glm::vec3(0.05f));
 			staticShader.setMat4("model", modelPara);
 			paracaidas.Draw(staticShader);
